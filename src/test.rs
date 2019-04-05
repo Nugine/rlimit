@@ -1,4 +1,4 @@
-use crate::RLimit;
+use crate::{RLimit, RLIM_INFINITY};
 
 const SOFT: u64 = 128 * 1024 * 1024;
 const HARD: u64 = 256 * 1024 * 1024;
@@ -19,5 +19,5 @@ fn test_set_get() {
 
 #[test]
 fn test_get() {
-    assert_eq!(RLimit::CPU.get(), Ok((u64::max_value(), u64::max_value())));
+    assert_eq!(RLimit::CPU.get(), Ok((RLIM_INFINITY, RLIM_INFINITY)));
 }

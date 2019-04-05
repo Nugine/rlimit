@@ -7,6 +7,8 @@ use libc::{
     RLIMIT_RTPRIO, RLIMIT_RTTIME, RLIMIT_SIGPENDING, RLIMIT_STACK,
 };
 
+pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RLimit {
     AS = RLIMIT_AS as isize,
