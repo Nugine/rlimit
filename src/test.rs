@@ -1,7 +1,7 @@
 use crate::{RLimit, RLIM_INFINITY};
 
-const SOFT: u64 = 128 * 1024 * 1024;
-const HARD: u64 = 256 * 1024 * 1024;
+const SOFT: u64 = 1024 * 1024 * 1024;
+const HARD: u64 = 2048 * 1024 * 1024;
 
 #[test]
 fn test_eq() {
