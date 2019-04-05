@@ -5,3 +5,4 @@ authors = ["Nugine <Nugine@163.com>"]
 edition = "2018"
 
 [dependencies]
+libc = "^0.2"
