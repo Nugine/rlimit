@@ -1,8 +1,12 @@
 [package]
 name = "rlimit"
-version = "0.0.1"
-authors = ["Nugine <Nugine@163.com>"]
+version = "0.1.0"
+authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
+description = "A simple wrapper for getrlimit and setrlimit."
+repository = "https://github.com/Nugine/rlimit/"
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 libc = "^0.2"
