@@ -30,10 +30,12 @@ pub enum RLimit {
     STACK = RLIMIT_STACK as isize,
 }
 
+use std::io::{Error, Result};
+
 impl RLimit {
     #[inline(always)]
-    pub fn to_c_int(&self) -> libc::c_int {
-        *self as isize as i32
+    pub fn to_c_uint(&self) -> libc::c_uint {
+        *self as isize as u32
     }
 
     #[inline(always)]
@@ -44,25 +46,25 @@ impl RLimit {
         limit
     }
 
-    pub fn set(&self, soft: u64, hard: u64) -> Result<(), i32> {
+    pub fn set(&self, soft: u64, hard: u64) -> Result<()> {
         let mut limit = unsafe { RLimit::new_limit(soft, hard) };
-        let resource = self.to_c_int();
+        let resource = self.to_c_uint();
         let code = unsafe { libc::setrlimit(resource, &mut limit as *mut libc::rlimit) };
         if code == 0 {
             Ok(())
         } else {
-            Err(code)
+            Err(Error::last_os_error())
         }
     }
 
-    pub fn get(&self) -> Result<(u64, u64), i32> {
+    pub fn get(&self) -> Result<(u64, u64)> {
         let mut limit = unsafe { std::mem::zeroed::<libc::rlimit>() };
-        let resource = self.to_c_int();
+        let resource = self.to_c_uint();
         let code = unsafe { libc::getrlimit(resource, &mut limit as *mut libc::rlimit) };
         if code == 0 {
             Ok((limit.rlim_cur, limit.rlim_max))
         } else {
-            Err(code)
+            Err(Error::last_os_error())
         }
     }
 }
