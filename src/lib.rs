@@ -1,19 +1,31 @@
 //! rlimit - A simple wrapper for `getrlimit` and `setrlimit`.
 //! # Example
-//!     const SOFT: rlim = 4 * 1024 * 1024;
-//!     const HARD: rlim = 8 * 1024 * 1024;
-//!
+//! ```no_run
+//! # use rlimit::rlim;
+//! const SOFT: rlim = 4 * 1024 * 1024;
+//! const HARD: rlim = 8 * 1024 * 1024;
+//!```
+//! 
 //! ## Set resource limit
-//! ```
+//! ```no_run
+//! # use rlimit::{rlim, Resource};
+//! # const SOFT: rlim = 4 * 1024 * 1024;
+//! # const HARD: rlim = 8 * 1024 * 1024;
 //! assert!(Resource::FSIZE.set(SOFT, HARD).is_ok());
 //! ```
 //! or
-//! ```
+//! ```no_run
+//! # use rlimit::{rlim, Resource, setrlimit};
+//! # const SOFT: rlim = 4 * 1024 * 1024;
+//! # const HARD: rlim = 8 * 1024 * 1024;
 //! assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
 //!```
 //!
 //! ## Get resource limit
-//! ```
+//! ```no_run
+//! # use rlimit::{rlim, Resource, RLIM_INFINITY, getrlimit};
+//! # const SOFT: rlim = 4 * 1024 * 1024;
+//! # const HARD: rlim = 8 * 1024 * 1024;
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (RLIM_INFINITY, RLIM_INFINITY));
 //! ```
 
