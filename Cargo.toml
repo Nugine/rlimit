@@ -12,4 +12,5 @@ categories = ["os::unix-apis"]
 
 [dependencies]
 libc = "^0.2"
+thiserror = "1.0.20"
 cfg-if = "0.1.9"
