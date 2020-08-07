@@ -43,7 +43,4 @@ Support more targets.
 | i686-unknown-linux-musl   |
 | x86_64-unknown-linux-gnu  |
 | x86_64-unknown-linux-musl |
-| i686-apple-darwin         |
 | x86_64-apple-darwin       |
-
-
