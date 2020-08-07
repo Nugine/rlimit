@@ -1,12 +1,14 @@
 [package]
 name = "rlimit"
-version = "0.3.0"
+version = "0.4.0-dev"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
 description = "A simple wrapper for getrlimit and setrlimit."
 repository = "https://github.com/Nugine/rlimit/"
 license = "MIT"
 readme = "README.md"
+keywords = ["rlimit", "unix", "syscall"]
+categories = ["os::unix-apis"]
 
 [dependencies]
 libc = "^0.2"
