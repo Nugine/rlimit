@@ -38,19 +38,26 @@ fn test_get() {
 #[cfg(target_os = "linux")]
 #[test]
 fn test_prlimit() {
-    use rlimit::{prlimit, prlimit_with_old};
+    use rlimit::prlimit;
     let res = Resource::CORE;
 
-    assert!(prlimit(0, res, Some((SOFT, HARD))).is_ok());
+    assert!(prlimit(0, res, Some((SOFT, HARD)), None).is_ok());
 
-    assert_eq!(prlimit_with_old(0, res, None).unwrap(), (SOFT, HARD));
+    let mut ans: (rlim, rlim) = (0, 0);
+    assert!(prlimit(0, res, None, Some(&mut ans)).is_ok());
+    assert_eq!(ans, (SOFT, HARD));
 
     assert_eq!(
-        prlimit(0, res, Some((HARD, SOFT))).unwrap_err().kind(),
+        prlimit(0, res, Some((HARD, SOFT)), None)
+            .unwrap_err()
+            .kind(),
         ErrorKind::InvalidInput
     );
+
     assert_eq!(
-        prlimit(0, res, Some((HARD, HARD + 1))).unwrap_err().kind(),
+        prlimit(0, res, Some((HARD, HARD + 1)), None)
+            .unwrap_err()
+            .kind(),
         ErrorKind::PermissionDenied
     );
 }

@@ -1,14 +1,11 @@
 # rlimit
 
-[![Travis-CI Status]][Travis-CI]
 [![Latest Version]][crates.io]
 [![Documentation]][docs.rs] 
 ![License]
 
 A simple wrapper for `getrlimit` and `setrlimit`.
 
-[Travis-CI]: https://travis-ci.org/Nugine/rlimit
-[Travis-CI Status]: https://travis-ci.org/Nugine/rlimit.svg?branch=master
 [crates.io]: https://crates.io/crates/rlimit
 [Latest Version]: https://img.shields.io/crates/v/rlimit.svg
 [Documentation]: https://docs.rs/rlimit/badge.svg
@@ -18,8 +15,8 @@ A simple wrapper for `getrlimit` and `setrlimit`.
 ## Example
 
 ```rust
-    const SOFT: rlim = 4 * 1024 * 1024;
-    const HARD: rlim = 8 * 1024 * 1024;
+const SOFT: rlim = 4 * 1024 * 1024;
+const HARD: rlim = 8 * 1024 * 1024;
 ```
 
 ### Set resource limit

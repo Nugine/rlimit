@@ -5,7 +5,7 @@
 //! const SOFT: rlim = 4 * 1024 * 1024;
 //! const HARD: rlim = 8 * 1024 * 1024;
 //!```
-//! 
+//!
 //! ## Set resource limit
 //! ```no_run
 //! # use rlimit::{rlim, Resource};
@@ -29,8 +29,29 @@
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (RLIM_INFINITY, RLIM_INFINITY));
 //! ```
 
+#![deny(
+    missing_docs,
+    missing_debug_implementations,
+    clippy::all,
+    clippy::restriction,
+    clippy::pedantic,
+    clippy::nursery,
+    clippy::cargo
+)]
+#![allow(
+    clippy::as_conversions,
+    clippy::implicit_return,
+    clippy::inline_always,
+    clippy::must_use_candidate
+)]
+#![allow(clippy::missing_errors_doc)]
+
 #[macro_use]
 extern crate cfg_if;
+
+use std::io;
+use std::mem;
+use std::ptr;
 
 cfg_if! {
     if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
@@ -60,6 +81,7 @@ pub const RLIM_INFINITY: rlim = libc::RLIM_INFINITY;
 pub type RawResource = __resource_t;
 
 /// Enum type used for resource values.
+#[allow(clippy::cast_possible_wrap)]
 #[repr(i32)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Resource {
@@ -149,33 +171,35 @@ pub enum Resource {
 }
 
 impl Resource {
+    /// Returns the raw resource type
     #[inline(always)]
-    pub fn as_raw_resource(&self) -> RawResource {
-        *self as _
+    pub const fn as_raw_resource(self) -> RawResource {
+        self as _
     }
 
     /// Set resource limits.
     #[inline(always)]
-    pub fn set(&self, soft: rlim, hard: rlim) -> std::io::Result<()> {
-        setrlimit(*self, soft, hard)
+    pub fn set(self, soft: rlim, hard: rlim) -> io::Result<()> {
+        setrlimit(self, soft, hard)
     }
 
     /// Get resource limits.
     #[inline(always)]
-    pub fn get(&self) -> std::io::Result<(rlim, rlim)> {
-        getrlimit(*self)
+    pub fn get(self) -> std::io::Result<(rlim, rlim)> {
+        getrlimit(self)
     }
 }
 
 /// Set resource limits.
-pub fn setrlimit(resource: Resource, soft: rlim, hard: rlim) -> std::io::Result<()> {
-    let resource = resource.as_raw_resource();
+#[inline]
+pub fn setrlimit(resource: Resource, soft: rlim, hard: rlim) -> io::Result<()> {
+    let raw_resource = resource.as_raw_resource();
     let limit = __rlimit {
         rlim_cur: soft,
         rlim_max: hard,
     };
 
-    let ret = unsafe { __setrlimit(resource as _, &limit) };
+    let ret = unsafe { __setrlimit(raw_resource as _, &limit) };
 
     if ret == 0 {
         Ok(())
@@ -185,11 +209,11 @@ pub fn setrlimit(resource: Resource, soft: rlim, hard: rlim) -> std::io::Result<
 }
 
 /// Get resource limits.
-pub fn getrlimit(resource: Resource) -> std::io::Result<(rlim, rlim)> {
-    let resource = resource.as_raw_resource();
+#[inline]
+pub fn getrlimit(resource: Resource) -> io::Result<(rlim, rlim)> {
     let mut limit = std::mem::MaybeUninit::<__rlimit>::uninit();
 
-    let ret = unsafe { __getrlimit(resource as _, limit.as_mut_ptr()) };
+    let ret = unsafe { __getrlimit(resource.as_raw_resource() as _, limit.as_mut_ptr()) };
 
     if ret == 0 {
         let limit = unsafe { limit.assume_init() };
@@ -199,55 +223,48 @@ pub fn getrlimit(resource: Resource) -> std::io::Result<(rlim, rlim)> {
     }
 }
 
-/// [Linux] Set the resource limits of an arbitrary process.
+/// [Linux] Set and get the resource limits of an arbitrary process.
+///
+///
+#[allow(clippy::similar_names, clippy::needless_pass_by_value)]
+#[inline]
 #[cfg(target_os = "linux")]
 pub fn prlimit(
     pid: libc::pid_t,
     resource: Resource,
     new_limit: Option<(rlim, rlim)>,
-) -> std::io::Result<()> {
-    let resource = resource.as_raw_resource();
-
-    let new_rlimit = new_limit.map(|(soft, hard)| __rlimit {
+    old_limit: Option<&mut (rlim, rlim)>,
+) -> io::Result<()> {
+    let new_rlimit: Option<__rlimit> = new_limit.map(|(soft, hard)| __rlimit {
         rlim_cur: soft,
         rlim_max: hard,
     });
-    let new_rlimit_ptr = new_rlimit
-        .as_ref()
-        .map(|r| r as *const _)
-        .unwrap_or(std::ptr::null());
-    let ret = unsafe { __prlimit(pid, resource, new_rlimit_ptr, std::ptr::null_mut()) };
-    if ret == 0 {
-        Ok(())
+    let new_rlimit_ptr: *const __rlimit = new_rlimit.as_ref().map_or(ptr::null(), |r| r);
+
+    let mut old_rlimit: mem::MaybeUninit<__rlimit> = mem::MaybeUninit::uninit();
+    let old_rlimit_ptr: *mut __rlimit = if old_limit.is_some() {
+        old_rlimit.as_mut_ptr()
     } else {
-        Err(std::io::Error::last_os_error())
-    }
-}
+        ptr::null_mut()
+    };
 
-/// [Linux] Set and get the resource limits of an arbitrary process.
-#[cfg(target_os = "linux")]
-pub fn prlimit_with_old(
-    pid: libc::pid_t,
-    resource: Resource,
-    new_limit: Option<(rlim, rlim)>,
-) -> std::io::Result<(rlim, rlim)> {
-    let resource = resource.as_raw_resource();
-
-    let new_rlimit = new_limit.map(|(soft, hard)| __rlimit {
-        rlim_cur: soft,
-        rlim_max: hard,
-    });
-    let new_rlimit_ptr = new_rlimit
-        .as_ref()
-        .map(|r| r as *const _)
-        .unwrap_or(std::ptr::null());
-
-    let mut old_rlimit = std::mem::MaybeUninit::<__rlimit>::uninit();
-    let ret = unsafe { __prlimit(pid, resource, new_rlimit_ptr, old_rlimit.as_mut_ptr()) };
+    let ret = unsafe {
+        __prlimit(
+            pid,
+            resource.as_raw_resource() as _,
+            new_rlimit_ptr,
+            old_rlimit_ptr,
+        )
+    };
 
     if ret == 0 {
-        let old_rlimit = unsafe { old_rlimit.assume_init() };
-        Ok((old_rlimit.rlim_cur, old_rlimit.rlim_max))
+        if let Some((soft, hard)) = old_limit {
+            let old_rlimit: __rlimit = unsafe { old_rlimit.assume_init() };
+            *soft = old_rlimit.rlim_cur;
+            *hard = old_rlimit.rlim_max;
+        }
+
+        Ok(())
     } else {
         Err(std::io::Error::last_os_error())
     }
