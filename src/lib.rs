@@ -49,13 +49,11 @@
 #[macro_use]
 extern crate cfg_if;
 
-
 use std::io;
 use std::mem;
 use std::ptr;
 
 pub mod errors;
-
 
 cfg_if! {
     if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
