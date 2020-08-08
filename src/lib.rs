@@ -63,7 +63,7 @@ cfg_if! {
     }
 }
 
-use crate::errors::RlimitsError;
+use crate::errors::RlimitsResourceError;
 
 use libc::rlim_t as __rlim_t;
 use libc::rlimit as __rlimit;
@@ -195,27 +195,56 @@ impl Resource {
 }
 
 impl std::str::FromStr for Resource {
-    type Err = RlimitsError;
+    type Err = RlimitsResourceError;
 
+    /// Parse a `Resource` from a &str
+    #[inline(always)]
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s {
-            "RLIMIT_AS" => Ok(Resource::AS),
-            "RLIMIT_CORE" => Ok(Resource::CORE),
-            "RLIMIT_CPU" => Ok(Resource::CPU),
-            "RLIMIT_DATA" => Ok(Resource::DATA),
-            "RLIMIT_FSIZE" => Ok(Resource::FSIZE),
-            "RLIMIT_LOCKS" => Ok(Resource::LOCKS),
-            "RLIMIT_MEMLOCK" => Ok(Resource::MEMLOCK),
-            "RLIMIT_MSGQUEUE" => Ok(Resource::MSGQUEUE),
-            "RLIMIT_NICE" => Ok(Resource::NICE),
-            "RLIMIT_NOFILE" => Ok(Resource::NOFILE),
-            "RLIMIT_NPROC" => Ok(Resource::NPROC),
-            "RLIMIT_RSS" => Ok(Resource::RSS),
-            "RLIMIT_RTPRIO" => Ok(Resource::RTPRIO),
-            "RLIMIT_RTTIME" => Ok(Resource::RTTIME),
-            "RLIMIT_SIGPENDING" => Ok(Resource::SIGPENDING),
-            "RLIMIT_STACK" => Ok(Resource::STACK),
-            _ => Err(format!("invalid rlimit: {}", s).into()),
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_AS" => Ok(Self::AS),
+
+            "RLIMIT_CORE" => Ok(Self::CORE),
+
+            "RLIMIT_CPU" => Ok(Self::CPU),
+
+            "RLIMIT_DATA" => Ok(Self::DATA),
+
+            "RLIMIT_FSIZE" => Ok(Self::FSIZE),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_LOCKS" => Ok(Self::LOCKS),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_MEMLOCK" => Ok(Self::MEMLOCK),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_MSGQUEUE" => Ok(Self::MSGQUEUE),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_NICE" => Ok(Self::NICE),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_NOFILE" => Ok(Self::NOFILE),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_NPROC" => Ok(Self::NPROC),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_RSS" => Ok(Self::RSS),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_RTPRIO" => Ok(Self::RTPRIO),
+
+            #[cfg(all(target_os = "linux", target_env = "gnu"))]
+            "RLIMIT_RTTIME" => Ok(Self::RTTIME),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_SIGPENDING" => Ok(Self::SIGPENDING),
+
+            "RLIMIT_STACK" => Ok(Self::STACK),
+
+            _ => Err(RlimitsResourceError(s.to_string())),
         }
     }
 }
