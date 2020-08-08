@@ -49,13 +49,11 @@
 #[macro_use]
 extern crate cfg_if;
 
-
 use std::io;
 use std::mem;
 use std::ptr;
 
 pub mod errors;
-
 
 cfg_if! {
     if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
@@ -193,6 +191,32 @@ impl Resource {
     #[inline(always)]
     pub fn get(self) -> std::io::Result<(rlim, rlim)> {
         getrlimit(self)
+    }
+}
+
+impl std::str::FromStr for Resource {
+    type Err = RlimitsError;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
+            "RLIMIT_AS" => Ok(Resource::AS),
+            "RLIMIT_CORE" => Ok(Resource::CORE),
+            "RLIMIT_CPU" => Ok(Resource::CPU),
+            "RLIMIT_DATA" => Ok(Resource::DATA),
+            "RLIMIT_FSIZE" => Ok(Resource::FSIZE),
+            "RLIMIT_LOCKS" => Ok(Resource::LOCKS),
+            "RLIMIT_MEMLOCK" => Ok(Resource::MEMLOCK),
+            "RLIMIT_MSGQUEUE" => Ok(Resource::MSGQUEUE),
+            "RLIMIT_NICE" => Ok(Resource::NICE),
+            "RLIMIT_NOFILE" => Ok(Resource::NOFILE),
+            "RLIMIT_NPROC" => Ok(Resource::NPROC),
+            "RLIMIT_RSS" => Ok(Resource::RSS),
+            "RLIMIT_RTPRIO" => Ok(Resource::RTPRIO),
+            "RLIMIT_RTTIME" => Ok(Resource::RTTIME),
+            "RLIMIT_SIGPENDING" => Ok(Resource::SIGPENDING),
+            "RLIMIT_STACK" => Ok(Resource::STACK),
+            _ => Err(format!("invalid rlimit: {}", s).into()),
+        }
     }
 }
 
