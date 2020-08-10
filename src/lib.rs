@@ -52,8 +52,8 @@ extern crate cfg_if;
 use std::io;
 use std::mem;
 use std::ptr;
-
-pub mod errors;
+use std::fmt;
+use std::error::Error;
 
 cfg_if! {
     if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
@@ -62,8 +62,6 @@ cfg_if! {
         use libc::c_int as __resource_t;
     }
 }
-
-use crate::errors::RlimitsResourceError;
 
 use libc::rlim_t as __rlim_t;
 use libc::rlimit as __rlimit;
@@ -194,8 +192,23 @@ impl Resource {
     }
 }
 
+/// An error returned when parsing a `Resource` using [`from_str`] fails
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ParseResourceError {
+    _priv: (),
+}
+
+impl fmt::Display for ParseResourceError {
+    #[inline(always)]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        "failed to parse Resource".fmt(f)
+    }
+}
+
+impl Error for ParseResourceError {}
+
 impl std::str::FromStr for Resource {
-    type Err = RlimitsResourceError;
+    type Err = ParseResourceError;
 
     /// Parse a `Resource` from a &str
     #[inline(always)]
@@ -244,7 +257,7 @@ impl std::str::FromStr for Resource {
 
             "RLIMIT_STACK" => Ok(Self::STACK),
 
-            _ => Err(RlimitsResourceError(s.to_string())),
+            _ => Err(ParseResourceError { _priv: () }),
         }
     }
 }
