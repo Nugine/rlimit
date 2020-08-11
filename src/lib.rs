@@ -52,8 +52,6 @@ extern crate cfg_if;
 use std::error::Error;
 use std::fmt;
 use std::io;
-use std::mem;
-use std::ptr;
 
 cfg_if! {
     if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
@@ -308,6 +306,9 @@ pub fn prlimit(
     new_limit: Option<(rlim, rlim)>,
     old_limit: Option<&mut (rlim, rlim)>,
 ) -> io::Result<()> {
+    use std::mem;
+    use std::ptr;
+
     let new_rlimit: Option<__rlimit> = new_limit.map(|(soft, hard)| __rlimit {
         rlim_cur: soft,
         rlim_max: hard,
