@@ -49,6 +49,8 @@
 #[macro_use]
 extern crate cfg_if;
 
+use std::error::Error;
+use std::fmt;
 use std::io;
 use std::mem;
 use std::ptr;
@@ -187,6 +189,77 @@ impl Resource {
     #[inline(always)]
     pub fn get(self) -> std::io::Result<(rlim, rlim)> {
         getrlimit(self)
+    }
+}
+
+/// An error returned when parsing a `Resource` using [`from_str`] fails
+#[allow(clippy::missing_docs_in_private_items)]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ParseResourceError {
+    _priv: (),
+}
+
+impl fmt::Display for ParseResourceError {
+    #[inline(always)]
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        "failed to parse Resource".fmt(f)
+    }
+}
+
+impl Error for ParseResourceError {}
+
+impl std::str::FromStr for Resource {
+    type Err = ParseResourceError;
+
+    /// Parse a `Resource` from a &str
+    #[inline(always)]
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_AS" => Ok(Self::AS),
+
+            "RLIMIT_CORE" => Ok(Self::CORE),
+
+            "RLIMIT_CPU" => Ok(Self::CPU),
+
+            "RLIMIT_DATA" => Ok(Self::DATA),
+
+            "RLIMIT_FSIZE" => Ok(Self::FSIZE),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_LOCKS" => Ok(Self::LOCKS),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_MEMLOCK" => Ok(Self::MEMLOCK),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_MSGQUEUE" => Ok(Self::MSGQUEUE),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_NICE" => Ok(Self::NICE),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_NOFILE" => Ok(Self::NOFILE),
+
+            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
+            "RLIMIT_NPROC" => Ok(Self::NPROC),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_RSS" => Ok(Self::RSS),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_RTPRIO" => Ok(Self::RTPRIO),
+
+            #[cfg(all(target_os = "linux", target_env = "gnu"))]
+            "RLIMIT_RTTIME" => Ok(Self::RTTIME),
+
+            #[cfg(target_os = "linux")]
+            "RLIMIT_SIGPENDING" => Ok(Self::SIGPENDING),
+
+            "RLIMIT_STACK" => Ok(Self::STACK),
+
+            _ => Err(ParseResourceError { _priv: () }),
+        }
     }
 }
 
