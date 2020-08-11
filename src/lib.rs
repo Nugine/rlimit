@@ -193,6 +193,7 @@ impl Resource {
 }
 
 /// An error returned when parsing a `Resource` using [`from_str`] fails
+#[allow(clippy::missing_docs_in_private_items)]
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ParseResourceError {
     _priv: (),
