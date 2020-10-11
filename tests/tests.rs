@@ -1,16 +1,16 @@
-use rlimit::{getrlimit, rlim, Resource, RLIM_INFINITY};
+use rlimit::{getrlimit, Resource, Rlim};
 use std::io::ErrorKind;
 
-const SOFT: rlim = 4 * 1024 * 1024;
-const HARD: rlim = 8 * 1024 * 1024;
+const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
+const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 
 #[test]
-fn test_eq() {
-    assert_eq!(Resource::FSIZE.as_raw_resource(), libc::RLIMIT_FSIZE);
+fn raw_eq() {
+    assert_eq!(Resource::FSIZE.as_raw(), libc::RLIMIT_FSIZE);
 }
 
 #[test]
-fn test_set_get() {
+fn resource_set_get() {
     assert!(Resource::FSIZE.set(SOFT, HARD).is_ok());
 
     // assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
@@ -28,24 +28,26 @@ fn test_set_get() {
 }
 
 #[test]
-fn test_get() {
+fn resource_get() {
     assert_eq!(
         getrlimit(Resource::CPU).unwrap(),
-        (RLIM_INFINITY, RLIM_INFINITY)
+        (Rlim::INFINITY, Rlim::INFINITY)
     );
 }
 
 #[cfg(target_os = "linux")]
 #[test]
-fn test_prlimit() {
+fn linux_prlimit() {
     use rlimit::prlimit;
     let res = Resource::CORE;
 
     assert!(prlimit(0, res, Some((SOFT, HARD)), None).is_ok());
 
-    let mut ans: (rlim, rlim) = (0, 0);
-    assert!(prlimit(0, res, None, Some(&mut ans)).is_ok());
-    assert_eq!(ans, (SOFT, HARD));
+    let mut soft = Rlim::default();
+    let mut hard = Rlim::default();
+
+    assert!(prlimit(0, res, None, Some((&mut soft, &mut hard))).is_ok());
+    assert_eq!((soft, hard), (SOFT, HARD));
 
     assert_eq!(
         prlimit(0, res, Some((HARD, SOFT)), None)
@@ -59,5 +61,13 @@ fn test_prlimit() {
             .unwrap_err()
             .kind(),
         ErrorKind::PermissionDenied
+    );
+}
+
+#[test]
+fn available() {
+    assert_eq!(
+        Resource::available_names().len(),
+        Resource::available_resources().len()
     );
 }

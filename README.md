@@ -15,32 +15,21 @@ A simple wrapper for `getrlimit` and `setrlimit`.
 ## Example
 
 ```rust
-const SOFT: rlim = 4 * 1024 * 1024;
-const HARD: rlim = 8 * 1024 * 1024;
+use rlimit::{Rlim, Resource, setrlimit, getrlimit};
+const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
+const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 ```
 
 ### Set resource limit
+
 ```rust
 assert!(Resource::FSIZE.set(SOFT, HARD).is_ok());
-```
-or
-```rust
 assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
 ```
 
 ### Get resource limit
+
 ```rust
-assert_eq!(getrlimit(Resource::CPU).unwrap(), (RLIM_INFINITY, RLIM_INFINITY));
+assert!(Resource::NOFILE.get().is_ok());
+assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 ```
-
-## Todo
-
-Support more targets.
-
-| Current targets           |
-| ------------------------- |
-| i686-unknown-linux-gnu    |
-| i686-unknown-linux-musl   |
-| x86_64-unknown-linux-gnu  |
-| x86_64-unknown-linux-musl |
-| x86_64-apple-darwin       |

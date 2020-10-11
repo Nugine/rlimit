@@ -1,345 +1,144 @@
 //! rlimit - A simple wrapper for `getrlimit` and `setrlimit`.
 //! # Example
-//! ```no_run
-//! # use rlimit::rlim;
-//! const SOFT: rlim = 4 * 1024 * 1024;
-//! const HARD: rlim = 8 * 1024 * 1024;
-//!```
+//! ```
+//! use rlimit::{Rlim, Resource, setrlimit, getrlimit};
+//! const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
+//! const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
+//! ```
 //!
 //! ## Set resource limit
 //! ```no_run
-//! # use rlimit::{rlim, Resource};
-//! # const SOFT: rlim = 4 * 1024 * 1024;
-//! # const HARD: rlim = 8 * 1024 * 1024;
+//! # use rlimit::{Rlim, Resource, setrlimit};
+//! # const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
+//! # const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 //! assert!(Resource::FSIZE.set(SOFT, HARD).is_ok());
-//! ```
-//! or
-//! ```no_run
-//! # use rlimit::{rlim, Resource, setrlimit};
-//! # const SOFT: rlim = 4 * 1024 * 1024;
-//! # const HARD: rlim = 8 * 1024 * 1024;
 //! assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
-//!```
+//! ```
 //!
 //! ## Get resource limit
 //! ```no_run
-//! # use rlimit::{rlim, Resource, RLIM_INFINITY, getrlimit};
-//! # const SOFT: rlim = 4 * 1024 * 1024;
-//! # const HARD: rlim = 8 * 1024 * 1024;
-//! assert_eq!(getrlimit(Resource::CPU).unwrap(), (RLIM_INFINITY, RLIM_INFINITY));
+//! # use rlimit::{Rlim, Resource, getrlimit};
+//! assert!(Resource::NOFILE.get().is_ok());
+//! assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 //! ```
 
 #![deny(
     missing_docs,
     missing_debug_implementations,
     clippy::all,
-    clippy::restriction,
     clippy::pedantic,
     clippy::nursery,
     clippy::cargo
 )]
-#![allow(
-    clippy::as_conversions,
-    clippy::implicit_return,
-    clippy::inline_always,
-    clippy::must_use_candidate
-)]
-#![allow(clippy::missing_errors_doc)]
 
-#[macro_use]
-extern crate cfg_if;
+#[cfg(target_os = "windows")]
+compile_error!("rlimit does not support windows");
 
-use std::error::Error;
-use std::fmt;
+mod resource_type;
+mod rlim_type;
+
+pub use crate::resource_type::{RawResource, Resource};
+pub use crate::rlim_type::{RawRlim, Rlim};
+
 use std::io;
 
-cfg_if! {
-    if #[cfg(all(target_os = "linux", target_env = "gnu"))]{
-        use libc::__rlimit_resource_t as __resource_t;
-    }else{
-        use libc::c_int as __resource_t;
-    }
-}
-
-use libc::rlim_t as __rlim_t;
-use libc::rlimit as __rlimit;
-
-use libc::getrlimit as __getrlimit;
-use libc::setrlimit as __setrlimit;
+use libc::c_int;
+use libc::rlimit;
 
 #[cfg(target_os = "linux")]
-use libc::prlimit as __prlimit;
+use std::ptr;
 
-/// Unsigned integer type used for limit values.
-#[allow(non_camel_case_types)]
-pub type rlim = __rlim_t;
-
-/// A value of rlim indicating no limit.
-pub const RLIM_INFINITY: rlim = libc::RLIM_INFINITY;
-
-/// Integer type used for resource values.
-pub type RawResource = __resource_t;
-
-/// Enum type used for resource values.
-#[allow(clippy::cast_possible_wrap)]
-#[repr(i32)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum Resource {
-    /// The maximum size (in bytes)
-    /// of the process's virtual memory (address space).
-    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-    AS = libc::RLIMIT_AS as _,
-
-    /// The maximum size (in bytes)
-    /// of a core file that the process may dump.
-    CORE = libc::RLIMIT_CORE as _,
-
-    /// A limit (in seconds)
-    /// on the amount of CPU time that the process can consume.
-    CPU = libc::RLIMIT_CPU as _,
-
-    /// The maximum size (in bytes)
-    /// of the process's data segment
-    /// (initialized data, uninitialized data, and heap).
-    DATA = libc::RLIMIT_DATA as _,
-
-    /// The maximum size (in bytes)
-    /// of files that the process may create.
-    FSIZE = libc::RLIMIT_FSIZE as _,
-
-    /// A limit on the combined number
-    /// of `flock(2)` locks and `fcntl(2)` leases
-    /// that this process may establish.
-    #[cfg(target_os = "linux")]
-    LOCKS = libc::RLIMIT_LOCKS as _,
-
-    /// The maximum number (in bytes)
-    /// of memory that may be locked into RAM.
-    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-    MEMLOCK = libc::RLIMIT_MEMLOCK as _,
-
-    /// A limit on the number
-    /// of bytes that can be allocated for POSIX message queues
-    /// for the real user ID of the calling process.
-    #[cfg(target_os = "linux")]
-    MSGQUEUE = libc::RLIMIT_MSGQUEUE as _,
-
-    /// This specifies a ceiling
-    /// to which the process's nice value can be raised
-    /// using `setpriority(2)` or `nice(2)`.
-    #[cfg(target_os = "linux")]
-    NICE = libc::RLIMIT_NICE as _,
-
-    /// This specifies a value
-    /// one greater than the maximum file descriptor number
-    /// that can be opened by this process.
-    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-    NOFILE = libc::RLIMIT_NOFILE as _,
-
-    /// A limit on the number of extant process (or, more precisely on Linux, threads)
-    /// for the real user ID of the calling process.
-    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-    NPROC = libc::RLIMIT_NPROC as _,
-
-    /// A limit (in bytes)
-    /// on the process's resident set
-    /// (the number of virtual pages resident in RAM).
-    #[cfg(target_os = "linux")]
-    RSS = libc::RLIMIT_RSS as _,
-
-    /// This specifies a ceiling on the real-time priority
-    /// that may be set for this process
-    /// using `sched_setscheduler(2)` and `sched_setparam(2)`.
-    #[cfg(target_os = "linux")]
-    RTPRIO = libc::RLIMIT_RTPRIO as _,
-
-    /// A limit (in microseconds) on the amount of CPU time
-    /// that a process scheduled under a real-time scheduling policy
-    /// may consume without making a blocking system call.
-    #[cfg(all(target_os = "linux", target_env = "gnu"))]
-    RTTIME = libc::RLIMIT_RTTIME as _,
-
-    /// A limit on the number
-    /// of signals that may be queued
-    /// for the real user ID of the calling process.
-    #[cfg(target_os = "linux")]
-    SIGPENDING = libc::RLIMIT_SIGPENDING as _,
-
-    /// The maximum size (in bytes)
-    /// of the process stack.
-    STACK = libc::RLIMIT_STACK as _,
-}
-
-impl Resource {
-    /// Returns the raw resource type
-    #[inline(always)]
-    pub const fn as_raw_resource(self) -> RawResource {
-        self as _
-    }
-
-    /// Set resource limits.
-    #[inline(always)]
-    pub fn set(self, soft: rlim, hard: rlim) -> io::Result<()> {
-        setrlimit(self, soft, hard)
-    }
-
-    /// Get resource limits.
-    #[inline(always)]
-    pub fn get(self) -> std::io::Result<(rlim, rlim)> {
-        getrlimit(self)
-    }
-}
-
-/// An error returned when parsing a `Resource` using [`from_str`] fails
-#[allow(clippy::missing_docs_in_private_items)]
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ParseResourceError {
-    _priv: (),
-}
-
-impl fmt::Display for ParseResourceError {
-    #[inline(always)]
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        "failed to parse Resource".fmt(f)
-    }
-}
-
-impl Error for ParseResourceError {}
-
-impl std::str::FromStr for Resource {
-    type Err = ParseResourceError;
-
-    /// Parse a `Resource` from a &str
-    #[inline(always)]
-    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
-        match s {
-            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-            "RLIMIT_AS" => Ok(Self::AS),
-
-            "RLIMIT_CORE" => Ok(Self::CORE),
-
-            "RLIMIT_CPU" => Ok(Self::CPU),
-
-            "RLIMIT_DATA" => Ok(Self::DATA),
-
-            "RLIMIT_FSIZE" => Ok(Self::FSIZE),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_LOCKS" => Ok(Self::LOCKS),
-
-            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-            "RLIMIT_MEMLOCK" => Ok(Self::MEMLOCK),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_MSGQUEUE" => Ok(Self::MSGQUEUE),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_NICE" => Ok(Self::NICE),
-
-            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-            "RLIMIT_NOFILE" => Ok(Self::NOFILE),
-
-            #[cfg(any(target_os = "linux", target_os = "macos", target_os = "ios"))]
-            "RLIMIT_NPROC" => Ok(Self::NPROC),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_RSS" => Ok(Self::RSS),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_RTPRIO" => Ok(Self::RTPRIO),
-
-            #[cfg(all(target_os = "linux", target_env = "gnu"))]
-            "RLIMIT_RTTIME" => Ok(Self::RTTIME),
-
-            #[cfg(target_os = "linux")]
-            "RLIMIT_SIGPENDING" => Ok(Self::SIGPENDING),
-
-            "RLIMIT_STACK" => Ok(Self::STACK),
-
-            _ => Err(ParseResourceError { _priv: () }),
-        }
-    }
-}
+#[cfg(target_os = "linux")]
+use libc::pid_t;
 
 /// Set resource limits.
+/// # Errors
+/// [Linux] See <https://man7.org/linux/man-pages/man2/setrlimit.2.html>
 #[inline]
-pub fn setrlimit(resource: Resource, soft: rlim, hard: rlim) -> io::Result<()> {
-    let raw_resource = resource.as_raw_resource();
-    let limit = __rlimit {
-        rlim_cur: soft,
-        rlim_max: hard,
+pub fn setrlimit(resource: Resource, soft: Rlim, hard: Rlim) -> io::Result<()> {
+    let raw_resource = resource.as_raw();
+
+    let rlim: rlimit = rlimit {
+        rlim_cur: soft.as_raw(),
+        rlim_max: hard.as_raw(),
     };
 
-    let ret = unsafe { __setrlimit(raw_resource as _, &limit) };
+    let ret: c_int = unsafe { libc::setrlimit(raw_resource, &rlim) };
 
     if ret == 0 {
         Ok(())
     } else {
-        Err(std::io::Error::last_os_error())
+        Err(io::Error::last_os_error())
     }
 }
 
 /// Get resource limits.
+/// # Errors
+/// [Linux] See <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
 #[inline]
-pub fn getrlimit(resource: Resource) -> io::Result<(rlim, rlim)> {
-    let mut limit = std::mem::MaybeUninit::<__rlimit>::uninit();
+pub fn getrlimit(resource: Resource) -> io::Result<(Rlim, Rlim)> {
+    let raw_resource = resource.as_raw();
 
-    let ret = unsafe { __getrlimit(resource.as_raw_resource() as _, limit.as_mut_ptr()) };
+    let mut rlim: rlimit = rlimit {
+        rlim_cur: 0, // zero-init
+        rlim_max: 0, // zero-init
+    };
+
+    let ret: c_int = unsafe { libc::getrlimit(raw_resource, &mut rlim) };
 
     if ret == 0 {
-        let limit = unsafe { limit.assume_init() };
-        Ok((limit.rlim_cur, limit.rlim_max))
+        let soft = Rlim::from_raw(rlim.rlim_cur);
+        let hard = Rlim::from_raw(rlim.rlim_max);
+        Ok((soft, hard))
     } else {
-        Err(std::io::Error::last_os_error())
+        Err(io::Error::last_os_error())
     }
 }
 
 /// [Linux] Set and get the resource limits of an arbitrary process.
-///
-///
-#[allow(clippy::similar_names, clippy::needless_pass_by_value)]
+/// # Errors
+/// See <https://man7.org/linux/man-pages/man2/prlimit.2.html>
 #[inline]
 #[cfg(target_os = "linux")]
 pub fn prlimit(
-    pid: libc::pid_t,
+    pid: pid_t,
     resource: Resource,
-    new_limit: Option<(rlim, rlim)>,
-    old_limit: Option<&mut (rlim, rlim)>,
+    new_limit: Option<(Rlim, Rlim)>,
+    old_limit: Option<(&mut Rlim, &mut Rlim)>,
 ) -> io::Result<()> {
-    use std::mem;
-    use std::ptr;
+    let raw_resource = resource.as_raw();
 
-    let new_rlimit: Option<__rlimit> = new_limit.map(|(soft, hard)| __rlimit {
-        rlim_cur: soft,
-        rlim_max: hard,
+    let new_rlim: Option<rlimit> = new_limit.map(|(soft, hard)| rlimit {
+        rlim_cur: soft.as_raw(),
+        rlim_max: hard.as_raw(),
     });
-    let new_rlimit_ptr: *const __rlimit = new_rlimit.as_ref().map_or(ptr::null(), |r| r);
 
-    let mut old_rlimit: mem::MaybeUninit<__rlimit> = mem::MaybeUninit::uninit();
-    let old_rlimit_ptr: *mut __rlimit = if old_limit.is_some() {
-        old_rlimit.as_mut_ptr()
+    let new_rlimit_ptr: *const rlimit = match new_rlim {
+        Some(ref rlim) => rlim,
+        None => ptr::null(),
+    };
+
+    let mut old_rlim: rlimit = rlimit {
+        rlim_cur: 0, // zero-init
+        rlim_max: 0, // zero-init
+    };
+
+    let old_rlimit_ptr: *mut rlimit = if old_limit.is_some() {
+        &mut old_rlim
     } else {
         ptr::null_mut()
     };
 
-    let ret = unsafe {
-        __prlimit(
-            pid,
-            resource.as_raw_resource() as _,
-            new_rlimit_ptr,
-            old_rlimit_ptr,
-        )
-    };
+    let ret: c_int = unsafe { libc::prlimit(pid, raw_resource, new_rlimit_ptr, old_rlimit_ptr) };
 
     if ret == 0 {
         if let Some((soft, hard)) = old_limit {
-            let old_rlimit: __rlimit = unsafe { old_rlimit.assume_init() };
-            *soft = old_rlimit.rlim_cur;
-            *hard = old_rlimit.rlim_max;
+            *soft = Rlim::from_raw(old_rlim.rlim_cur);
+            *hard = Rlim::from_raw(old_rlim.rlim_max);
         }
 
         Ok(())
     } else {
-        Err(std::io::Error::last_os_error())
+        Err(io::Error::last_os_error())
     }
 }
