@@ -21,6 +21,10 @@
 //! assert!(Resource::NOFILE.get().is_ok());
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 //! ```
+//!
+//! ## Increase NOFILE limit
+//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.0/examples/nofile.rs).
+//!
 
 #![deny(
     missing_docs,
