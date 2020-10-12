@@ -12,4 +12,4 @@ categories = ["os::unix-apis"]
 
 [dependencies]
 libc = "^0.2"
-cfg-if = "0.1.9"
+cfg-if = "1.0.0"
