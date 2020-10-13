@@ -143,6 +143,19 @@ macro_rules! declare_resource {
                 )+
             }
 
+            #[allow(unused_doc_comments)]
+            #[test]
+            fn from_str(){
+                $(
+                    $(#[$attr])*
+                    {
+                        assert_eq!(Resource::from_str(stringify!($c_enum)), Ok(Resource::$id));
+                    }
+                )+
+
+                assert!(Resource::from_str("asdqwe").is_err());
+            }
+
             #[test]
             fn available(){
                 assert_eq!(
