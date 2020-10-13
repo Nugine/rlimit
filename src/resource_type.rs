@@ -38,7 +38,8 @@ pub struct Resource(u16, u16);
 
 impl fmt::Debug for Resource {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Resource::{}", self.as_name())
+        let idx = Self::VALUE_TABLE.iter().position(|v| v == self).unwrap();
+        write!(f, "Resource::{}", Self::IDENT_TABLE[idx])
     }
 }
 
@@ -93,7 +94,18 @@ macro_rules! declare_resource {
             const VALUE_TABLE: &'static [Self] = &[
                 $(
                     $(#[$attr])*
-                    Self::$id,
+                    {
+                        Self::$id
+                    },
+                )+
+            ];
+
+            const IDENT_TABLE: &'static [&'static str] = &[
+                $(
+                    $(#[$attr])*
+                    {
+                        stringify!($id)
+                    },
                 )+
             ];
         }
