@@ -15,19 +15,23 @@ use libc::c_int as resource_t;
 
 /// Integer type used for resource values.
 ///
-/// The actual type of `RawResource` can be different on different platforms.
+/// The actual type of [`RawResource`][RawResource] can be different on different platforms.
+///
+/// [RawResource]: type.RawResource.html
 pub type RawResource = resource_t;
 
 #[allow(clippy::doc_markdown)]
 /// A kind of resource.
 ///
-/// **Be careful**: The documentation of `Resource` constants are based on Linux and FreeBSD.
+/// **Be careful**: The documentation of [`Resource`][Resource] constants are based on Linux and FreeBSD.
 /// It may be inconsistent with other platforms.
 ///
 /// # References
 /// Linux: <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
 ///
 /// FreeBSD: <https://www.freebsd.org/cgi/man.cgi?query=getrlimit>
+///
+/// [Resource]: struct.Resource.html
 ///
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Resource(u16, u16);
@@ -458,7 +462,9 @@ impl Resource {
 
     /// Returns the raw resource type.
     ///
-    /// The actual type of `RawResource` can be different on different platforms.
+    /// **Be careful**: The actual type of [`RawResource`][RawResource] can be different on different platforms.
+    ///
+    /// [RawResource]: type.RawResource.html
     #[inline]
     #[must_use]
     pub const fn as_raw(self) -> RawResource {

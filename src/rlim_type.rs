@@ -10,16 +10,32 @@ use libc::rlim_t;
 
 /// Unsigned integer type used for limit values.
 ///
-/// The actual type of `RawRlim` can be different on different platforms.
+/// The actual type of [`RawRlim`][RawRlim] can be different on different platforms.
+///
+/// [RawRlim]: type.RawRlim.html
 pub type RawRlim = rlim_t;
 
 /// Unsigned integer type used for limit values.
 ///
+/// Arithmetic operations with [`Self`][Rlim] are delegated to the inner [`RawRlim`][RawRlim].
+///
+/// Arithmetic operation with [`usize`][usize] converts the rhs to [`RawRlim`][RawRlim] and computes the result by two [`RawRlim`][RawRlim] values.
+///
+/// **Be careful**: The actual type of [`RawRlim`][RawRlim] can be different on different platforms.
+///
 /// # Panics
-/// Panics if arithmetic overflow occurs
+///
+/// Panics if the usize operand can not be converted to [`RawRlim`][RawRlim].
+///
+/// Panics in debug mode if arithmetic overflow occurred .
 ///
 /// # Features
-/// Enables the feature `serde` to impl Serialize and Deserialize for Rlim.
+/// Enables the feature `serde` to implement `Serialize` and `Deserialize` for Rlim with the attribute `serde(transparent)`.
+///
+/// [Rlim]: struct.Rlim.html
+/// [RawRlim]: type.RawRlim.html
+/// [usize]: https://doc.rust-lang.org/std/primitive.usize.html
+///
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -48,10 +64,10 @@ impl Rlim {
     ))]
     /// A value of type Rlim indicating an unrepresentable saved hard limit.
     pub const SAVED_MAX: Self = Self(libc::RLIM_SAVED_MAX);
+}
 
+impl Rlim {
     /// Wraps a raw value of limit as Rlim.
-    ///
-    /// The actual type of `RawRlim` can be different on different platforms.
     ///
     /// # Example
     /// ```
@@ -66,8 +82,6 @@ impl Rlim {
     }
 
     /// Returns a raw value of limit.
-    ///
-    /// The actual type of `RawRlim` can be different on different platforms.
     #[inline]
     #[must_use]
     pub const fn as_raw(self) -> RawRlim {
@@ -76,7 +90,9 @@ impl Rlim {
 
     /// Converts usize to Rlim
     /// # Panics
-    /// Panics if the usize value can not be converted to `RawRlim`.
+    /// Panics if the usize value can not be converted to [`RawRlim`][RawRlim].
+    ///
+    /// [RawRlim]: type.RawRlim.html
     #[inline]
     #[must_use]
     pub fn from_usize(n: usize) -> Self {
@@ -85,7 +101,9 @@ impl Rlim {
 
     /// Converts Rlim to usize
     /// # Panics
-    /// Panics if the wrapped `RawRlim` value can not be converted to usize.
+    /// Panics if the wrapped [`RawRlim`][RawRlim] value can not be converted to usize.
+    ///
+    /// [RawRlim]: type.RawRlim.html
     #[inline]
     #[must_use]
     pub fn as_usize(self) -> usize {
@@ -144,7 +162,7 @@ fn raw_to_usize(n: RawRlim) -> usize {
     match n.try_into() {
         Ok(r) => r,
         Err(e) => panic!(
-            "can not convert usize to {}, the number is {}, the error is {}",
+            "can not convert {} to usize, the number is {}, the error is {}",
             std::any::type_name::<RawRlim>(),
             n,
             e
@@ -171,9 +189,13 @@ macro_rules! impl_arithmetic {
 
             #[track_caller]
             fn $method(self, rhs: Self) -> Self::Output {
-                match self.0.$check(rhs.0) {
-                    Some(x) => Self(x),
-                    None => arithmetic_panic!($method, self.0, rhs.0),
+                if cfg!(debug_assertions) {
+                    match self.0.$check(rhs.0) {
+                        Some(x) => Self(x),
+                        None => arithmetic_panic!($method, self.0, rhs.0),
+                    }
+                } else {
+                    Self(self.0.$method(rhs.0))
                 }
             }
         }
@@ -183,9 +205,15 @@ macro_rules! impl_arithmetic {
 
             #[track_caller]
             fn $method(self, rhs: usize) -> Self::Output {
-                match self.0.$check(usize_to_raw(rhs)) {
-                    Some(x) => Self(x),
-                    None => arithmetic_panic!($method, self.0, rhs),
+                let rhs = usize_to_raw(rhs);
+
+                if cfg!(debug_assertions) {
+                    match self.0.$check(rhs) {
+                        Some(x) => Self(x),
+                        None => arithmetic_panic!($method, self.0, rhs),
+                    }
+                } else {
+                    Self(self.0.$method(rhs))
                 }
             }
         }
@@ -210,6 +238,34 @@ macro_rules! impl_arithmetic_assign{
     }
 }
 
+macro_rules! delegate_arithmetic{
+    {@checked $($check:tt,)+} => {
+        impl Rlim{
+            $(
+                /// Checked integer arithmetic. Returns None if overflow occurred.
+                pub fn $check(self, rhs: Self) -> Option<Self>{
+                    self.0.$check(rhs.0).map(Self)
+                }
+            )+
+        }
+    };
+
+    {@wrapping $($wrap:tt,)+} => {
+        impl Rlim{
+            $(
+                /// Wrapping (modular) arithmetic. Wraps around at the boundary of the inner [`RawRlim`][RawRlim].
+                ///
+                /// [RawRlim]: type.RawRlim.html
+                #[must_use]
+                #[allow(clippy::missing_const_for_fn)] // FIXME: `core::num::<impl u64>::wrapping_div` is not yet stable as a const fn
+                pub fn $wrap(self, rhs: Self) -> Self{
+                    Self(self.0.$wrap(rhs.0))
+                }
+            )+
+        }
+    }
+}
+
 impl_arithmetic!(Add, add, checked_add);
 impl_arithmetic!(Sub, sub, checked_sub);
 impl_arithmetic!(Mul, mul, checked_mul);
@@ -220,19 +276,16 @@ impl_arithmetic_assign!(SubAssign, sub_assign, -);
 impl_arithmetic_assign!(MulAssign, mul_assign, *);
 impl_arithmetic_assign!(DivAssign, div_assign, /);
 
-#[cfg(test)]
-mod tests {
-    use super::Rlim;
+delegate_arithmetic! {@checked
+    checked_add,
+    checked_sub,
+    checked_mul,
+    checked_div,
+}
 
-    #[test]
-    #[should_panic]
-    fn arithmetic_self() {
-        let _ = Rlim::default() - Rlim::from_raw(1);
-    }
-
-    #[test]
-    #[should_panic]
-    fn arithmetic_usize() {
-        let _ = Rlim::default() - 1;
-    }
+delegate_arithmetic! {@wrapping
+    wrapping_add,
+    wrapping_sub,
+    wrapping_mul,
+    wrapping_div,
 }
