@@ -1,19 +1,14 @@
-use rlimit::{getrlimit, Resource, Rlim};
+use rlimit::{getrlimit, setrlimit, Resource, Rlim};
 use std::io::ErrorKind;
 
 const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
 const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 
 #[test]
-fn raw_eq() {
-    assert_eq!(Resource::FSIZE.as_raw(), libc::RLIMIT_FSIZE);
-}
-
-#[test]
 fn resource_set_get() {
-    assert!(Resource::FSIZE.set(SOFT, HARD).is_ok());
+    assert!(Resource::FSIZE.set(SOFT - 1, HARD).is_ok());
 
-    // assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
+    assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
 
     assert_eq!(Resource::FSIZE.get().unwrap(), (SOFT, HARD));
 
@@ -61,13 +56,5 @@ fn linux_prlimit() {
             .unwrap_err()
             .kind(),
         ErrorKind::PermissionDenied
-    );
-}
-
-#[test]
-fn available() {
-    assert_eq!(
-        Resource::available_names().len(),
-        Resource::available_resources().len()
     );
 }

@@ -3,7 +3,7 @@
 //!
 //! ## Set resource limit
 //! ```no_run
-//! use rlimit::{Rlim, Resource, setrlimit};
+//! use rlimit::{setrlimit, Resource, Rlim};
 //!
 //! const DEFAULT_SOFT_LIMIT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
 //! const DEFAULT_HARD_LIMIT: Rlim = Rlim::from_raw(8 * 1024 * 1024);
@@ -16,7 +16,7 @@
 //!
 //! ## Get resource limit
 //! ```no_run
-//! # use rlimit::{Rlim, Resource, getrlimit};
+//! # use rlimit::{getrlimit, Resource, Rlim};
 //! assert!(Resource::NOFILE.get().is_ok());
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 //! ```

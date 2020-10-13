@@ -98,19 +98,58 @@ macro_rules! declare_resource {
             ];
         }
 
-        #[allow(unused_doc_comments)]
-        #[allow(unused_comparisons)]
         #[cfg(test)]
-        #[test]
-        fn name_value(){
-            $(
-                $(#[$attr])*
-                {
-                    assert_eq!(Resource::$id.as_name(), stringify!($c_enum));
-                    assert_eq!(Resource::from_str(stringify!($c_enum)).unwrap(), Resource::$id);
-                    assert!(libc::$c_enum >= 0 && libc::$c_enum <= 128);
-                }
-            )+
+        mod tests{
+            use super::*;
+
+            #[allow(unused_comparisons)]
+            #[allow(unused_doc_comments)]
+            #[test]
+            fn name_value(){
+                $(
+                    $(#[$attr])*
+                    {
+                        assert_eq!(Resource::$id.as_name(), stringify!($c_enum));
+                        assert_eq!(Resource::from_str(stringify!($c_enum)).unwrap(), Resource::$id);
+                        assert!(libc::$c_enum >= 0 && libc::$c_enum <= 128);
+                    }
+                )+
+            }
+
+            #[allow(unused_doc_comments)]
+            #[test]
+            fn unique_id_v(){
+                use std::collections::HashSet;
+
+                let vs = [
+                    $(
+                        $(#[$attr])*
+                        { $v },
+                    )+
+                ];
+
+                let s: HashSet<u16> = vs.iter().copied().collect();
+                assert_eq!(s.len(), Resource::NAME_TABLE.len());
+            }
+
+            #[allow(unused_doc_comments)]
+            #[test]
+            fn raw_eq(){
+                $(
+                    $(#[$attr])*
+                    {
+                        assert_eq!(Resource::$id.as_raw(), libc::$c_enum);
+                    }
+                )+
+            }
+
+            #[test]
+            fn available(){
+                assert_eq!(
+                    Resource::available_names().len(),
+                    Resource::available_resources().len()
+                );
+            }
         }
     };
 }
