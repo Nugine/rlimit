@@ -16,7 +16,8 @@
 //!
 //! ## Get resource limit
 //! ```no_run
-//! # use rlimit::{getrlimit, Resource, Rlim};
+//! use rlimit::{getrlimit, Resource, Rlim};
+//!
 //! assert!(Resource::NOFILE.get().is_ok());
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 //! ```
