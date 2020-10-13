@@ -12,24 +12,18 @@ A simple wrapper for `getrlimit` and `setrlimit`.
 [docs.rs]: https://docs.rs/rlimit
 [License]: https://img.shields.io/crates/l/rlimit.svg
 
-## Example
-
-```rust
-use rlimit::{Rlim, Resource, setrlimit, getrlimit};
-const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
-const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
-```
+## Examples
 
 ### Set resource limit
 
 ```rust
-use rlimit::{Rlim, Resource, setrlimit};
+use rlimit::{setrlimit, Resource, Rlim};
 
 const DEFAULT_SOFT_LIMIT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
 const DEFAULT_HARD_LIMIT: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 assert!(Resource::FSIZE.set(DEFAULT_SOFT_LIMIT, DEFAULT_HARD_LIMIT).is_ok());
 
-let soft = Rlim::from_usize(32768);
+let soft = Rlim::from_usize(16384);
 let hard = soft * 2;
 assert!(setrlimit(Resource::NOFILE, soft, hard).is_ok());
 ```
@@ -37,6 +31,7 @@ assert!(setrlimit(Resource::NOFILE, soft, hard).is_ok());
 ### Get resource limit
 
 ```rust
+# use rlimit::{getrlimit, Resource, Rlim};
 assert!(Resource::NOFILE.get().is_ok());
 assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 ```

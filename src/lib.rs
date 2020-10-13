@@ -1,5 +1,5 @@
 //! rlimit - A simple wrapper for `getrlimit` and `setrlimit`.
-//! # Example
+//! # Examples
 //!
 //! ## Set resource limit
 //! ```no_run
@@ -9,7 +9,7 @@
 //! const DEFAULT_HARD_LIMIT: Rlim = Rlim::from_raw(8 * 1024 * 1024);
 //! assert!(Resource::FSIZE.set(DEFAULT_SOFT_LIMIT, DEFAULT_HARD_LIMIT).is_ok());
 //!
-//! let soft = Rlim::from_usize(32768);
+//! let soft = Rlim::from_usize(16384);
 //! let hard = soft * 2;
 //! assert!(setrlimit(Resource::NOFILE, soft, hard).is_ok());
 //! ```

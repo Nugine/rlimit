@@ -2,14 +2,14 @@ use rlimit::{Resource, Rlim};
 use std::cmp;
 use std::io;
 
-const RECOMMENDED_NOFILE_LIMIT: Rlim = Rlim::from_raw(65536); // or another number
+const DEFAULT_NOFILE_LIMIT: Rlim = Rlim::from_raw(16384); // or another number
 
 /// Try to increase NOFILE limit and return the current soft limit.
 fn increase_nofile_limit() -> io::Result<Rlim> {
     let (soft, hard) = Resource::NOFILE.get()?;
     println!("Before increasing: soft   = {}, hard = {}", soft, hard);
 
-    let target = cmp::min(RECOMMENDED_NOFILE_LIMIT, hard);
+    let target = cmp::min(DEFAULT_NOFILE_LIMIT, hard);
     println!("Try to increase:   target = {}", target);
     Resource::NOFILE.set(target, target)?;
 
