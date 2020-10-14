@@ -3,6 +3,8 @@
 //!
 //! ## Set resource limit
 //! ```no_run
+//! # #[cfg(unix)]
+//! # {
 //! use rlimit::{setrlimit, Resource, Rlim};
 //!
 //! const DEFAULT_SOFT_LIMIT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
@@ -12,14 +14,18 @@
 //! let soft = Rlim::from_usize(16384);
 //! let hard = soft * 2;
 //! assert!(setrlimit(Resource::NOFILE, soft, hard).is_ok());
+//! # }
 //! ```
 //!
 //! ## Get resource limit
 //! ```no_run
+//! # #[cfg(unix)]
+//! # {
 //! use rlimit::{getrlimit, Resource, Rlim};
 //!
 //! assert!(Resource::NOFILE.get().is_ok());
 //! assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
+//! # }
 //! ```
 //!
 //! ## Increase NOFILE limit
@@ -35,11 +41,11 @@
     clippy::cargo
 )]
 
-#[cfg(not(target_os = "windows"))]
+#[cfg(unix)]
+#[doc(inline)]
 pub use self::unix::*;
 
-#[cfg(not(target_os = "windows"))]
-#[doc(inline)]
+#[cfg(unix)]
 mod unix {
     mod resource_type;
     mod rlim_type;
