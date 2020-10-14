@@ -31,7 +31,7 @@ jobs:
         with:
           use-cross: true
           command: test
-          args: --target=${{ matrix.target }}
+          args: --all-features --target=${{ matrix.target }}
 
   macos:
     name: macos
@@ -51,5 +51,17 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --target=${{ matrix.target }}
+          args: --all-features --target=${{ matrix.target }}
 
+  windows:
+    name: windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features

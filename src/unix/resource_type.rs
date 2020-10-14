@@ -1,6 +1,6 @@
 #![deny(unsafe_code)]
 
-use crate::rlim_type::Rlim;
+use super::rlim_type::Rlim;
 
 use std::error::Error;
 use std::fmt;
@@ -488,7 +488,7 @@ impl Resource {
     /// See [`setrlimit`](fn.setrlimit.html)
     #[inline]
     pub fn set(self, soft: Rlim, hard: Rlim) -> io::Result<()> {
-        crate::setrlimit(self, soft, hard)
+        super::setrlimit(self, soft, hard)
     }
 
     /// Get resource limits.
@@ -496,7 +496,7 @@ impl Resource {
     /// See [`getrlimit`](fn.getrlimit.html)
     #[inline]
     pub fn get(self) -> io::Result<(Rlim, Rlim)> {
-        crate::getrlimit(self)
+        super::getrlimit(self)
     }
 
     /// Returns the name of the resource.
