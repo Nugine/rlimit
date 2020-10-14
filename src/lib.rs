@@ -29,7 +29,7 @@
 //! ```
 //!
 //! ## Increase NOFILE limit
-//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.1/examples/nofile.rs).
+//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.2/examples/nofile.rs).
 //!
 
 #![deny(
