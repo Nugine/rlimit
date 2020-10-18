@@ -50,8 +50,14 @@ mod unix {
     mod resource_type;
     mod rlim_type;
 
+    #[cfg(target_os = "linux")]
+    mod proc_limits_type;
+
     pub use self::resource_type::{RawResource, Resource};
     pub use self::rlim_type::{RawRlim, Rlim};
+
+    #[cfg(target_os = "linux")]
+    pub use self::proc_limits_type::{ProcLimit, ProcLimits};
 
     use std::io;
 

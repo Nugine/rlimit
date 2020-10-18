@@ -31,7 +31,7 @@ jobs:
         with:
           use-cross: true
           command: test
-          args: --all-features --target=${{ matrix.target }}
+          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
 
   macos:
     name: macos
@@ -51,7 +51,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all-features --target=${{ matrix.target }}
+          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
 
   windows:
     name: windows
@@ -64,4 +64,4 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all-features
+          args: --all-features  -- --test-threads=1
