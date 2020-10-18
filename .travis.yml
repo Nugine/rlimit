@@ -1,0 +1,20 @@
+branches:
+  only: 
+    - master
+
+arch:
+  - arm64
+
+os: 
+  - linux
+
+language: rust
+
+rust:
+  - stable
+
+cache: cargo
+
+script:
+  - cargo build --verbose
+  - cargo test --all-features -- --test-threads=1
