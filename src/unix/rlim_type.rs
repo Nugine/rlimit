@@ -113,13 +113,13 @@ impl Rlim {
 
 impl fmt::Debug for Rlim {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        RawRlim::fmt(&self.0, f)
+        RawRlim::fmt(&(self.0), f)
     }
 }
 
 impl fmt::Display for Rlim {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        RawRlim::fmt(&self.0, f)
+        RawRlim::fmt(&(self.0), f)
     }
 }
 
@@ -190,12 +190,12 @@ macro_rules! impl_arithmetic {
             #[track_caller]
             fn $method(self, rhs: Self) -> Self::Output {
                 if cfg!(debug_assertions) {
-                    match self.0.$check(rhs.0) {
+                    match (self.0).$check(rhs.0) {
                         Some(x) => Self(x),
-                        None => arithmetic_panic!($method, self.0, rhs.0),
+                        None => arithmetic_panic!($method, (self.0), rhs.0),
                     }
                 } else {
-                    Self(self.0.$method(rhs.0))
+                    Self((self.0).$method(rhs.0))
                 }
             }
         }
@@ -208,12 +208,12 @@ macro_rules! impl_arithmetic {
                 let rhs = usize_to_raw(rhs);
 
                 if cfg!(debug_assertions) {
-                    match self.0.$check(rhs) {
+                    match (self.0).$check(rhs) {
                         Some(x) => Self(x),
-                        None => arithmetic_panic!($method, self.0, rhs),
+                        None => arithmetic_panic!($method, (self.0), rhs),
                     }
                 } else {
-                    Self(self.0.$method(rhs))
+                    Self((self.0).$method(rhs))
                 }
             }
         }
@@ -244,7 +244,7 @@ macro_rules! delegate_arithmetic{
             $(
                 /// Checked integer arithmetic. Returns None if overflow occurred.
                 pub fn $check(self, rhs: Self) -> Option<Self>{
-                    self.0.$check(rhs.0).map(Self)
+                    (self.0).$check(rhs.0).map(Self)
                 }
             )+
         }
@@ -259,7 +259,7 @@ macro_rules! delegate_arithmetic{
                 #[must_use]
                 #[allow(clippy::missing_const_for_fn)] // FIXME: `core::num::<impl u64>::wrapping_div` is not yet stable as a const fn
                 pub fn $wrap(self, rhs: Self) -> Self{
-                    Self(self.0.$wrap(rhs.0))
+                    Self((self.0).$wrap(rhs.0))
                 }
             )+
         }
