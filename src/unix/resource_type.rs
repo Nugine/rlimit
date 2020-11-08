@@ -34,7 +34,10 @@ pub type RawResource = resource_t;
 /// [Resource]: struct.Resource.html
 ///
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Resource(u16, u16);
+pub struct Resource {
+    tag: u16,
+    value: u16,
+}
 
 impl fmt::Debug for Resource {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -72,11 +75,11 @@ impl fmt::Display for ParseResourceError {
 impl Error for ParseResourceError {}
 
 macro_rules! declare_resource {
-    {$($(#[$attr:meta])* $id:ident = $v:expr => $c_enum:ident,)+} => {
+    {$($(#[$attr:meta])* $id:ident = $tag:expr => $c_enum:ident,)+} => {
         impl Resource{
             $(
                 $(#[$attr])*
-                pub const $id: Self = Self($v, libc::$c_enum as u16);
+                pub const $id: Self = Self{ tag: $tag, value: libc::$c_enum as u16 };
             )+
         }
 
@@ -130,17 +133,17 @@ macro_rules! declare_resource {
 
             #[allow(unused_doc_comments)]
             #[test]
-            fn unique_id_v(){
+            fn unique_tag(){
                 use std::collections::HashSet;
 
-                let vs = [
+                let tags = [
                     $(
                         $(#[$attr])*
-                        { $v },
+                        { $tag },
                     )+
                 ];
 
-                let s: HashSet<u16> = vs.iter().copied().collect();
+                let s: HashSet<u16> = tags.iter().copied().collect();
                 assert_eq!(s.len(), Resource::NAME_TABLE.len());
             }
 
@@ -532,6 +535,6 @@ impl Resource {
     #[inline]
     #[must_use]
     pub const fn as_raw(self) -> RawResource {
-        self.1 as _
+        self.value as _
     }
 }
