@@ -50,7 +50,6 @@ impl Rlim {
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "emscripten",
         target_os = "linux",
-        target_env = "uclibc",
     ))]
     /// A value of type Rlim indicating an unrepresentable saved soft limit.
     pub const SAVED_CUR: Self = Self(libc::RLIM_SAVED_CUR);
@@ -60,13 +59,18 @@ impl Rlim {
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "emscripten",
         target_os = "linux",
-        target_env = "uclibc",
     ))]
     /// A value of type Rlim indicating an unrepresentable saved hard limit.
     pub const SAVED_MAX: Self = Self(libc::RLIM_SAVED_MAX);
 }
 
 impl Rlim {
+    /// Returns `true` if `self` indicates no limit.
+    #[must_use]
+    pub const fn is_infinity(self) -> bool {
+        self.0 == Self::INFINITY.0
+    }
+
     /// Wraps a raw value of limit as Rlim.
     ///
     /// # Example
