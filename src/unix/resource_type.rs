@@ -23,13 +23,15 @@ pub type RawResource = resource_t;
 #[allow(clippy::doc_markdown)]
 /// A kind of resource.
 ///
-/// **Be careful**: The documentation of [`Resource`][Resource] constants are based on Linux and FreeBSD.
+/// **Be careful**: The documentation of [`Resource`][Resource] constants are based on a few systems.
 /// It may be inconsistent with other platforms.
 ///
 /// # References
 /// Linux: <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
 ///
 /// FreeBSD: <https://www.freebsd.org/cgi/man.cgi?query=getrlimit>
+///
+/// NetBSD: <https://man.netbsd.org/getrlimit.2>
 ///
 /// [Resource]: struct.Resource.html
 ///

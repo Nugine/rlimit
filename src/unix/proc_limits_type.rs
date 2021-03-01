@@ -9,7 +9,7 @@ use std::path::Path;
 
 use libc::pid_t;
 
-/// [Linux] A process's resource limits. It is parsed from the **proc** filesystem.
+/// \[Linux\] A process's resource limits. It is parsed from the **proc** filesystem.
 ///
 /// See <https://man7.org/linux/man-pages/man5/proc.5.html>.
 ///
@@ -50,7 +50,7 @@ pub struct ProcLimits {
     pub max_realtime_timeout: Option<ProcLimit>,
 }
 
-/// [Linux] A process's resource limit field.
+/// \[Linux\] A process's resource limit field.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ProcLimit {
     /// Soft limit. `None` indicates `unlimited`.

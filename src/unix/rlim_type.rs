@@ -10,32 +10,25 @@ use libc::rlim_t;
 
 /// Unsigned integer type used for limit values.
 ///
-/// The actual type of [`RawRlim`][RawRlim] can be different on different platforms.
-///
-/// [RawRlim]: type.RawRlim.html
+/// The actual type of [`RawRlim`] can be different on different platforms.
 pub type RawRlim = rlim_t;
 
 /// Unsigned integer type used for limit values.
 ///
-/// Arithmetic operations with [`Self`][Rlim] are delegated to the inner [`RawRlim`][RawRlim].
+/// Arithmetic operations with [`Rlim`] are delegated to the inner [`RawRlim`].
 ///
-/// Arithmetic operation with [`usize`][usize] converts the rhs to [`RawRlim`][RawRlim] and computes the result by two [`RawRlim`][RawRlim] values.
+/// Arithmetic operation with [`usize`] converts the rhs to [`RawRlim`] and computes the result by two [`RawRlim`] values.
 ///
-/// **Be careful**: The actual type of [`RawRlim`][RawRlim] can be different on different platforms.
+/// **Be careful**: The actual type of [`RawRlim`] can be different on different platforms.
 ///
 /// # Panics
 ///
-/// Panics if the usize operand can not be converted to [`RawRlim`][RawRlim].
+/// Panics if the usize operand can not be converted to [`RawRlim`].
 ///
 /// Panics in debug mode if arithmetic overflow occurred .
 ///
 /// # Features
-/// Enables the feature `serde` to implement `Serialize` and `Deserialize` for Rlim with the attribute `serde(transparent)`.
-///
-/// [Rlim]: struct.Rlim.html
-/// [RawRlim]: type.RawRlim.html
-/// [usize]: https://doc.rust-lang.org/std/primitive.usize.html
-///
+/// Enables the feature `serde` to implement `Serialize` and `Deserialize` for [`Rlim`] with the attribute `serde(transparent)`.
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -94,9 +87,7 @@ impl Rlim {
 
     /// Converts usize to Rlim
     /// # Panics
-    /// Panics if the usize value can not be converted to [`RawRlim`][RawRlim].
-    ///
-    /// [RawRlim]: type.RawRlim.html
+    /// Panics if the usize value can not be converted to [`RawRlim`].
     #[inline]
     #[must_use]
     pub fn from_usize(n: usize) -> Self {
@@ -105,9 +96,7 @@ impl Rlim {
 
     /// Converts Rlim to usize
     /// # Panics
-    /// Panics if the wrapped [`RawRlim`][RawRlim] value can not be converted to usize.
-    ///
-    /// [RawRlim]: type.RawRlim.html
+    /// Panics if the wrapped [`RawRlim`] value can not be converted to usize.
     #[inline]
     #[must_use]
     pub fn as_usize(self) -> usize {
@@ -257,9 +246,7 @@ macro_rules! delegate_arithmetic{
     {@wrapping $($wrap:tt,)+} => {
         impl Rlim{
             $(
-                /// Wrapping (modular) arithmetic. Wraps around at the boundary of the inner [`RawRlim`][RawRlim].
-                ///
-                /// [RawRlim]: type.RawRlim.html
+                /// Wrapping (modular) arithmetic. Wraps around at the boundary of the inner [`RawRlim`].
                 #[must_use]
                 #[allow(clippy::missing_const_for_fn)] // FIXME: `core::num::<impl u64>::wrapping_div` is not yet stable as a const fn
                 pub fn $wrap(self, rhs: Self) -> Self{

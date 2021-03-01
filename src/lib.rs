@@ -1,4 +1,5 @@
 //! rlimit - A simple wrapper for `getrlimit` and `setrlimit`.
+//!
 //! # Examples
 //!
 //! ## Set resource limit
@@ -30,6 +31,17 @@
 //!
 //! ## Increase NOFILE limit
 //! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.3/examples/nofile.rs).
+//!
+//! # Features
+//! Enables the feature `serde` to implement `Serialize` and `Deserialize` for [`Rlim`] with the attribute `serde(transparent)`.
+//!
+//! # Troubleshoot
+//!
+//! ## Failed to increase NOFILE to hard limit on macOS
+//! On macOS, getrlimit by default reports that the hard limit is
+//! unlimited, but there is usually a stricter hard limit discoverable
+//! via sysctl (`kern.maxfilesperproc`). Failing to discover this secret stricter hard limit will
+//! cause the call to setrlimit to fail.
 //!
 
 #![deny(
@@ -72,7 +84,7 @@ mod unix {
 
     /// Set resource limits.
     /// # Errors
-    /// [Linux] See <https://man7.org/linux/man-pages/man2/setrlimit.2.html>
+    /// \[Linux\] See <https://man7.org/linux/man-pages/man2/setrlimit.2.html>
     #[inline]
     pub fn setrlimit(resource: Resource, soft: Rlim, hard: Rlim) -> io::Result<()> {
         let raw_resource = resource.as_raw();
@@ -93,7 +105,7 @@ mod unix {
 
     /// Get resource limits.
     /// # Errors
-    /// [Linux] See <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
+    /// \[Linux\] See <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
     #[inline]
     pub fn getrlimit(resource: Resource) -> io::Result<(Rlim, Rlim)> {
         let raw_resource = resource.as_raw();
@@ -114,7 +126,7 @@ mod unix {
         }
     }
 
-    /// [Linux] Set and get the resource limits of an arbitrary process.
+    /// \[Linux\] Set and get the resource limits of an arbitrary process.
     /// # Errors
     /// See <https://man7.org/linux/man-pages/man2/prlimit.2.html>
     #[inline]
