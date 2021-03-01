@@ -40,3 +40,13 @@ assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 ### Increase NOFILE limit
 
 See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.4/examples/nofile.rs).
+
+## Features
+
+Enables the feature `serde` to implement `Serialize` and `Deserialize` for [`Rlim`] with the attribute `serde(transparent)`.
+
+## Troubleshoot
+
+### Failed to increase NOFILE to hard limit on macOS
+
+On macOS, getrlimit by default reports that the hard limit is unlimited, but there is usually a stricter hard limit discoverable via sysctl (`kern.maxfilesperproc`). Failing to discover this secret stricter hard limit will cause the call to setrlimit to fail.
