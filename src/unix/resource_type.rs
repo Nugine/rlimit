@@ -523,6 +523,7 @@ impl Resource {
     /// assert_eq!(Resource::NOFILE.as_name(), "RLIMIT_NOFILE");
     /// ```
     #[must_use]
+    #[allow(clippy::missing_panics_doc)] // this method should never panic
     pub fn as_name(self) -> &'static str {
         let idx = Self::VALUE_TABLE.iter().position(|&v| v == self).unwrap();
         Self::NAME_TABLE[idx]

@@ -133,7 +133,7 @@ impl TryFrom<usize> for Rlim {
 impl TryFrom<Rlim> for usize {
     type Error = TryFromIntError;
     fn try_from(r: Rlim) -> Result<Self, Self::Error> {
-        Ok(r.0.try_into()?)
+        r.0.try_into()
     }
 }
 
