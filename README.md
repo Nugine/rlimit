@@ -39,7 +39,7 @@ assert_eq!(getrlimit(Resource::CPU).unwrap(), (Rlim::INFINITY, Rlim::INFINITY));
 
 ### Increase NOFILE limit
 
-See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.4/examples/nofile.rs).
+See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.5.5-dev/examples/nofile.rs).
 
 ## Features
 
