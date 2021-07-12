@@ -1,5 +1,8 @@
 /target
 **/*.rs.bk
-Cargo.lock
+/Cargo.lock
 
-.vscode
+/.vscode
+/libc
+
+__pycache__

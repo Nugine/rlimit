@@ -34,28 +34,7 @@ pub type RawRlim = rlim_t;
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Rlim(RawRlim);
 
-impl Rlim {
-    /// A value of Rlim indicating no limit.
-    pub const INFINITY: Self = Self(libc::RLIM_INFINITY);
-
-    #[cfg(any(
-        target_os = "fuchsia",
-        any(target_os = "openbsd", target_os = "netbsd"),
-        target_os = "emscripten",
-        target_os = "linux",
-    ))]
-    /// A value of type Rlim indicating an unrepresentable saved soft limit.
-    pub const SAVED_CUR: Self = Self(libc::RLIM_SAVED_CUR);
-
-    #[cfg(any(
-        target_os = "fuchsia",
-        any(target_os = "openbsd", target_os = "netbsd"),
-        target_os = "emscripten",
-        target_os = "linux",
-    ))]
-    /// A value of type Rlim indicating an unrepresentable saved hard limit.
-    pub const SAVED_MAX: Self = Self(libc::RLIM_SAVED_MAX);
-}
+include!("__rlims.rs");
 
 impl Rlim {
     /// Returns `true` if `self` indicates no limit.
