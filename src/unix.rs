@@ -12,11 +12,7 @@ group! {
 
 // #begin-codegen
 // generated from rust-lang/libc 13c8ceb1ed9077295edf68747bb282a6bee5f31c
-#[cfg(any(
-    target_os = "fuchsia",
-    target_os = "emscripten",
-    target_os = "linux",
-))]
+#[cfg(any(target_os = "fuchsia", target_os = "emscripten", target_os = "linux",))]
 group! {
     type c_rlimit = libc::rlimit64;
     use libc::setrlimit64 as c_setrlimit;
@@ -26,11 +22,7 @@ group! {
     const RLIM_SAVED_MAX: u64 = u64::MAX;
 }
 
-#[cfg(not(any(
-    target_os = "fuchsia",
-    target_os = "emscripten",
-    target_os = "linux",
-)))]
+#[cfg(not(any(target_os = "fuchsia", target_os = "emscripten", target_os = "linux",)))]
 group! {
     type c_rlimit = libc::rlimit;
     use libc::setrlimit as c_setrlimit;
@@ -67,7 +59,6 @@ group! {
     const RLIM_SAVED_MAX: u64 = libc::RLIM_SAVED_MAX as u64;
 }
 
-
 /// A value indicating no limit.
 #[cfg(any(
     target_os = "fuchsia",
@@ -86,7 +77,6 @@ group! {
 ))]
 pub const INFINITY: u64 = RLIM_INFINITY;
 
-
 /// A value indicating an unrepresentable saved soft limit.
 #[cfg(any(
     target_os = "fuchsia",
@@ -95,7 +85,6 @@ pub const INFINITY: u64 = RLIM_INFINITY;
     target_os = "linux",
 ))]
 pub const SAVED_CUR: u64 = RLIM_SAVED_CUR;
-
 
 /// A value indicating an unrepresentable saved hard limit.
 #[cfg(any(

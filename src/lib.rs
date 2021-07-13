@@ -50,6 +50,7 @@
     clippy::cargo
 )]
 
+#[allow(unused_macros)]
 macro_rules! group {
     ($($tt:tt)*) => {
         $($tt)*
