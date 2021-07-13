@@ -1,10 +1,10 @@
 #[cfg(unix)]
 mod unix_tests {
-    use rlimit::{getrlimit, setrlimit, Resource, Rlim};
+    use rlimit::{getrlimit, setrlimit, Resource};
     use std::io::ErrorKind;
 
-    const SOFT: Rlim = Rlim::from_raw(4 * 1024 * 1024);
-    const HARD: Rlim = Rlim::from_raw(8 * 1024 * 1024);
+    const SOFT: u64 = 4 * 1024 * 1024;
+    const HARD: u64 = 8 * 1024 * 1024;
 
     #[test]
     fn resource_set_get() {
@@ -28,7 +28,7 @@ mod unix_tests {
     fn resource_get() {
         assert_eq!(
             getrlimit(Resource::CPU).unwrap(),
-            (Rlim::INFINITY, Rlim::INFINITY)
+            (rlimit::INFINITY, rlimit::INFINITY)
         );
     }
 
@@ -40,8 +40,8 @@ mod unix_tests {
 
         assert!(prlimit(0, res, Some((SOFT, HARD)), None).is_ok());
 
-        let mut soft = Rlim::default();
-        let mut hard = Rlim::default();
+        let mut soft = 0;
+        let mut hard = 0;
 
         assert!(prlimit(0, res, None, Some((&mut soft, &mut hard))).is_ok());
         assert_eq!((soft, hard), (SOFT, HARD));

@@ -1,6 +1,6 @@
 [package]
 name = "rlimit"
-version = "0.5.5-dev"
+version = "0.6.0-dev"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
 description = "A simple wrapper for getrlimit and setrlimit."
@@ -15,4 +15,3 @@ all-features = true
 
 [dependencies]
 libc = "0.2"
-serde = { version = "1.0", features = ["derive"], optional = true }

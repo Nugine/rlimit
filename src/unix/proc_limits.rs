@@ -1,7 +1,5 @@
 #![deny(unsafe_code)]
 
-use super::rlim_type::{RawRlim, Rlim};
-
 use std::fs;
 use std::io::{self, BufRead};
 use std::num::ParseIntError;
@@ -54,9 +52,9 @@ pub struct ProcLimits {
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ProcLimit {
     /// Soft limit. `None` indicates `unlimited`.
-    pub soft_limit: Option<Rlim>,
+    pub soft_limit: Option<u64>,
     /// Hard limit. `None` indicates `unlimited`.
-    pub hard_limit: Option<Rlim>,
+    pub hard_limit: Option<u64>,
 }
 
 impl ProcLimits {
@@ -98,11 +96,11 @@ impl ProcLimits {
             Some((s_idx, h_idx, u_idx))
         }
 
-        fn parse_limit_number(s: &str) -> Result<Option<Rlim>, ParseIntError> {
+        fn parse_limit_number(s: &str) -> Result<Option<u64>, ParseIntError> {
             match s {
                 "unlimited" => Ok(None),
-                _ => match s.parse::<RawRlim>() {
-                    Ok(n) => Ok(Some(Rlim::from_raw(n))),
+                _ => match s.parse::<u64>() {
+                    Ok(n) => Ok(Some(n)),
                     Err(e) => Err(e),
                 },
             }

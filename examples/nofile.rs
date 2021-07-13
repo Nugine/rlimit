@@ -3,12 +3,12 @@ mod unix_limits {
     use std::cmp;
     use std::io;
 
-    use rlimit::{Resource, Rlim};
+    use rlimit::Resource;
 
-    const DEFAULT_NOFILE_LIMIT: Rlim = Rlim::from_raw(16384); // or another number
+    const DEFAULT_NOFILE_LIMIT: u64 = 16384; // or another number
 
     /// Try to increase NOFILE limit and return the current soft limit.
-    pub fn increase_nofile_limit() -> io::Result<Rlim> {
+    pub fn increase_nofile_limit() -> io::Result<u64> {
         let (soft, hard) = Resource::NOFILE.get()?;
         println!("Before increasing: soft   = {}, hard = {}", soft, hard);
 

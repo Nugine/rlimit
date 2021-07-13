@@ -47,7 +47,7 @@ SELECTORS = {
 
 
 def search_ident(line_pattern: str, ident_pattern: str) -> Dict[str, List[str]]:
-    pipe = os.popen(f'rg --json "{line_pattern}" {PATH}')
+    pipe = os.popen(f"rg --json '{line_pattern}' {PATH}")
     lines = [l for l in pipe.read().split("\n") if l != ""]
     matches = []
     for line in lines:
