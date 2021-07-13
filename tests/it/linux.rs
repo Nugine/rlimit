@@ -1,67 +1,38 @@
-#![cfg(unix)]
+#![cfg(target_os = "linux")]
 
-use rlimit::{getrlimit, setrlimit, Resource};
 use std::io::ErrorKind;
 
-const SOFT: u64 = 4 * 1024 * 1024;
-const HARD: u64 = 8 * 1024 * 1024;
+use rlimit::{prlimit, Resource};
 
-#[test]
-fn resource_set_get() {
-    assert!(Resource::FSIZE.set(SOFT - 1, HARD).is_ok());
+use super::{expect_err, expect_ok};
 
-    assert!(setrlimit(Resource::FSIZE, SOFT, HARD).is_ok());
-
-    assert_eq!(Resource::FSIZE.get().unwrap(), (SOFT, HARD));
-
-    assert_eq!(
-        Resource::FSIZE.set(HARD, SOFT).unwrap_err().kind(),
-        ErrorKind::InvalidInput
-    );
-    assert_eq!(
-        Resource::FSIZE.set(HARD, HARD + 1).unwrap_err().kind(),
-        ErrorKind::PermissionDenied
-    );
-}
-
-#[test]
-fn resource_get() {
-    assert_eq!(
-        getrlimit(Resource::CPU).unwrap(),
-        (rlimit::INFINITY, rlimit::INFINITY)
-    );
-}
-
-#[cfg(target_os = "linux")]
 #[test]
 fn linux_prlimit() {
-    use rlimit::prlimit;
+    const SOFT: u64 = 4 * 1024 * 1024;
+    const HARD: u64 = 8 * 1024 * 1024;
+
     let res = Resource::CORE;
 
-    assert!(prlimit(0, res, Some((SOFT, HARD)), None).is_ok());
+    expect_ok(prlimit(0, res, Some((SOFT, HARD)), None));
 
     let mut soft = 0;
     let mut hard = 0;
 
-    assert!(prlimit(0, res, None, Some((&mut soft, &mut hard))).is_ok());
+    expect_ok(prlimit(0, res, None, Some((&mut soft, &mut hard))));
+
     assert_eq!((soft, hard), (SOFT, HARD));
 
-    assert_eq!(
-        prlimit(0, res, Some((HARD, SOFT)), None)
-            .unwrap_err()
-            .kind(),
-        ErrorKind::InvalidInput
+    expect_err(
+        prlimit(0, res, Some((HARD, SOFT)), None),
+        ErrorKind::InvalidInput,
     );
 
-    assert_eq!(
-        prlimit(0, res, Some((HARD, HARD + 1)), None)
-            .unwrap_err()
-            .kind(),
-        ErrorKind::PermissionDenied
+    expect_err(
+        prlimit(0, res, Some((HARD, HARD + 1)), None),
+        ErrorKind::PermissionDenied,
     );
 }
 
-#[cfg(target_os = "linux")]
 #[test]
 fn linux_proc_limits() {
     use rlimit::ProcLimits;
@@ -88,12 +59,12 @@ fn linux_proc_limits() {
     let process_limits = ProcLimits::read_process(self_pid).unwrap();
 
     macro_rules! assert_limit_eq{
-                {$lhs:expr, $rhs:expr, [$($field:tt,)+]} => {
-                    $(
-                        assert_eq!($lhs.$field, $rhs.$field, stringify!($field));
-                    )+
-                }
-            }
+        {$lhs:expr, $rhs:expr, [$($field:tt,)+]} => {
+            $(
+                assert_eq!($lhs.$field, $rhs.$field, stringify!($field));
+            )+
+        }
+    }
 
     assert_limit_eq!(
         self_limits,
