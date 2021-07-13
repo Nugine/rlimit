@@ -37,7 +37,7 @@ assert_eq!(getrlimit(Resource::CPU).unwrap(), (rlimit::INFINITY, rlimit::INFINIT
 
 ### Increase NOFILE limit
 
-See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.0-dev/examples/nofile.rs).
+See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.0/examples/nofile.rs).
 
 ## Troubleshoot
 ### Failed to increase NOFILE to hard limit on macOS

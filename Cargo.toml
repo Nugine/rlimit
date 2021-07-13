@@ -1,6 +1,6 @@
 [package]
 name = "rlimit"
-version = "0.6.0-dev"
+version = "0.6.0"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
 description = "A simple wrapper for getrlimit and setrlimit."
