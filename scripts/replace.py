@@ -12,11 +12,11 @@ def replace_range(src: Path, dst: Path, begin_line: str, end_line: str):
     def gen():
         flag = False
         for l in dst_lines:
-            if l.startswith(begin_line):
+            if l.strip().startswith(begin_line):
                 yield l
                 yield from src_lines
                 flag = True
-            elif l.startswith(end_line):
+            elif l.strip().startswith(end_line):
                 yield l
                 flag = False
             elif flag:

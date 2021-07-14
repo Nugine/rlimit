@@ -14,7 +14,7 @@ mod unix_limits {
 
         let target = cmp::min(DEFAULT_NOFILE_LIMIT, hard);
         println!("Try to increase:   target = {}", target);
-        Resource::NOFILE.set(target, target)?;
+        Resource::NOFILE.set(target, hard)?;
 
         let (soft, hard) = Resource::NOFILE.get()?;
         println!("After increasing:  soft   = {}, hard = {}", soft, hard);
