@@ -4,7 +4,7 @@
 [![Documentation]][docs.rs] 
 ![License]
 
-A simple wrapper for `getrlimit` and `setrlimit`.
+Resource limits
 
 [crates.io]: https://crates.io/crates/rlimit
 [Latest Version]: https://img.shields.io/crates/v/rlimit.svg
@@ -39,6 +39,14 @@ assert_eq!(getrlimit(Resource::CPU).unwrap(), (rlimit::INFINITY, rlimit::INFINIT
 
 See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.1-dev/examples/nofile.rs).
 
+You can also use the tools in `rlimit::utils`.
+
+```rust
+use rlimit::utils::increase_nofile_limit;
+increase_nofile_limit(10240).unwrap();
+increase_nofile_limit(u64::MAX).unwrap();
+```
+
 ## Troubleshoot
 ### Failed to increase NOFILE to hard limit on macOS
 
@@ -46,3 +54,5 @@ On macOS, getrlimit by default reports that the hard limit is
 unlimited, but there is usually a stricter hard limit discoverable
 via sysctl (`kern.maxfilesperproc`). Failing to discover this secret stricter hard limit will
 cause the call to setrlimit to fail.
+
+`rlimit::utils::increase_nofile_limit` respects `kern.maxfilesperproc`.

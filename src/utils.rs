@@ -41,13 +41,13 @@ pub fn get_kern_max_files_per_proc() -> io::Result<u64> {
 
 /// Try to increase NOFILE limit and return the current soft limit.
 ///
-/// `lim` is the expected limit which can be up to [`rlimit::INFINITY`][`super::INFINITY`].
+/// `lim` is the expected limit which can be up to [`u64::MAX`].
 ///
 /// This function does nothing if `RLIMIT_NOFILE` does not exist on current platform.
 ///
 /// # Errors
 /// Returns an error if any syscall failed.
-pub fn increase_nofile_limit(mut lim: u64) -> io::Result<u64> {
+pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     // #begin-codegen RLIMIT_NOFILE
     // generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
     #[cfg(any(
@@ -96,6 +96,8 @@ pub fn increase_nofile_limit(mut lim: u64) -> io::Result<u64> {
         if soft >= hard {
             return Ok(hard);
         }
+
+        let mut lim = lim;
 
         lim = lim.min(hard);
 

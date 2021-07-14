@@ -1,4 +1,4 @@
-//! rlimit - A simple wrapper for `getrlimit` and `setrlimit`.
+//! rlimit - Resource limits.
 //!
 //! # Examples
 //!
@@ -32,6 +32,14 @@
 //! ## Increase NOFILE limit
 //! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.1-dev/examples/nofile.rs).
 //!
+//! You can also use the tools in [`rlimit::utils`][`crate::utils`].
+//!
+//! ```no_run
+//! use rlimit::utils::increase_nofile_limit;
+//! increase_nofile_limit(10240).unwrap();
+//! increase_nofile_limit(u64::MAX).unwrap();
+//! ```
+//!
 //! # Troubleshoot
 //!
 //! ## Failed to increase NOFILE to hard limit on macOS
@@ -39,6 +47,9 @@
 //! unlimited, but there is usually a stricter hard limit discoverable
 //! via sysctl (`kern.maxfilesperproc`). Failing to discover this secret stricter hard limit will
 //! cause the call to setrlimit to fail.
+//!
+//! [`rlimit::utils::increase_nofile_limit`][`crate::utils::increase_nofile_limit`]
+//! respects `kern.maxfilesperproc`.
 //!
 
 #![deny(
