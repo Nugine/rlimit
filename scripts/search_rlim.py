@@ -32,9 +32,7 @@ if __name__ == "__main__":
     rlim64_t_idents = libc_source.search_ident("type rlim64_t", ".+(rlim64_t).+")
     selectors = libc_source.calc_selectors(rlim64_t_idents)
 
-    cfg = "".join(f"\n    {v}," for v in selectors["rlim64_t"].values())
-
-    print(f"#[cfg(any({cfg}\n))]")
+    print(libc_source.calc_cfg(sorted(selectors["rlim64_t"].values()), indent=0))
     print("group! {")
     print(f"    type c_rlimit = libc::rlimit64;")
     print(f"    use libc::setrlimit64 as c_setrlimit;")
@@ -45,7 +43,7 @@ if __name__ == "__main__":
     print("}")
     print()
 
-    print(f"#[cfg(not(any({cfg}\n)))]")
+    print(libc_source.calc_cfg(sorted(selectors["rlim64_t"].values()), indent=0, inverse=True))
     print("group! {")
     print(f"    type c_rlimit = libc::rlimit;")
     print(f"    use libc::setrlimit as c_setrlimit;")
@@ -56,15 +54,13 @@ if __name__ == "__main__":
     selectors = libc_source.calc_selectors(rlims)
 
     for rlim in sorted(selectors.keys()):
-        cfg = "".join(f"\n        {v}," for v in selectors[rlim].values())
-        print(f"    #[cfg(any({cfg}\n    ))]")
+        print(libc_source.calc_cfg(sorted(selectors[rlim].values()), indent=4))
         print(f"    const RLIM_{rlim}: u64 = libc::RLIM_{rlim} as u64;")
     print("}")
     print()
 
     for rlim in sorted(selectors.keys()):
-        cfg = "".join(f"\n    {v}," for v in selectors[rlim].values())
         print(docs[rlim], end="")
-        print(f"#[cfg(any({cfg}\n))]")
+        print(libc_source.calc_cfg(sorted(selectors[rlim].values()), indent=0))
         print(f"pub const {rlim}: u64 = RLIM_{rlim};")
         print()

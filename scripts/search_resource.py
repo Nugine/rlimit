@@ -196,19 +196,12 @@ docs[
 if __name__ == "__main__":
     resources = libc_source.search_ident("RLIMIT_.+?:", ".+[^_]RLIMIT_(.+?):")
     del resources["NLIMITS"]
-
     selectors = libc_source.calc_selectors(resources)
 
-    resources = sorted(selectors.keys())
-    code = []
-    for tag, resource_id in enumerate(resources, 1):
-        rel_path = "".join("\n        " + v + "," for v in selectors[resource_id].values())
-        rel_path = f"    #[cfg(any({rel_path}\n    ))]"
-        doc = docs[resource_id]
-        declaration = f"    {resource_id} = {tag} => RLIMIT_{resource_id},"
-        code.append((resource_id, f"{rel_path}{doc}{declaration}\n"))
     print(f"// generated from rust-lang/libc {libc_source.COMMIT_HASH}")
     print("declare_resource! {")
-    for decl in code:
-        print(decl[1])
+    for tag, resource_id in enumerate(sorted(selectors.keys()), 1):
+        print(docs[resource_id], end="")
+        print(libc_source.calc_cfg(sorted(selectors[resource_id].values()), indent=4))
+        print(f"    {resource_id} = {tag} => RLIMIT_{resource_id},\n")
     print("}")

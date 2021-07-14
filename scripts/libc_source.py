@@ -87,3 +87,18 @@ def calc_selectors(idents: Dict[str, List[str]]) -> Dict[str, Dict[str, str]]:
                 raise Exception(f"can not find a selector for {path}, id = {ident}")
         selectors[ident] = ident_selectors
     return selectors
+
+
+def calc_cfg(selectors: List[str], *, indent: int, inverse: bool = False) -> str:
+    indent_s = " " * indent
+    lines = []
+    if inverse:
+        lines.append(f"{indent_s}#[cfg(not(any(\n")
+    else:
+        lines.append(f"{indent_s}#[cfg(any(\n")
+    lines.extend(f"{indent_s}    {v},\n" for v in selectors)
+    if inverse:
+        lines.append(f"{indent_s})))]")
+    else:
+        lines.append(f"{indent_s}))]")
+    return "".join(lines)
