@@ -30,7 +30,7 @@
 //! ```
 //!
 //! ## Increase NOFILE limit
-//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.2-dev/examples/nofile.rs).
+//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.6.2/examples/nofile.rs).
 //!
 //! You can also use the tools in [`rlimit::utils`][`crate::utils`].
 //!
