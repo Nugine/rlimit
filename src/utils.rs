@@ -97,6 +97,10 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
             return Ok(hard);
         }
 
+        if soft >= lim {
+            return Ok(soft);
+        }
+
         let mut lim = lim;
 
         lim = lim.min(hard);
