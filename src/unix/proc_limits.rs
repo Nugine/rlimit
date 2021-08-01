@@ -184,7 +184,7 @@ impl ProcLimits {
                     if field.is_some() {
                         return Err(error_duplicate_limit_field());
                     }
-                    *field = Some(limit)
+                    *field = Some(limit);
                 }
                 Err(_) => return Err(error_unknown_limit_field(&name)),
             }
