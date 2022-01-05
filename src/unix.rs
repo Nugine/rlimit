@@ -11,7 +11,7 @@ group! {
 }
 
 // #begin-codegen
-// generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+// generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
 #[cfg(any(target_os = "emscripten", target_os = "fuchsia", target_os = "linux",))]
 group! {
     type c_rlimit = libc::rlimit64;
@@ -40,12 +40,14 @@ group! {
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "haiku",
         target_os = "solarish",
     ))]
     const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
     #[cfg(any(
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "emscripten",
+        target_os = "freebsd",
         target_os = "fuchsia",
         target_os = "linux",
     ))]
@@ -53,6 +55,7 @@ group! {
     #[cfg(any(
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "emscripten",
+        target_os = "freebsd",
         target_os = "fuchsia",
         target_os = "linux",
     ))]
@@ -73,6 +76,7 @@ group! {
     target_os = "android",
     target_os = "emscripten",
     target_os = "fuchsia",
+    target_os = "haiku",
     target_os = "solarish",
 ))]
 pub const INFINITY: u64 = RLIM_INFINITY;
@@ -81,6 +85,7 @@ pub const INFINITY: u64 = RLIM_INFINITY;
 #[cfg(any(
     any(target_os = "openbsd", target_os = "netbsd"),
     target_os = "emscripten",
+    target_os = "freebsd",
     target_os = "fuchsia",
     target_os = "linux",
 ))]
@@ -90,6 +95,7 @@ pub const SAVED_CUR: u64 = RLIM_SAVED_CUR;
 #[cfg(any(
     any(target_os = "openbsd", target_os = "netbsd"),
     target_os = "emscripten",
+    target_os = "freebsd",
     target_os = "fuchsia",
     target_os = "linux",
 ))]

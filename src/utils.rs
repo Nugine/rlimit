@@ -6,7 +6,7 @@ use std::io;
 /// # Errors
 /// Returns an error if any syscall failed.
 // #begin-codegen KERN_MAXFILESPERPROC
-// generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+// generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
 #[cfg(any(
     any(target_os = "macos", target_os = "ios"),
     target_os = "dragonfly",
@@ -49,7 +49,7 @@ pub fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// Returns an error if any syscall failed.
 pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     // #begin-codegen RLIMIT_NOFILE
-    // generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+    // generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
     #[cfg(any(
         all(target_os = "linux", target_env = "gnu"),
         all(
@@ -73,11 +73,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
                 target_arch = "powerpc64"
             )
         ),
-        all(
-            target_os = "linux",
-            target_env = "uclibc",
-            any(target_arch = "mips", target_arch = "mips64")
-        ),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -106,7 +102,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         lim = lim.min(hard);
 
         // #begin-codegen KERN_MAXFILESPERPROC
-        // generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+        // generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
         #[cfg(any(
             any(target_os = "macos", target_os = "ios"),
             target_os = "dragonfly",
@@ -123,7 +119,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     }
 
     // #begin-codegen not RLIMIT_NOFILE
-    // generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+    // generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
     #[cfg(not(any(
         all(target_os = "linux", target_env = "gnu"),
         all(
@@ -147,11 +143,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
                 target_arch = "powerpc64"
             )
         ),
-        all(
-            target_os = "linux",
-            target_env = "uclibc",
-            any(target_arch = "mips", target_arch = "mips64")
-        ),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),

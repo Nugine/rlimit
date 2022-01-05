@@ -239,7 +239,7 @@ impl Resource {
 }
 
 // #begin-codegen
-// generated from rust-lang/libc 6568dacc81b2dd2edae571ab97bbca94bc662595
+// generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
 declare_resource! {
 
     /// The maximum size (in bytes)
@@ -248,7 +248,7 @@ declare_resource! {
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         target_os = "android",
@@ -363,7 +363,7 @@ declare_resource! {
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -409,7 +409,7 @@ declare_resource! {
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -435,7 +435,7 @@ declare_resource! {
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -477,7 +477,7 @@ declare_resource! {
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
         all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -508,6 +508,7 @@ declare_resource! {
     #[cfg(any(
         all(target_os = "linux", target_env = "gnu"),
         all(target_os = "linux", target_env = "musl"),
+        all(target_os = "linux", target_env = "uclibc"),
         target_os = "fuchsia",
     ))]
     RTTIME = 19 => RLIMIT_RTTIME,
