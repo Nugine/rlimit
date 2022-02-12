@@ -1,5 +1,3 @@
-//! Some tools for operating resource limits.
-
 use std::io;
 
 /// Returns the value of `kern.maxfilesperproc` by sysctl.
@@ -13,7 +11,7 @@ use std::io;
     target_os = "freebsd",
 ))]
 // #end-codegen KERN_MAXFILESPERPROC
-pub fn get_kern_max_files_per_proc() -> io::Result<u64> {
+fn get_kern_max_files_per_proc() -> io::Result<u64> {
     use std::mem;
     use std::ptr;
 
@@ -43,7 +41,8 @@ pub fn get_kern_max_files_per_proc() -> io::Result<u64> {
 ///
 /// `lim` is the expected limit which can be up to [`u64::MAX`].
 ///
-/// This function does nothing if `RLIMIT_NOFILE` does not exist on current platform.
+/// This function does nothing and returns `Ok(lim)`
+/// if `RLIMIT_NOFILE` does not exist on current platform.
 ///
 /// # Errors
 /// Returns an error if any syscall failed.

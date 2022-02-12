@@ -23,8 +23,7 @@ fn expect_err(result: io::Result<()>, kind: io::ErrorKind) {
 }
 
 #[test]
-fn utils_nofile() {
-    use rlimit::utils::increase_nofile_limit;
-    let lim = increase_nofile_limit(u64::MAX).unwrap();
+fn tools_nofile() {
+    let lim = rlimit::increase_nofile_limit(u64::MAX).unwrap();
     dbg!(lim);
 }

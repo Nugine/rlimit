@@ -32,12 +32,11 @@
 //! ## Increase NOFILE limit
 //! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.7.0-dev/examples/nofile.rs).
 //!
-//! You can also use the tools in [`rlimit::utils`][`crate::utils`].
+//! You can also use the tool function showed below:
 //!
 //! ```no_run
-//! use rlimit::utils::increase_nofile_limit;
-//! increase_nofile_limit(10240).unwrap();
-//! increase_nofile_limit(u64::MAX).unwrap();
+//! rlimit::increase_nofile_limit(10240).unwrap();
+//! rlimit::increase_nofile_limit(u64::MAX).unwrap();
 //! ```
 //!
 //! ## Windows
@@ -67,7 +66,7 @@
 //! via sysctl (`kern.maxfilesperproc`). Failing to discover this secret stricter hard limit will
 //! cause the call to setrlimit to fail.
 //!
-//! [`rlimit::utils::increase_nofile_limit`][`crate::utils::increase_nofile_limit`]
+//! [`rlimit::increase_nofile_limit`][`crate::increase_nofile_limit`]
 //! respects `kern.maxfilesperproc`.
 //!
 
@@ -96,8 +95,6 @@ group! {
     pub use self::unix::*;
 }
 
-pub mod utils;
-
 #[cfg(any(doc, windows))]
 group! {
     mod windows;
@@ -105,3 +102,8 @@ group! {
     #[doc(inline)]
     pub use self::windows::*;
 }
+
+mod tools;
+
+#[doc(inline)]
+pub use self::tools::*;
