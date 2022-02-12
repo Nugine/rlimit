@@ -12,6 +12,7 @@ extern "C" {
 ///
 /// # Errors
 /// See the official documentation
+#[cfg_attr(docsrs, doc(cfg(windows)))]
 pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
     // A negative `new_max` will cause EINVAL.
     // A negative `ret` should never appear.
@@ -29,6 +30,7 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
 /// Returns the number of simultaneously open files permitted at the stream I/O level.
 ///
 /// See <https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/getmaxstdio?view=msvc-170>
+#[cfg_attr(docsrs, doc(cfg(windows)))]
 #[must_use]
 pub fn getmaxstdio() -> u32 {
     // A negative `ret` should never appear.

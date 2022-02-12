@@ -108,11 +108,8 @@ use std::mem;
 
 use libc::c_int;
 
-#[cfg(target_os = "linux")]
-group! {
-    use std::ptr;
-    use libc::pid_t;
-}
+#[cfg(any(doc, target_os = "linux"))]
+use libc::pid_t;
 
 /// Set resource limits.
 /// # Errors
@@ -155,17 +152,20 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     }
 }
 
-/// \[Linux\] Set and get the resource limits of an arbitrary process.
+/// Set and get the resource limits of an arbitrary process.
 /// # Errors
 /// See <https://man7.org/linux/man-pages/man2/prlimit.2.html>
 #[inline]
-#[cfg(target_os = "linux")]
+#[cfg(any(doc, target_os = "linux"))]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
 pub fn prlimit(
     pid: pid_t,
     resource: Resource,
     new_limit: Option<(u64, u64)>,
     old_limit: Option<(&mut u64, &mut u64)>,
 ) -> io::Result<()> {
+    use std::ptr;
+
     let raw_resource = resource.as_raw();
 
     let new_rlim: Option<libc::rlimit> = new_limit.map(|(soft, hard)| libc::rlimit {

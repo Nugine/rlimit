@@ -12,7 +12,7 @@ test: check
     cargo run --example nofile
 
 doc:
-    cargo doc --no-deps --open
+    RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --no-deps --open --all-features
 
 codegen:
     python3 -m scripts.search_resource > tmp

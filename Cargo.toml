@@ -12,6 +12,7 @@ categories = ["os::unix-apis"]
 
 [package.metadata.docs.rs]
 all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
 libc = "0.2"

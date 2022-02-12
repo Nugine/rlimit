@@ -71,6 +71,7 @@
 //! respects `kern.maxfilesperproc`.
 //!
 
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![deny(
     missing_docs,
     missing_debug_implementations,
@@ -97,7 +98,7 @@ group! {
 
 pub mod utils;
 
-#[cfg(windows)]
+#[cfg(any(doc, windows))]
 group! {
     mod windows;
 
