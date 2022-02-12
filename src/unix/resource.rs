@@ -239,7 +239,7 @@ impl Resource {
 }
 
 // #begin-codegen
-// generated from rust-lang/libc cc186d743b3e00fb39806fa6429aae424cda80cb
+// generated from rust-lang/libc ec88c377ab1695d7bdd721332382e7cecc07b7e3
 declare_resource! {
 
     /// The maximum size (in bytes)

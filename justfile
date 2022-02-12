@@ -28,3 +28,4 @@ codegen:
     python3 -m scripts.replace tmp src/utils.rs '// #begin-codegen not RLIMIT_NOFILE' '// #end-codegen not RLIMIT_NOFILE'
 
     rm tmp
+    cargo fmt
