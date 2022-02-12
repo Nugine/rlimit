@@ -9,6 +9,7 @@ license = "MIT"
 readme = "README.md"
 keywords = ["rlimit", "unix", "syscall"]
 categories = ["os::unix-apis"]
+documentation = "https://docs.rs/rlimit"
 
 [package.metadata.docs.rs]
 all-features = true
