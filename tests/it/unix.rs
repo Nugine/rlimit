@@ -1,5 +1,3 @@
-#![cfg(unix)]
-
 use std::io::ErrorKind;
 
 use rlimit::{getrlimit, setrlimit, Resource};

@@ -11,6 +11,9 @@ test: check
     cargo test --all-features -- --test-threads=1 --nocapture
     cargo run --example nofile
 
+doc:
+    cargo doc --no-deps --open
+
 codegen:
     python3 -m scripts.search_resource > tmp
     python3 -m scripts.replace tmp src/unix/resource.rs '// #begin-codegen' '// #end-codegen'

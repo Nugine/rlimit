@@ -40,6 +40,25 @@
 //! increase_nofile_limit(u64::MAX).unwrap();
 //! ```
 //!
+//! ## Windows
+//!
+//! Windows does not have Unix-like resource limits.
+//! It only supports changing the number of simultaneously open files currently permitted at the stdio level.
+//!
+//! See the official documentation of
+//! [`_getmaxstdio`](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/getmaxstdio?view=msvc-170)
+//! and
+//! [`_setmaxstdio`](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/setmaxstdio?view=msvc-170).
+//!
+//! ```no_run
+//! # #[cfg(windows)]
+//! # {
+//! println!("{}", rlimit::getmaxstdio()); // 512
+//! rlimit::setmaxstdio(2048).unwrap();
+//! println!("{}", rlimit::getmaxstdio()); // 2048
+//! # }
+//! ```
+//!
 //! # Troubleshoot
 //!
 //! ## Failed to increase NOFILE to hard limit on macOS
@@ -77,3 +96,11 @@ group! {
 }
 
 pub mod utils;
+
+#[cfg(windows)]
+group! {
+    mod windows;
+
+    #[doc(inline)]
+    pub use self::windows::*;
+}
