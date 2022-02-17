@@ -4,7 +4,7 @@ use std::io;
 /// # Errors
 /// Returns an error if any syscall failed.
 // #begin-codegen KERN_MAXFILESPERPROC
-// generated from rust-lang/libc ec88c377ab1695d7bdd721332382e7cecc07b7e3
+// generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
 #[cfg(any(
     any(target_os = "macos", target_os = "ios"),
     target_os = "dragonfly",
@@ -48,7 +48,7 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// Returns an error if any syscall failed.
 pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     // #begin-codegen RLIMIT_NOFILE
-    // generated from rust-lang/libc ec88c377ab1695d7bdd721332382e7cecc07b7e3
+    // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
     #[cfg(any(
         all(target_os = "linux", target_env = "gnu"),
         all(
@@ -101,7 +101,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         lim = lim.min(hard);
 
         // #begin-codegen KERN_MAXFILESPERPROC
-        // generated from rust-lang/libc ec88c377ab1695d7bdd721332382e7cecc07b7e3
+        // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
         #[cfg(any(
             any(target_os = "macos", target_os = "ios"),
             target_os = "dragonfly",
@@ -118,7 +118,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     }
 
     // #begin-codegen not RLIMIT_NOFILE
-    // generated from rust-lang/libc ec88c377ab1695d7bdd721332382e7cecc07b7e3
+    // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
     #[cfg(not(any(
         all(target_os = "linux", target_env = "gnu"),
         all(
