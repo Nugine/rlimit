@@ -2,11 +2,9 @@ on:
   push:
     branches:
       - master
-      - dev
   pull_request:
     branches:
       - master
-      - dev
   schedule: # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
     - cron: '0 0 * * 0' # at midnight of each sunday
 
