@@ -1,7 +1,3 @@
-use super::{expect_err, expect_ok};
-
-use std::io;
-
 #[test]
 fn maxstdio() {
     assert_eq!(rlimit::getmaxstdio(), 512);

@@ -4,6 +4,8 @@ import json
 from contextlib import contextmanager
 from typing import Dict, List
 
+from . import epprint
+
 PATH = os.getenv("LIBC_SRC_PATH", "libc")
 
 
@@ -43,9 +45,11 @@ SELECTORS = {
     "unix/linux_like/linux/uclibc/mips/mips64/mod.rs": 'all(target_os = "linux", target_env = "uclibc", target_arch = "mips64")',
     "unix/linux_like/linux/uclibc/arm/mod.rs": 'all(target_os = "linux", target_env = "uclibc", target_arch = "arm")',
     "unix/linux_like/linux/uclibc/x86_64/mod.rs": 'all(target_os = "linux", target_env = "uclibc", target_arch = "x86_64")',
-    "unix/solarish/mod.rs": 'target_os = "solarish"',
+    "unix/solarish/mod.rs": 'any(target_os = "solaris", target_os = "illumos")',
     "unix/bsd/freebsdlike/dragonfly/mod.rs": 'target_os = "dragonfly"',
     "unix/bsd/freebsdlike/freebsd/mod.rs": 'target_os = "freebsd"',
+    "unix/linux_like/android/b32/mod.rs": 'all(target_os = "android", target_pointer_width = "32")',
+    "unix/linux_like/android/b64/mod.rs": 'all(target_os = "android", target_pointer_width = "64")',
 }
 
 

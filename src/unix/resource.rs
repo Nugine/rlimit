@@ -250,13 +250,13 @@ declare_resource! {
         all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
         target_os = "netbsd",
-        target_os = "solarish",
     ))]
     AS = 1 => RLIMIT_AS,
 
@@ -270,12 +270,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     CORE = 2 => RLIMIT_CORE,
 
@@ -289,12 +289,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     CPU = 3 => RLIMIT_CPU,
 
@@ -309,12 +309,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     DATA = 4 => RLIMIT_DATA,
 
@@ -328,12 +328,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     FSIZE = 5 => RLIMIT_FSIZE,
 
@@ -419,12 +419,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     NOFILE = 11 => RLIMIT_NOFILE,
 
@@ -558,12 +558,12 @@ declare_resource! {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     STACK = 22 => RLIMIT_STACK,
 
@@ -586,7 +586,7 @@ declare_resource! {
     /// An alias for RLIMIT_AS. The maximum size of a process's mapped address space in bytes.
     #[cfg(any(
         any(target_os = "freebsd", target_os = "dragonfly"),
-        target_os = "solarish",
+        any(target_os = "solaris", target_os = "illumos"),
     ))]
     VMEM = 25 => RLIMIT_VMEM,
 

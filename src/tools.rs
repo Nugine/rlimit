@@ -62,12 +62,12 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     ))]
     // #end-codegen RLIMIT_NOFILE
     {
@@ -119,12 +119,12 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
+        any(target_os = "solaris", target_os = "illumos"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
         target_os = "linux",
-        target_os = "solarish",
     )))]
     // #end-codegen not RLIMIT_NOFILE
     {

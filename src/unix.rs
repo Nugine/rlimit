@@ -13,26 +13,58 @@ group! {
 // #begin-codegen
 // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
 #[cfg(any(
+    all(target_os = "android", target_pointer_width = "32"),
+    all(target_os = "android", target_pointer_width = "64"),
     target_os = "emscripten",
     target_os = "fuchsia",
     target_os = "linux",
 ))]
-group! {
-    type c_rlimit = libc::rlimit64;
-    use libc::setrlimit64 as c_setrlimit;
-    use libc::getrlimit64 as c_getrlimit;
-}
+type c_rlimit = libc::rlimit64;
 
 #[cfg(not(any(
+    all(target_os = "android", target_pointer_width = "32"),
+    all(target_os = "android", target_pointer_width = "64"),
     target_os = "emscripten",
     target_os = "fuchsia",
     target_os = "linux",
 )))]
-group! {
-    type c_rlimit = libc::rlimit;
-    use libc::setrlimit as c_setrlimit;
-    use libc::getrlimit as c_getrlimit;
-}
+type c_rlimit = libc::rlimit;
+
+#[cfg(any(
+    all(target_os = "linux", target_env = "gnu"),
+    all(target_os = "linux", target_env = "musl"),
+    all(target_os = "linux", target_env = "uclibc"),
+    target_os = "android",
+    target_os = "emscripten",
+))]
+use libc::getrlimit64 as c_getrlimit;
+
+#[cfg(not(any(
+    all(target_os = "linux", target_env = "gnu"),
+    all(target_os = "linux", target_env = "musl"),
+    all(target_os = "linux", target_env = "uclibc"),
+    target_os = "android",
+    target_os = "emscripten",
+)))]
+use libc::getrlimit as c_getrlimit;
+
+#[cfg(any(
+    all(target_os = "linux", target_env = "gnu"),
+    all(target_os = "linux", target_env = "musl"),
+    all(target_os = "linux", target_env = "uclibc"),
+    target_os = "android",
+    target_os = "emscripten",
+))]
+use libc::setrlimit64 as c_setrlimit;
+
+#[cfg(not(any(
+    all(target_os = "linux", target_env = "gnu"),
+    all(target_os = "linux", target_env = "musl"),
+    all(target_os = "linux", target_env = "uclibc"),
+    target_os = "android",
+    target_os = "emscripten",
+)))]
+use libc::setrlimit as c_setrlimit;
 
 
 /// A value indicating no limit.
@@ -43,14 +75,32 @@ group! {
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "openbsd", target_os = "netbsd"),
+    any(target_os = "solaris", target_os = "illumos"),
     target_os = "android",
     target_os = "emscripten",
     target_os = "fuchsia",
     target_os = "haiku",
     target_os = "linux",
-    target_os = "solarish",
 ))]
 pub const INFINITY: u64 = libc::RLIM_INFINITY as u64;
+
+
+/// A value indicating no limit.
+#[cfg(not(any(
+    all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+    all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+    all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
+    any(target_os = "freebsd", target_os = "dragonfly"),
+    any(target_os = "macos", target_os = "ios"),
+    any(target_os = "openbsd", target_os = "netbsd"),
+    any(target_os = "solaris", target_os = "illumos"),
+    target_os = "android",
+    target_os = "emscripten",
+    target_os = "fuchsia",
+    target_os = "haiku",
+    target_os = "linux",
+)))]
+pub const INFINITY: u64 = u64::MAX;
 
 
 /// A value indicating an unrepresentable saved soft limit.
@@ -117,8 +167,8 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     let ret: c_int = unsafe { c_getrlimit(raw_resource, &mut rlim) };
 
     if ret == 0 {
-        let soft = rlim.rlim_cur as u64;
-        let hard = rlim.rlim_max as u64;
+        let soft = (rlim.rlim_cur as u64).min(INFINITY);
+        let hard = (rlim.rlim_max as u64).min(INFINITY);
         Ok((soft, hard))
     } else {
         Err(io::Error::last_os_error())
@@ -163,8 +213,8 @@ pub fn prlimit(
 
     if ret == 0 {
         if let Some((soft, hard)) = old_limit {
-            *soft = old_rlim.rlim_cur as u64;
-            *hard = old_rlim.rlim_max as u64;
+            *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
+            *hard = (old_rlim.rlim_max as u64).min(INFINITY);
         }
 
         Ok(())

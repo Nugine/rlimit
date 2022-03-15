@@ -17,17 +17,17 @@ jobs:
       matrix:
         target:
           # copied from `rustup target list`
-          # - aarch64-apple-darwin                  # (missing libc definitions)
-          # - aarch64-apple-ios                     # (missing libc definitions)
+          # - aarch64-apple-darwin                  # (build error)
+          # - aarch64-apple-ios                     # (build error)
           # - aarch64-apple-ios-sim                 # (build error)
-          # - aarch64-fuchsia                       # (missing libc definitions)
-          # - aarch64-linux-android                 # (missing libc definitions)
+          # - aarch64-fuchsia                       # (fuchsia does not have [sg]etrlimit)
+          - aarch64-linux-android
           # - aarch64-pc-windows-msvc               # (missing docker image)
           - aarch64-unknown-linux-gnu
           - aarch64-unknown-linux-musl
           # - aarch64-unknown-none                  # (no std)
           # - aarch64-unknown-none-softfloat        # (no std)
-          # - arm-linux-androideabi                 # (missing libc definitions)
+          - arm-linux-androideabi
           # - arm-unknown-linux-gnueabi             # (libc mismatch)
           # - arm-unknown-linux-gnueabihf           # (libc mismatch)
           - arm-unknown-linux-musleabi
@@ -36,7 +36,7 @@ jobs:
           # - armebv7r-none-eabihf                  # (no std)
           # - armv5te-unknown-linux-gnueabi         # (libc mismatch)
           - armv5te-unknown-linux-musleabi
-          # - armv7-linux-androideabi               # (missing libc definitions)
+          - armv7-linux-androideabi
           # - armv7-unknown-linux-gnueabi           # (missing docker image)
           # - armv7-unknown-linux-gnueabihf         # (libc mismatch)
           # - armv7-unknown-linux-musleabi          # (missing docker image)
@@ -48,7 +48,7 @@ jobs:
           # - i586-pc-windows-msvc                  # (missing docker image)
           # - i586-unknown-linux-gnu                # (libc mismatch)
           - i586-unknown-linux-musl
-          # - i686-linux-android                    # (missing libc definitions)
+          - i686-linux-android
           # - i686-pc-windows-gnu                   # (missing docker image)
           # - i686-pc-windows-msvc                  # (missing docker image)
           # - i686-unknown-freebsd                  # (missing docker image)
@@ -74,7 +74,7 @@ jobs:
           # - riscv64imac-unknown-none-elf          # (no std)
           - s390x-unknown-linux-gnu
           # - sparc64-unknown-linux-gnu             # (missing docker image)
-          - sparcv9-sun-solaris
+          # - sparcv9-sun-solaris                   # (build error)
           # - thumbv6m-none-eabi                    # (no std)
           # - thumbv7em-none-eabi                   # (no std)
           # - thumbv7em-none-eabihf                 # (no std)
@@ -87,21 +87,21 @@ jobs:
           # - wasm32-unknown-emscripten             # (build error)
           # - wasm32-unknown-unknown                # (tester error)
           # - wasm32-wasi                           # (tester error)
-          # - x86_64-apple-darwin                   # (missing libc definitions)
+          # - x86_64-apple-darwin                   # (build error)
           # - x86_64-apple-ios                      # (build error)
           # - x86_64-fortanix-unknown-sgx           # (tester error)
-          # - x86_64-fuchsia                        # (missing libc definitions)
-          # - x86_64-linux-android                  # (missing libc definitions)
-          - x86_64-pc-solaris
+          # - x86_64-fuchsia                        # (fuchsia does not have [sg]etrlimit)
+          - x86_64-linux-android
+          # - x86_64-pc-solaris                     # (missing docker image)
           - x86_64-pc-windows-gnu
           # - x86_64-pc-windows-msvc                # (missing docker image)
-          - x86_64-sun-solaris
+          # - x86_64-sun-solaris                    # (build error)
           # - x86_64-unknown-freebsd                # (missing docker image)
-          - x86_64-unknown-illumos
+          # - x86_64-unknown-illumos                # (build error)
           - x86_64-unknown-linux-gnu
           # - x86_64-unknown-linux-gnux32           # (missing docker image)
           - x86_64-unknown-linux-musl
-          - x86_64-unknown-netbsd
+          # - x86_64-unknown-netbsd                 # (tester error)
           # - x86_64-unknown-redox                  # (nightly)
 
     steps:

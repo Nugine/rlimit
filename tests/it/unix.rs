@@ -35,6 +35,13 @@ fn resource_infinity() {
     );
 }
 
+#[cfg(any(
+    any(target_os = "openbsd", target_os = "netbsd"),
+    target_os = "emscripten",
+    target_os = "freebsd",
+    target_os = "fuchsia",
+    target_os = "linux",
+))]
 #[test]
 fn rlim_value() {
     use std::fs;
