@@ -84,8 +84,8 @@ fn rlim_value() {
         rlimit::SAVED_MAX
     );
 
-    assert_eq!(c_output, libc_output);
-    assert_eq!(c_output, rlimit_output);
+    assert_eq!(c_output, libc_output, "libc mismatch");
+    assert_eq!(c_output, rlimit_output, "rlimit mismatch");
 
     fs::remove_file(cpp_path).ok();
     fs::remove_file(exe_path).ok();
