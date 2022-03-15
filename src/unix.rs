@@ -21,9 +21,6 @@ group! {
     type c_rlimit = libc::rlimit64;
     use libc::setrlimit64 as c_setrlimit;
     use libc::getrlimit64 as c_getrlimit;
-    const RLIM_INFINITY: u64 = u64::MAX;
-    const RLIM_SAVED_CUR: u64 = u64::MAX;
-    const RLIM_SAVED_MAX: u64 = u64::MAX;
 }
 
 #[cfg(not(any(
@@ -35,37 +32,6 @@ group! {
     type c_rlimit = libc::rlimit;
     use libc::setrlimit as c_setrlimit;
     use libc::getrlimit as c_getrlimit;
-    #[cfg(any(
-        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
-        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
-        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
-        any(target_os = "freebsd", target_os = "dragonfly"),
-        any(target_os = "macos", target_os = "ios"),
-        any(target_os = "openbsd", target_os = "netbsd"),
-        target_os = "android",
-        target_os = "emscripten",
-        target_os = "fuchsia",
-        target_os = "haiku",
-        target_os = "linux",
-        target_os = "solarish",
-    ))]
-    const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
-    #[cfg(any(
-        any(target_os = "openbsd", target_os = "netbsd"),
-        target_os = "emscripten",
-        target_os = "freebsd",
-        target_os = "fuchsia",
-        target_os = "linux",
-    ))]
-    const RLIM_SAVED_CUR: u64 = libc::RLIM_SAVED_CUR as u64;
-    #[cfg(any(
-        any(target_os = "openbsd", target_os = "netbsd"),
-        target_os = "emscripten",
-        target_os = "freebsd",
-        target_os = "fuchsia",
-        target_os = "linux",
-    ))]
-    const RLIM_SAVED_MAX: u64 = libc::RLIM_SAVED_MAX as u64;
 }
 
 
@@ -84,7 +50,7 @@ group! {
     target_os = "linux",
     target_os = "solarish",
 ))]
-pub const INFINITY: u64 = RLIM_INFINITY;
+pub const INFINITY: u64 = libc::RLIM_INFINITY as u64;
 
 
 /// A value indicating an unrepresentable saved soft limit.
@@ -95,7 +61,7 @@ pub const INFINITY: u64 = RLIM_INFINITY;
     target_os = "fuchsia",
     target_os = "linux",
 ))]
-pub const SAVED_CUR: u64 = RLIM_SAVED_CUR;
+pub const SAVED_CUR: u64 = libc::RLIM_SAVED_CUR as u64;
 
 
 /// A value indicating an unrepresentable saved hard limit.
@@ -106,7 +72,7 @@ pub const SAVED_CUR: u64 = RLIM_SAVED_CUR;
     target_os = "fuchsia",
     target_os = "linux",
 ))]
-pub const SAVED_MAX: u64 = RLIM_SAVED_MAX;
+pub const SAVED_MAX: u64 = libc::RLIM_SAVED_MAX as u64;
 
 // #end-codegen
 
