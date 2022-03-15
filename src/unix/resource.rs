@@ -239,22 +239,22 @@ impl Resource {
 }
 
 // #begin-codegen
-// generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
+// generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
 declare_resource! {
 
     /// The maximum size (in bytes)
     /// of the process's virtual memory (address space).
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "netbsd",
         target_os = "solarish",
     ))]
@@ -264,9 +264,9 @@ declare_resource! {
     /// The maximum size (in bytes)
     /// of a core file that the process may dump.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -274,6 +274,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     CORE = 2 => RLIMIT_CORE,
@@ -282,9 +283,9 @@ declare_resource! {
     /// A limit (in seconds)
     /// on the amount of CPU time that the process can consume.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -292,6 +293,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     CPU = 3 => RLIMIT_CPU,
@@ -301,9 +303,9 @@ declare_resource! {
     /// of the process's data segment
     /// (initialized data, uninitialized data, and heap).
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -311,6 +313,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     DATA = 4 => RLIMIT_DATA,
@@ -319,9 +322,9 @@ declare_resource! {
     /// The maximum size (in bytes)
     /// of files that the process may create.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -329,6 +332,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     FSIZE = 5 => RLIMIT_FSIZE,
@@ -347,12 +351,13 @@ declare_resource! {
     /// of `flock(2)` locks and `fcntl(2)` leases
     /// that this process may establish.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     LOCKS = 7 => RLIMIT_LOCKS,
 
@@ -360,16 +365,16 @@ declare_resource! {
     /// The maximum number (in bytes)
     /// of memory that may be locked into RAM.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     MEMLOCK = 8 => RLIMIT_MEMLOCK,
 
@@ -378,12 +383,13 @@ declare_resource! {
     /// of bytes that can be allocated for POSIX message queues
     /// for the real user ID of the calling process.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     MSGQUEUE = 9 => RLIMIT_MSGQUEUE,
 
@@ -392,12 +398,13 @@ declare_resource! {
     /// to which the process's nice value can be raised
     /// using `setpriority(2)` or `nice(2)`.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     NICE = 10 => RLIMIT_NICE,
 
@@ -406,10 +413,9 @@ declare_resource! {
     /// one greater than the maximum file descriptor number
     /// that can be opened by this process.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -417,6 +423,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     NOFILE = 11 => RLIMIT_NOFILE,
@@ -432,16 +439,16 @@ declare_resource! {
     /// A limit on the number of extant process (or, more precisely on Linux, threads)
     /// for the real user ID of the calling process.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     NPROC = 13 => RLIMIT_NPROC,
 
@@ -474,16 +481,16 @@ declare_resource! {
     /// on the process's resident set
     /// (the number of virtual pages resident in RAM).
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86", target_arch = "mips", target_arch = "powerpc", target_arch = "hexagon", target_arch = "arm")),
-        all(target_os = "linux", target_env = "musl", any(target_arch = "x86_64", target_arch = "aarch64", target_arch = "mips64", target_arch = "powerpc64")),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     RSS = 17 => RLIMIT_RSS,
 
@@ -492,12 +499,13 @@ declare_resource! {
     /// that may be set for this process
     /// using `sched_setscheduler(2)` and `sched_setparam(2)`.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     RTPRIO = 18 => RLIMIT_RTPRIO,
 
@@ -506,10 +514,11 @@ declare_resource! {
     /// that a process scheduled under a real-time scheduling policy
     /// may consume without making a blocking system call.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     RTTIME = 19 => RLIMIT_RTTIME,
 
@@ -529,12 +538,13 @@ declare_resource! {
     /// of signals that may be queued
     /// for the real user ID of the calling process.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         target_os = "android",
         target_os = "emscripten",
         target_os = "fuchsia",
+        target_os = "linux",
     ))]
     SIGPENDING = 21 => RLIMIT_SIGPENDING,
 
@@ -542,9 +552,9 @@ declare_resource! {
     /// The maximum size (in bytes)
     /// of the process stack.
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -552,6 +562,7 @@ declare_resource! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     STACK = 22 => RLIMIT_STACK,

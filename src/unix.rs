@@ -11,8 +11,12 @@ group! {
 }
 
 // #begin-codegen
-// generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
-#[cfg(any(target_os = "emscripten", target_os = "fuchsia", target_os = "linux",))]
+// generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
+#[cfg(any(
+    target_os = "emscripten",
+    target_os = "fuchsia",
+    target_os = "linux",
+))]
 group! {
     type c_rlimit = libc::rlimit64;
     use libc::setrlimit64 as c_setrlimit;
@@ -22,18 +26,19 @@ group! {
     const RLIM_SAVED_MAX: u64 = u64::MAX;
 }
 
-#[cfg(not(any(target_os = "emscripten", target_os = "fuchsia", target_os = "linux",)))]
+#[cfg(not(any(
+    target_os = "emscripten",
+    target_os = "fuchsia",
+    target_os = "linux",
+)))]
 group! {
     type c_rlimit = libc::rlimit;
     use libc::setrlimit as c_setrlimit;
     use libc::getrlimit as c_getrlimit;
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
-        all(target_os = "linux", target_env = "musl"),
-        all(target_os = "linux", target_env = "uclibc", target_arch = "arm"),
-        all(target_os = "linux", target_env = "uclibc", target_arch = "mips"),
-        all(target_os = "linux", target_env = "uclibc", target_arch = "mips64"),
-        all(target_os = "linux", target_env = "uclibc", target_arch = "x86_64"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+        all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+        all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -41,6 +46,7 @@ group! {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
@@ -62,14 +68,12 @@ group! {
     const RLIM_SAVED_MAX: u64 = libc::RLIM_SAVED_MAX as u64;
 }
 
+
 /// A value indicating no limit.
 #[cfg(any(
-    all(target_os = "linux", target_env = "gnu"),
-    all(target_os = "linux", target_env = "musl"),
-    all(target_os = "linux", target_env = "uclibc", target_arch = "arm"),
-    all(target_os = "linux", target_env = "uclibc", target_arch = "mips"),
-    all(target_os = "linux", target_env = "uclibc", target_arch = "mips64"),
-    all(target_os = "linux", target_env = "uclibc", target_arch = "x86_64"),
+    all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
+    all(target_os = "linux", any(target_arch = "powerpc", target_arch = "powerpc64")),
+    all(target_os = "linux", any(target_arch = "sparc", target_arch = "sparc64")),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -77,9 +81,11 @@ group! {
     target_os = "emscripten",
     target_os = "fuchsia",
     target_os = "haiku",
+    target_os = "linux",
     target_os = "solarish",
 ))]
 pub const INFINITY: u64 = RLIM_INFINITY;
+
 
 /// A value indicating an unrepresentable saved soft limit.
 #[cfg(any(
@@ -90,6 +96,7 @@ pub const INFINITY: u64 = RLIM_INFINITY;
     target_os = "linux",
 ))]
 pub const SAVED_CUR: u64 = RLIM_SAVED_CUR;
+
 
 /// A value indicating an unrepresentable saved hard limit.
 #[cfg(any(

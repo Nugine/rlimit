@@ -4,7 +4,7 @@ use std::io;
 /// # Errors
 /// Returns an error if any syscall failed.
 // #begin-codegen KERN_MAXFILESPERPROC
-// generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
+// generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
 #[cfg(any(
     any(target_os = "macos", target_os = "ios"),
     target_os = "dragonfly",
@@ -48,31 +48,17 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// Returns an error if any syscall failed.
 pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     // #begin-codegen RLIMIT_NOFILE
-    // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
+    // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
     #[cfg(any(
-        all(target_os = "linux", target_env = "gnu"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
         all(
             target_os = "linux",
-            target_env = "musl",
-            any(
-                target_arch = "x86",
-                target_arch = "mips",
-                target_arch = "powerpc",
-                target_arch = "hexagon",
-                target_arch = "arm"
-            )
+            any(target_arch = "powerpc", target_arch = "powerpc64")
         ),
         all(
             target_os = "linux",
-            target_env = "musl",
-            any(
-                target_arch = "x86_64",
-                target_arch = "aarch64",
-                target_arch = "mips64",
-                target_arch = "powerpc64"
-            )
+            any(target_arch = "sparc", target_arch = "sparc64")
         ),
-        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -80,6 +66,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     ))]
     // #end-codegen RLIMIT_NOFILE
@@ -101,7 +88,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         lim = lim.min(hard);
 
         // #begin-codegen KERN_MAXFILESPERPROC
-        // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
+        // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
         #[cfg(any(
             any(target_os = "macos", target_os = "ios"),
             target_os = "dragonfly",
@@ -118,31 +105,17 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     }
 
     // #begin-codegen not RLIMIT_NOFILE
-    // generated from rust-lang/libc f1d3d97cd78bf04643a83ea728a487f5a2a10800
+    // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
     #[cfg(not(any(
-        all(target_os = "linux", target_env = "gnu"),
+        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
         all(
             target_os = "linux",
-            target_env = "musl",
-            any(
-                target_arch = "x86",
-                target_arch = "mips",
-                target_arch = "powerpc",
-                target_arch = "hexagon",
-                target_arch = "arm"
-            )
+            any(target_arch = "powerpc", target_arch = "powerpc64")
         ),
         all(
             target_os = "linux",
-            target_env = "musl",
-            any(
-                target_arch = "x86_64",
-                target_arch = "aarch64",
-                target_arch = "mips64",
-                target_arch = "powerpc64"
-            )
+            any(target_arch = "sparc", target_arch = "sparc64")
         ),
-        all(target_os = "linux", target_env = "uclibc"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -150,6 +123,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
         target_os = "emscripten",
         target_os = "fuchsia",
         target_os = "haiku",
+        target_os = "linux",
         target_os = "solarish",
     )))]
     // #end-codegen not RLIMIT_NOFILE

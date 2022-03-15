@@ -2,7 +2,9 @@
 import os
 import json
 import re
+import sys
 from typing import Any, Dict, List
+from pprint import pprint
 
 from . import libc_source
 
@@ -193,8 +195,13 @@ docs[
 """
 
 
+# def epprint(*args, **kwargs):
+#     pprint(*args, **kwargs, stream=sys.stderr)
+
+
 if __name__ == "__main__":
     resources = libc_source.search_ident("RLIMIT_.+?:", ".+[^_]RLIMIT_(.+?):")
+    # epprint(resources)
     del resources["NLIMITS"]
     selectors = libc_source.calc_selectors(resources)
 
