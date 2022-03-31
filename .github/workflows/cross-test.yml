@@ -120,7 +120,7 @@ jobs:
         with:
           use-cross: true
           command: test
-          args: --all-features --target=${{ matrix.target }} -- codegen --test-threads=1
+          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}
