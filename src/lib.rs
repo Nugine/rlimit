@@ -101,17 +101,20 @@ group! {
 
     mod unix;
     mod resource;
-    mod proc_limits;
 
     #[doc(inline)]
     pub use self::unix::*;
 
     #[doc(inline)]
     pub use self::resource::Resource;
+}
+
+#[cfg(any(doc, target_os = "linux"))]
+group! {
+    mod proc_limits;
 
     #[doc(inline)]
     pub use self::proc_limits::*;
-
 }
 
 mod tools;

@@ -89,28 +89,97 @@ target_list = [
     "x86_64-unknown-redox",
 ]
 
+arch_map = {
+    "aarch64": "aarch64",
+    "arm": "arm",
+    "armebv7r": "arm",
+    "armv5te": "arm",
+    "armv7": "arm",
+    "armv7a": "arm",
+    "armv7r": "arm",
+    "asmjs": "asmjs",
+    "i586": "x86",
+    "i686": "x86",
+    "mips": "mips",
+    "mips64": "mips64",
+    "mips64el": "mips64",
+    "mipsel": "mips",
+    "nvptx64": "nvptx64",
+    "powerpc": "powerpc",
+    "powerpc64": "powerpc64",
+    "powerpc64le": "powerpc64",
+    "riscv32i": "riscv32",
+    "riscv32imac": "riscv32",
+    "riscv32imc": "riscv32",
+    "riscv64gc": "riscv64",
+    "riscv64imac": "riscv64",
+    "s390x": "s390x",
+    "sparc64": "sparc64",
+    "sparcv9": "sparc",
+    "thumbv6m": "thumbv6",
+    "thumbv7em": "thumbv7",
+    "thumbv7m": "thumbv7",
+    "thumbv7neon": "thumbv7",
+    "wasm32": "wasm32",
+    "x86_64": "x86_64",
+}
+
+env_map = {
+    "gnueabi": "gnu",
+    "gnueabihf": "gnu",
+    "musleabi": "musl",
+    "musleabihf": "musl",
+    "gnuabi64": "gnu",
+    "muslabi64": "musl",
+}
+
 if __name__ == "__main__":
     print("#![allow(non_camel_case_types)]\n")
-    
+
+    content_map = dict()
+
     for target in target_list:
         t = list(target.split("-"))
         t_arch = t[0]
         t_os = t[2] if len(t) > 2 else t[1]
         t_env = t[3] if len(t) > 3 else None
 
+        outrs = Path(target) / "out.rs"
+        if not outrs.exists():
+            continue
+        content = open(outrs, "r", encoding="utf8").read()
+
+        t_arch = arch_map[t_arch]
+
+        if t_os == "darwin":
+            t_os = "macos"
+        elif t_os == "androideabi":
+            t_os = "android"
+
+        if t_env is not None and t_env in env_map:
+            t_env = env_map[t_env]
+
         if t_env is not None:
             cfg = f'#[cfg(all(target_arch="{t_arch}", target_os="{t_os}", target_env="{t_env}"))]'
         else:
             cfg = f'#[cfg(all(target_arch="{t_arch}", target_os="{t_os}"))]'
 
-        outrs = Path(target) / "out.rs"
-        if outrs.exists():
-            content = open(outrs, "r", encoding="utf8").read()
-            mod_name = target.replace("-", "_")
-            print(cfg)
-            print(f"pub mod {mod_name} {{")
-            print(content)
-            print("}")
-            print(cfg)
-            print(f"pub use self::{mod_name}::*;")
+        if target == "x86_64-unknown-linux-gnu":
+            cfg = '#[cfg(any(all(doc, windows), all(target_arch = "x86_64", target_os = "linux", target_env = "gnu")))]'
+
+        if (cfg in content_map) and content_map[cfg][1] == content:
+            a = target.ljust(40, " ")
+            b = content_map[cfg][0].ljust(40, " ")
+            print(f"// {a} ~ {b}")
             print()
+            continue
+        content_map[cfg] = (target, content)
+
+        mod_name = target.replace("-", "_")
+        print(cfg)
+        print(f"pub mod {mod_name} {{")
+        print(content)
+        print("}")
+        print(cfg)
+        print(f"pub use self::{mod_name}::*;")
+        print()

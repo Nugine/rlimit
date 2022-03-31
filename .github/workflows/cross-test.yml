@@ -112,35 +112,28 @@ jobs:
           target: ${{ matrix.target }}
           override: true
       - run: |
-          echo '[build.env]' >> Cross.toml
-          echo 'passthrough = ["RUSTFLAGS"]' >> Cross.toml
+          mv src/lib.rs tmp.rs
+          cp scripts/codegen.rs src/main.rs
+          cp scripts/build.rs ./
       - uses: actions-rs/cargo@v1
-        env:
-          RUSTFLAGS: "--cfg private_codegen"
         with:
           use-cross: true
-          command: test
-          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
+          command: run
+          args: --target=${{ matrix.target }}
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target }}
           path: target/out.rs
           retention-days: 1
-
-  check-codegen:
-    name: check-codegen
-    runs-on: ubuntu-latest
-    needs: ubuntu
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v3
-      - run: python3 ./scripts/codegen.py > bindings.rs
-      - run: rustfmt bindings.rs
-      - uses: actions/upload-artifact@v3
+      - run: |
+          cat target/vars.txt
+          mv tmp.rs src/lib.rs
+          rm src/main.rs ./build.rs
+      - uses: actions-rs/cargo@v1
         with:
-          name: bindings
-          path: bindings.rs
-      - run: diff bindings.rs src/bindings.rs
+          use-cross: true
+          command: test
+          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
 
   macos:
     name: macos
@@ -157,6 +150,23 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
+      - run: |
+          mv src/lib.rs tmp.rs
+          cp scripts/codegen.rs src/main.rs
+          cp scripts/build.rs ./
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: run
+          args: --target=${{ matrix.target }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.target }}
+          path: target/out.rs
+          retention-days: 1
+      - run: |
+          mv tmp.rs src/lib.rs
+          rm src/main.rs ./build.rs
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -174,3 +184,19 @@ jobs:
         with:
           command: test
           args: --all-features  -- --test-threads=1
+
+  check-codegen:
+    name: check-codegen
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: ["ubuntu", "macos"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+      - run: python3 ./scripts/codegen.py > bindings.rs
+      - run: rustfmt bindings.rs
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bindings
+          path: bindings.rs
+      - run: diff bindings.rs src/bindings.rs

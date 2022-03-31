@@ -184,8 +184,11 @@ impl Resource {
     ///
     /// # Example
     /// ```
+    /// # #[cfg(unix)]
+    /// # {
     /// # use rlimit::Resource;
     /// assert_eq!(Resource::NOFILE.as_name(), "RLIMIT_NOFILE");
+    /// # }
     /// ```
     #[must_use]
     #[allow(clippy::missing_panics_doc)] // this method should never panic

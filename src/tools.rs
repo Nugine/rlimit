@@ -3,14 +3,11 @@ use std::io;
 /// Returns the value of `kern.maxfilesperproc` by sysctl.
 /// # Errors
 /// Returns an error if any syscall failed.
-// #begin-codegen KERN_MAXFILESPERPROC
-// generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
 #[cfg(any(
     any(target_os = "macos", target_os = "ios"),
     target_os = "dragonfly",
     target_os = "freebsd",
 ))]
-// #end-codegen KERN_MAXFILESPERPROC
 fn get_kern_max_files_per_proc() -> io::Result<u64> {
     use std::mem;
     use std::ptr;
@@ -47,31 +44,13 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// # Errors
 /// Returns an error if any syscall failed.
 pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
-    // #begin-codegen RLIMIT_NOFILE
-    // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
-    #[cfg(any(
-        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
-        all(
-            target_os = "linux",
-            any(target_arch = "powerpc", target_arch = "powerpc64")
-        ),
-        all(
-            target_os = "linux",
-            any(target_arch = "sparc", target_arch = "sparc64")
-        ),
-        any(target_os = "freebsd", target_os = "dragonfly"),
-        any(target_os = "macos", target_os = "ios"),
-        any(target_os = "openbsd", target_os = "netbsd"),
-        any(target_os = "solaris", target_os = "illumos"),
-        target_os = "android",
-        target_os = "emscripten",
-        target_os = "fuchsia",
-        target_os = "haiku",
-        target_os = "linux",
-    ))]
-    // #end-codegen RLIMIT_NOFILE
+    #[cfg(unix)]
     {
-        use super::Resource;
+        use crate::Resource;
+
+        if !Resource::NOFILE.is_supported() {
+            return Ok(lim);
+        }
 
         let (soft, hard) = Resource::NOFILE.get()?;
 
@@ -87,14 +66,11 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
 
         lim = lim.min(hard);
 
-        // #begin-codegen KERN_MAXFILESPERPROC
-        // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
         #[cfg(any(
             any(target_os = "macos", target_os = "ios"),
             target_os = "dragonfly",
             target_os = "freebsd",
         ))]
-        // #end-codegen KERN_MAXFILESPERPROC
         {
             lim = lim.min(get_kern_max_files_per_proc()?)
         }
@@ -103,30 +79,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
 
         Ok(lim)
     }
-
-    // #begin-codegen not RLIMIT_NOFILE
-    // generated from rust-lang/libc f05cd2a19196c710ed29edba950f7e38906d6043
-    #[cfg(not(any(
-        all(target_os = "linux", any(target_arch = "mips", target_arch = "mips64")),
-        all(
-            target_os = "linux",
-            any(target_arch = "powerpc", target_arch = "powerpc64")
-        ),
-        all(
-            target_os = "linux",
-            any(target_arch = "sparc", target_arch = "sparc64")
-        ),
-        any(target_os = "freebsd", target_os = "dragonfly"),
-        any(target_os = "macos", target_os = "ios"),
-        any(target_os = "openbsd", target_os = "netbsd"),
-        any(target_os = "solaris", target_os = "illumos"),
-        target_os = "android",
-        target_os = "emscripten",
-        target_os = "fuchsia",
-        target_os = "haiku",
-        target_os = "linux",
-    )))]
-    // #end-codegen not RLIMIT_NOFILE
+    #[cfg(windows)]
     {
         Ok(lim)
     }

@@ -15,5 +15,5 @@ documentation = "https://docs.rs/rlimit"
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
-[dev-dependencies]
+[dependencies]
 libc = "0.2"

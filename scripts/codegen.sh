@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 OUTEXE=/tmp/rlimit_codegen
 OUTRS=$1
 if [ -z "$OUTRS" ]; then 
@@ -7,7 +7,7 @@ if [ -z "$OUTRS" ]; then
 fi
 g++ ./scripts/codegen.cpp -DCODEGEN64 -std=c++11 -o $OUTEXE
 if [ $? -ne 0 ]; then
-    g++ codegen.cpp -std=c++11 -o $OUTEXE
+    g++ ./scripts/codegen.cpp -std=c++11 -o $OUTEXE
 fi
 $OUTEXE > $OUTRS
 echo "done"
