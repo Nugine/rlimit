@@ -30,7 +30,7 @@
 //! ```
 //!
 //! ## Increase NOFILE limit
-//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.8.0-dev/examples/nofile.rs).
+//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.8.0/examples/nofile.rs).
 //!
 //! You can also use the tool function showed below:
 //!

@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.7.0...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/v0.8.0...HEAD
+
+## [0.8.0] - 2022-03-31
+
+[0.8.0]: https://github.com/Nugine/rlimit/compare/v0.7.0...v0.8.0
 
 rlimit v0.8.0 uses custom ffi bindings instead of libc for rlimit symbols and constants. The custom bindings are kept in sync with system headers automatically.
 
