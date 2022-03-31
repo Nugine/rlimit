@@ -9,6 +9,10 @@ use std::str::FromStr;
 
 /// A kind of resource.
 ///
+/// All resource constants are available on all unix platforms.
+/// Passing an unsupported resource to `[set|get|p]rlimit` will
+/// result in a custom IO error.
+///
 /// **Be careful**: The documentation of [`Resource`][Resource] constants are based on a few systems.
 /// It may be inconsistent with other platforms.
 ///

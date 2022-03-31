@@ -8,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/Nugine/rlimit/v0.7.0...HEAD
 
+rlimit v0.8.0 uses custom ffi bindings instead of libc for rlimit symbols and constants. The custom bindings are kept in sync with system headers automatically.
+
+All resource constants are available on all unix platforms.
+Passing an unsupported resource to `[set|get|p]rlimit` will result in a custom IO error.
+
+### Added
+
++ `Resource::is_supported`
+
+### Changed
+
++ `Resource::as_raw` is a private method now.
+
+### Removed
+
++ `Resource::available_names`
++ `Resource::available_resources`
++ `RawResource`
+
 ## [0.7.0] - 2022-02-13
 
 [0.7.0]: https://github.com/Nugine/rlimit/compare/v0.6.2...v0.7.0

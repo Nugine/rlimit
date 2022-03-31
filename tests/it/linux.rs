@@ -1,4 +1,5 @@
 use std::io::ErrorKind;
+use std::ops::Not;
 
 use rlimit::{prlimit, Resource};
 
@@ -86,4 +87,11 @@ fn linux_proc_limits() {
             max_realtime_timeout,
         ]
     );
+}
+
+#[test]
+fn unsupported() {
+    assert!(Resource::UMTXP.is_supported().not());
+    let err = Resource::UMTXP.get().unwrap_err();
+    assert!(err.kind() == std::io::ErrorKind::Other);
 }
