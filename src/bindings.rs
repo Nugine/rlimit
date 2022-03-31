@@ -36,7 +36,7 @@ pub mod aarch64_linux_android {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -80,7 +80,7 @@ pub mod aarch64_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -124,7 +124,7 @@ pub mod aarch64_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -168,7 +168,7 @@ pub mod arm_linux_androideabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -212,7 +212,7 @@ pub mod arm_unknown_linux_gnueabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -256,7 +256,7 @@ pub mod arm_unknown_linux_gnueabihf {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -300,7 +300,7 @@ pub mod arm_unknown_linux_musleabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -344,7 +344,7 @@ pub mod arm_unknown_linux_musleabihf {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -388,7 +388,7 @@ pub mod armv5te_unknown_linux_gnueabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -432,7 +432,7 @@ pub mod armv5te_unknown_linux_musleabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -476,7 +476,7 @@ pub mod armv7_linux_androideabi {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -520,7 +520,7 @@ pub mod armv7_unknown_linux_gnueabihf {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -564,7 +564,7 @@ pub mod armv7_unknown_linux_musleabihf {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -608,7 +608,7 @@ pub mod i586_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -652,7 +652,7 @@ pub mod i586_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -696,7 +696,7 @@ pub mod i686_linux_android {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -740,7 +740,7 @@ pub mod i686_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -784,7 +784,7 @@ pub mod i686_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -828,7 +828,7 @@ pub mod mips_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -872,7 +872,7 @@ pub mod mips_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -916,7 +916,7 @@ pub mod mips64_unknown_linux_gnuabi64 {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -960,7 +960,7 @@ pub mod mips64el_unknown_linux_gnuabi64 {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1004,7 +1004,7 @@ pub mod mipsel_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1048,7 +1048,7 @@ pub mod mipsel_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1092,7 +1092,7 @@ pub mod powerpc_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1136,7 +1136,7 @@ pub mod powerpc64le_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1180,7 +1180,7 @@ pub mod riscv64gc_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1224,7 +1224,7 @@ pub mod s390x_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1268,7 +1268,7 @@ pub mod x86_64_linux_android {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1312,7 +1312,7 @@ pub mod x86_64_unknown_linux_gnu {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;
@@ -1356,7 +1356,7 @@ pub mod x86_64_unknown_linux_musl {
     }
     extern "C" {
         pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
-        pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;
     }
     pub use self::getrlimit64 as getrlimit;
     pub use self::setrlimit64 as setrlimit;

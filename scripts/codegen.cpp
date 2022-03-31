@@ -234,14 +234,14 @@ int main() {
 #if defined(CODEGEN64)
     cout << "extern \"C\" {\n"
          << "    pub fn getrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;\n"
-         << "    pub fn setrlimit64(resource: u32, rlimit: *mut rlimit) -> i32;\n"
+         << "    pub fn setrlimit64(resource: u32, rlimit: *const rlimit) -> i32;\n"
          << "}\n";
     cout << "pub use self::getrlimit64 as getrlimit;\n";
     cout << "pub use self::setrlimit64 as setrlimit;\n";
 #else
     cout << "extern \"C\" {\n"
          << "    pub fn getrlimit(resource: u32, rlimit: *mut rlimit) -> i32;\n"
-         << "    pub fn setrlimit(resource: u32, rlimit: *mut rlimit) -> i32;\n"
+         << "    pub fn setrlimit(resource: u32, rlimit: *const rlimit) -> i32;\n"
          << "}\n";
 #endif
 

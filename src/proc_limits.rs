@@ -1,11 +1,11 @@
 #![deny(unsafe_code)]
 
+use crate::unix::pid_t;
+
 use std::fs;
 use std::io::{self, BufRead};
 use std::num::ParseIntError;
 use std::path::Path;
-
-use libc::pid_t;
 
 /// A process's resource limits. It is parsed from the **proc** filesystem.
 ///

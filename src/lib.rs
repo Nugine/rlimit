@@ -82,17 +82,9 @@
 
 #[allow(unused_macros)]
 macro_rules! group {
-    ($($tt:tt)*) => {
-        $($tt)*
+    ($($item:item)*) => {
+        $($item)*
     }
-}
-
-#[cfg(unix)]
-group! {
-    mod unix;
-
-    #[doc(inline)]
-    pub use self::unix::*;
 }
 
 #[cfg(any(doc, windows))]
@@ -103,9 +95,25 @@ group! {
     pub use self::windows::*;
 }
 
-mod tools;
+#[cfg(any(doc, unix))]
+group! {
+    mod bindings;
 
+    mod unix;
+    mod resource;
+    mod proc_limits;
+
+    #[doc(inline)]
+    pub use self::unix::*;
+
+    #[doc(inline)]
+    pub use self::resource::Resource;
+
+    #[doc(inline)]
+    pub use self::proc_limits::*;
+
+}
+
+mod tools;
 #[doc(inline)]
 pub use self::tools::*;
-
-mod bindings;
