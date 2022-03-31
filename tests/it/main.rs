@@ -27,3 +27,14 @@ fn tools_nofile() {
     let lim = rlimit::increase_nofile_limit(u64::MAX).unwrap();
     dbg!(lim);
 }
+
+#[cfg(private_codegen)]
+#[test]
+fn codegen() {
+    use std::process::Command;
+    let mut child = Command::new("./scripts/codegen.sh")
+        .arg("target/out.rs")
+        .spawn()
+        .unwrap();
+    child.wait().unwrap();
+}

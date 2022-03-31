@@ -28,17 +28,17 @@ jobs:
           # - aarch64-unknown-none                  # (no std)
           # - aarch64-unknown-none-softfloat        # (no std)
           - arm-linux-androideabi
-          # - arm-unknown-linux-gnueabi             # (libc mismatch)
-          # - arm-unknown-linux-gnueabihf           # (libc mismatch)
+          - arm-unknown-linux-gnueabi # (libc mismatch)
+          - arm-unknown-linux-gnueabihf # (libc mismatch)
           - arm-unknown-linux-musleabi
           - arm-unknown-linux-musleabihf
           # - armebv7r-none-eabi                    # (no std)
           # - armebv7r-none-eabihf                  # (no std)
-          # - armv5te-unknown-linux-gnueabi         # (libc mismatch)
+          - armv5te-unknown-linux-gnueabi # (libc mismatch)
           - armv5te-unknown-linux-musleabi
           - armv7-linux-androideabi
           # - armv7-unknown-linux-gnueabi           # (missing docker image)
-          # - armv7-unknown-linux-gnueabihf         # (libc mismatch)
+          - armv7-unknown-linux-gnueabihf # (libc mismatch)
           # - armv7-unknown-linux-musleabi          # (missing docker image)
           - armv7-unknown-linux-musleabihf
           # - armv7a-none-eabi                      # (no std)
@@ -46,24 +46,24 @@ jobs:
           # - armv7r-none-eabihf                    # (no std)
           # - asmjs-unknown-emscripten              # (build error)
           # - i586-pc-windows-msvc                  # (missing docker image)
-          # - i586-unknown-linux-gnu                # (libc mismatch)
+          - i586-unknown-linux-gnu # (libc mismatch)
           - i586-unknown-linux-musl
           - i686-linux-android
           # - i686-pc-windows-gnu                   # (missing docker image)
           # - i686-pc-windows-msvc                  # (missing docker image)
           # - i686-unknown-freebsd                  # (missing docker image)
-          # - i686-unknown-linux-gnu                # (libc mismatch)
+          - i686-unknown-linux-gnu # (libc mismatch)
           - i686-unknown-linux-musl
-          # - mips-unknown-linux-gnu                # (libc mismatch)
+          - mips-unknown-linux-gnu # (libc mismatch)
           - mips-unknown-linux-musl
           - mips64-unknown-linux-gnuabi64
           # - mips64-unknown-linux-muslabi64        # (missing docker image)
           - mips64el-unknown-linux-gnuabi64
           # - mips64el-unknown-linux-muslabi64      # (missing docker image)
-          # - mipsel-unknown-linux-gnu              # (libc mismatch)
+          - mipsel-unknown-linux-gnu # (libc mismatch)
           - mipsel-unknown-linux-musl
           # - nvptx64-nvidia-cuda                   # (no std)
-          # - powerpc-unknown-linux-gnu             # (libc mismatch)
+          - powerpc-unknown-linux-gnu # (libc mismatch)
           # - powerpc64-unknown-linux-gnu           # (missing docker image)
           - powerpc64le-unknown-linux-gnu
           # - riscv32i-unknown-none-elf             # (no std)
@@ -93,7 +93,7 @@ jobs:
           # - x86_64-fuchsia                        # (fuchsia does not have [sg]etrlimit)
           - x86_64-linux-android
           # - x86_64-pc-solaris                     # (missing docker image)
-          - x86_64-pc-windows-gnu
+          # - x86_64-pc-windows-gnu                 # (other)
           # - x86_64-pc-windows-msvc                # (missing docker image)
           # - x86_64-sun-solaris                    # (build error)
           # - x86_64-unknown-freebsd                # (missing docker image)
@@ -111,11 +111,36 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
+      - run: |
+          echo '[build.env]' >> Cross.toml
+          echo 'passthrough = ["RUSTFLAGS"]' >> Cross.toml
       - uses: actions-rs/cargo@v1
+        env:
+          RUSTFLAGS: "--cfg private_codegen"
         with:
           use-cross: true
           command: test
-          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
+          args: --all-features --target=${{ matrix.target }} -- codegen --test-threads=1
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.target }}
+          path: target/out.rs
+          retention-days: 1
+
+  check-codegen:
+    name: check-codegen
+    runs-on: ubuntu-latest
+    needs: ubuntu
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v3
+      - run: python3 ./scripts/codegen.py > bindings.rs
+      - run: rustfmt bindings.rs
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bindings
+          path: bindings.rs
+      - run: diff bindings.rs src/bindings.rs
 
   macos:
     name: macos
