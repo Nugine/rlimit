@@ -132,6 +132,48 @@ pub mod aarch64_unknown_linux_musl {
 #[cfg(all(target_arch = "aarch64", target_os = "linux", target_env = "musl"))]
 pub use self::aarch64_unknown_linux_musl::*;
 
+#[cfg(all(target_arch = "aarch64", target_os = "macos"))]
+pub mod aarch64_apple_darwin {
+    pub const RLIM_INFINITY: u64 = 9223372036854775807;
+    pub const RLIMIT_AS: u8 = 5;
+    pub const RLIMIT_CORE: u8 = 4;
+    pub const RLIMIT_CPU: u8 = 0;
+    pub const RLIMIT_DATA: u8 = 2;
+    pub const RLIMIT_FSIZE: u8 = 1;
+    pub const RLIMIT_KQUEUES: u8 = u8::MAX;
+    pub const RLIMIT_LOCKS: u8 = u8::MAX;
+    pub const RLIMIT_MEMLOCK: u8 = 6;
+    pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
+    pub const RLIMIT_NICE: u8 = u8::MAX;
+    pub const RLIMIT_NOFILE: u8 = 8;
+    pub const RLIMIT_NOVMON: u8 = u8::MAX;
+    pub const RLIMIT_NPROC: u8 = 7;
+    pub const RLIMIT_NPTS: u8 = u8::MAX;
+    pub const RLIMIT_NTHR: u8 = u8::MAX;
+    pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
+    pub const RLIMIT_RSS: u8 = 5;
+    pub const RLIMIT_RTPRIO: u8 = u8::MAX;
+    pub const RLIMIT_RTTIME: u8 = u8::MAX;
+    pub const RLIMIT_SBSIZE: u8 = u8::MAX;
+    pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
+    pub const RLIMIT_STACK: u8 = 3;
+    pub const RLIMIT_SWAP: u8 = u8::MAX;
+    pub const RLIMIT_UMTXP: u8 = u8::MAX;
+    pub const RLIMIT_VMEM: u8 = u8::MAX;
+    pub type rlim_t = u64;
+    #[repr(C)]
+    pub struct rlimit {
+        pub rlim_cur: rlim_t,
+        pub rlim_max: rlim_t,
+    }
+    extern "C" {
+        pub fn getrlimit(resource: u32, rlimit: *mut rlimit) -> i32;
+        pub fn setrlimit(resource: u32, rlimit: *const rlimit) -> i32;
+    }
+}
+#[cfg(all(target_arch = "aarch64", target_os = "macos"))]
+pub use self::aarch64_apple_darwin::*;
+
 #[cfg(all(target_arch = "arm", target_os = "android"))]
 pub mod arm_linux_androideabi {
     pub const RLIM_INFINITY: u64 = u64::MAX;
