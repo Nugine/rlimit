@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.8.0...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/v0.8.1...HEAD
+
+## [0.8.1] - 2022-04-01
+
+[0.8.1]: https://github.com/Nugine/rlimit/compare/v0.8.0...v0.8.1
+
+[PR #36](https://github.com/Nugine/rlimit/pull/36): Fix the bindings for aarch64-apple-darwin.
 
 ## [0.8.0] - 2022-03-31
 
