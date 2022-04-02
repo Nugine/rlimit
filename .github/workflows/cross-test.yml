@@ -199,4 +199,11 @@ jobs:
         with:
           name: bindings
           path: bindings.rs
-      - run: diff bindings.rs src/bindings.rs
+      - name: diff
+        shell: bash
+        run: |
+          set +e
+          diff bindings.rs src/bindings.rs
+          if [ $? -ne 0 ]; then
+            echo "::warning::bindings mismatch"
+          fi

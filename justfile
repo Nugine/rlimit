@@ -13,3 +13,12 @@ test: check
 
 doc:
     RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --no-deps --open --all-features
+
+local-codegen:
+    #!/bin/bash -e
+    cd {{justfile_directory()}}
+    mkdir -p target
+    OUTRS=target/out.rs
+    ./scripts/codegen.sh $OUTRS
+    echo "arch={{arch()}}, os={{os()}}"
+    echo "saved in $OUTRS"
