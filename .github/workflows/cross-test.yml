@@ -106,10 +106,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: | # workaround
+          ls -al ~/.cargo/bin
+          set +e
+          rm ~/.cargo/bin/rustfmt
+          rm ~/.cargo/bin/cargo-fmt
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: ${{ matrix.target }}
+          components: rustfmt
           override: true
       - run: |
           mv src/lib.rs tmp.rs
