@@ -1,9 +1,4 @@
-#![allow(
-    clippy::assertions_on_constants,
-    clippy::absurd_extreme_comparisons,
-    clippy::cast_possible_truncation,
-    unused_comparisons
-)]
+#![allow(clippy::cast_possible_truncation)]
 
 #[cfg(any(
     target_os = "fuchsia",

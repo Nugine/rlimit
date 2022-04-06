@@ -109,13 +109,7 @@ if __name__ == "__main__":
         "RLIMIT_VMEM",
     ]
 
-    print(
-        "#![allow("
-        "clippy::assertions_on_constants, "
-        "clippy::absurd_extreme_comparisons, "
-        "clippy::cast_possible_truncation, "
-        "unused_comparisons)]\n"
-    )
+    print("#![allow(clippy::cast_possible_truncation)]\n")
 
     resource_cfgs = []
     for resource in resources:
