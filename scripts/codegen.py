@@ -1,185 +1,160 @@
-from pathlib import Path
+from typing import Optional, Dict, List
+import json
+import os
+import re
+from pprint import pprint
 
-target_list = [
-    "aarch64-apple-darwin",
-    "aarch64-apple-ios",
-    "aarch64-apple-ios-sim",
-    "aarch64-fuchsia",
-    "aarch64-linux-android",
-    "aarch64-pc-windows-msvc",
-    "aarch64-unknown-linux-gnu",
-    "aarch64-unknown-linux-musl",
-    "aarch64-unknown-none",
-    "aarch64-unknown-none-softfloat",
-    "arm-linux-androideabi",
-    "arm-unknown-linux-gnueabi",
-    "arm-unknown-linux-gnueabihf",
-    "arm-unknown-linux-musleabi",
-    "arm-unknown-linux-musleabihf",
-    "armebv7r-none-eabi",
-    "armebv7r-none-eabihf",
-    "armv5te-unknown-linux-gnueabi",
-    "armv5te-unknown-linux-musleabi",
-    "armv7-linux-androideabi",
-    "armv7-unknown-linux-gnueabi",
-    "armv7-unknown-linux-gnueabihf",
-    "armv7-unknown-linux-musleabi",
-    "armv7-unknown-linux-musleabihf",
-    "armv7a-none-eabi",
-    "armv7r-none-eabi",
-    "armv7r-none-eabihf",
-    "asmjs-unknown-emscripten",
-    "i586-pc-windows-msvc",
-    "i586-unknown-linux-gnu",
-    "i586-unknown-linux-musl",
-    "i686-linux-android",
-    "i686-pc-windows-gnu",
-    "i686-pc-windows-msvc",
-    "i686-unknown-freebsd",
-    "i686-unknown-linux-gnu",
-    "i686-unknown-linux-musl",
-    "mips-unknown-linux-gnu",
-    "mips-unknown-linux-musl",
-    "mips64-unknown-linux-gnuabi64",
-    "mips64-unknown-linux-muslabi64",
-    "mips64el-unknown-linux-gnuabi64",
-    "mips64el-unknown-linux-muslabi64",
-    "mipsel-unknown-linux-gnu",
-    "mipsel-unknown-linux-musl",
-    "nvptx64-nvidia-cuda",
-    "powerpc-unknown-linux-gnu",
-    "powerpc64-unknown-linux-gnu",
-    "powerpc64le-unknown-linux-gnu",
-    "riscv32i-unknown-none-elf",
-    "riscv32imac-unknown-none-elf",
-    "riscv32imc-unknown-none-elf",
-    "riscv64gc-unknown-linux-gnu",
-    "riscv64gc-unknown-none-elf",
-    "riscv64imac-unknown-none-elf",
-    "s390x-unknown-linux-gnu",
-    "sparc64-unknown-linux-gnu",
-    "sparcv9-sun-solaris",
-    "thumbv6m-none-eabi",
-    "thumbv7em-none-eabi",
-    "thumbv7em-none-eabihf",
-    "thumbv7m-none-eabi",
-    "thumbv7neon-linux-androideabi",
-    "thumbv7neon-unknown-linux-gnueabihf",
-    "thumbv8m.base-none-eabi",
-    "thumbv8m.main-none-eabi",
-    "thumbv8m.main-none-eabihf",
-    "wasm32-unknown-emscripten",
-    "wasm32-unknown-unknown",
-    "wasm32-wasi",
-    "x86_64-apple-darwin",
-    "x86_64-apple-ios",
-    "x86_64-fortanix-unknown-sgx",
-    "x86_64-fuchsia",
-    "x86_64-linux-android",
-    "x86_64-pc-solaris",
-    "x86_64-pc-windows-gnu",
-    "x86_64-pc-windows-msvc",
-    "x86_64-sun-solaris",
-    "x86_64-unknown-freebsd",
-    "x86_64-unknown-illumos",
-    "x86_64-unknown-linux-gnu",
-    "x86_64-unknown-linux-gnux32",
-    "x86_64-unknown-linux-musl",
-    "x86_64-unknown-netbsd",
-    "x86_64-unknown-redox",
-]
+LIBC_REPO_PATH = os.getenv("LIBC_REPO_PATH", "libc")
 
-arch_map = {
-    "aarch64": "aarch64",
-    "arm": "arm",
-    "armebv7r": "arm",
-    "armv5te": "arm",
-    "armv7": "arm",
-    "armv7a": "arm",
-    "armv7r": "arm",
-    "asmjs": "asmjs",
-    "i586": "x86",
-    "i686": "x86",
-    "mips": "mips",
-    "mips64": "mips64",
-    "mips64el": "mips64",
-    "mipsel": "mips",
-    "nvptx64": "nvptx64",
-    "powerpc": "powerpc",
-    "powerpc64": "powerpc64",
-    "powerpc64le": "powerpc64",
-    "riscv32i": "riscv32",
-    "riscv32imac": "riscv32",
-    "riscv32imc": "riscv32",
-    "riscv64gc": "riscv64",
-    "riscv64imac": "riscv64",
-    "s390x": "s390x",
-    "sparc64": "sparc64",
-    "sparcv9": "sparc",
-    "thumbv6m": "thumbv6",
-    "thumbv7em": "thumbv7",
-    "thumbv7m": "thumbv7",
-    "thumbv7neon": "thumbv7",
-    "wasm32": "wasm32",
-    "x86_64": "x86_64",
+PREDICATES = {
+    "fuchsia/mod.rs": {"os": ["fuchsia"]},
+    "unix/bsd/apple/mod.rs": {"os": ["macos", "ios"]},
+    "unix/bsd/freebsdlike/dragonfly/mod.rs": {"os": ["dragonfly"]},
+    "unix/bsd/freebsdlike/freebsd/mod.rs": {"os": ["freebsd"]},
+    "unix/bsd/freebsdlike/mod.rs": {"os": ["freebsd", "dragonfly"]},
+    "unix/bsd/netbsdlike/mod.rs": {"os": ["openbsd", "netbsd"]},
+    "unix/bsd/netbsdlike/netbsd/mod.rs": {"os": ["netbsd"]},
+    "unix/haiku/mod.rs": {"os": ["haiku"]},
+    "unix/linux_like/android/mod.rs": {"os": ["android"]},
+    "unix/linux_like/emscripten/mod.rs": {"os": ["emscripten"]},
+    "unix/linux_like/linux/arch/generic/mod.rs": {"os": ["linux"]},
+    "unix/linux_like/linux/arch/mips/mod.rs": {"os": ["linux"], "arch": ["mips", "mips64"]},
+    "unix/linux_like/linux/arch/powerpc/mod.rs": {"os": ["linux"], "arch": ["powerpc", "powerpc64"]},
+    "unix/linux_like/linux/arch/sparc/mod.rs": {"os": ["linux"], "arch": ["sparc", "sparc64"]},
+    "unix/solarish/mod.rs": {"os": ["solaris", "illumos"]},
+    "unix/linux_like/linux/gnu/mod.rs": {"os": ["linux"], "env": ["gnu"]},
+    "unix/linux_like/linux/musl/mod.rs": {"os": ["linux"], "env": ["musl"]},
+    "unix/linux_like/linux/uclibc/mod.rs": {"os": ["linux"], "env": ["uclibc"]},
+    "unix/linux_like/android/b32/mod.rs": {"os": ["android"], "pointer_width": ["32"]},
+    "unix/linux_like/android/b64/mod.rs": {"os": ["android"], "pointer_width": ["64"]},
+    "unix/linux_like/linux/mod.rs": {"os": ["linux"]},
+    "unix/mod.rs": {"family": ["unix"]},
+    "vxworks/mod.rs": {"os": ["vxworks"]},
+    "unix/bsd/mod.rs": {"os": ["macos", "ios", "watchos", "freebsd", "dragonfly", "openbsd", "netbsd"]},
+    "unix/hermit/mod.rs": {"os": ["hermit"]},
+    "unix/newlib/mod.rs": {"env": ["newlib"]},
+    "unix/redox/mod.rs": {"os": ["redox"]},
 }
 
-env_map = {
-    "gnueabi": "gnu",
-    "gnueabihf": "gnu",
-    "musleabi": "musl",
-    "musleabihf": "musl",
-    "gnuabi64": "gnu",
-    "muslabi64": "musl",
-}
+
+def extract_paths(rg_lines: List[str]) -> List[str]:
+    paths = set()
+    for line in rg_lines:
+        item = json.loads(line)
+        if item["type"] == "match":
+            file_path = item["data"]["path"]["text"]
+            rel_file_path = re.match(".+src/(.+)", file_path).group(1)  # type: ignore
+            paths.add(rel_file_path)
+    return sorted(paths)
+
+
+def search(prefix: str, ident: str) -> List[Dict[str, List[str]]]:
+    pipe = os.popen(f"rg --json 'pub {prefix} {ident}' {LIBC_REPO_PATH}")
+    lines = [l for l in pipe.read().split("\n") if l != ""]
+    cfgs = [PREDICATES[path] for path in extract_paths(lines)]
+    return cfgs
+
+
+def emit_predicate(kind: str, cond: List[str]) -> str:
+    if len(cond) == 1:
+        return f'{kind} = "{cond[0]}"'
+    else:
+        return "any(" + ", ".join(f'{kind} = "{c}"' for c in cond) + ")"
+
+
+def emit_cfg(cfgs: List[Dict[str, List[str]]], indent: int) -> str:
+    predicates = []
+    for cfg in cfgs:
+        ps = []
+        for kind in ["os", "arch", "env", "pointer_width", "family"]:
+            if kind in cfg:
+                ps.append(emit_predicate(f"target_{kind}", cfg[kind]))
+        if len(ps) == 1:
+            predicates.append(ps[0])
+        else:
+            predicates.append("all(" + ", ".join(ps) + ")")
+    ans = "any(\n"
+    for p in predicates:
+        ans += "    " * (indent + 1) + p + ",\n"
+    ans += "    " * indent + ")"
+    return ans
+
 
 if __name__ == "__main__":
-    print("#![allow(non_camel_case_types)]\n")
+    resources = [
+        "RLIMIT_AS",
+        "RLIMIT_CORE",
+        "RLIMIT_CPU",
+        "RLIMIT_DATA",
+        "RLIMIT_FSIZE",
+        "RLIMIT_KQUEUES",
+        "RLIMIT_LOCKS",
+        "RLIMIT_MEMLOCK",
+        "RLIMIT_MSGQUEUE",
+        "RLIMIT_NICE",
+        "RLIMIT_NOFILE",
+        "RLIMIT_NOVMON",
+        "RLIMIT_NPROC",
+        "RLIMIT_NPTS",
+        "RLIMIT_NTHR",
+        "RLIMIT_POSIXLOCKS",
+        "RLIMIT_RSS",
+        "RLIMIT_RTPRIO",
+        "RLIMIT_RTTIME",
+        "RLIMIT_SBSIZE",
+        "RLIMIT_SIGPENDING",
+        "RLIMIT_STACK",
+        "RLIMIT_SWAP",
+        "RLIMIT_UMTXP",
+        "RLIMIT_VMEM",
+    ]
 
-    content_map = dict()
+    print(
+        "#![allow("
+        "clippy::assertions_on_constants, "
+        "clippy::absurd_extreme_comparisons, "
+        "clippy::cast_possible_truncation, "
+        "unused_comparisons)]\n"
+    )
 
-    for target in target_list:
-        t = list(target.split("-"))
-        t_arch = t[0]
-        t_os = t[2] if len(t) > 2 else t[1]
-        t_env = t[3] if len(t) > 3 else None
+    for resource in resources:
+        cfg = emit_cfg(search("const", resource), indent=0)
 
-        outrs = Path(target) / "out.rs"
-        if not outrs.exists():
-            continue
-        content = open(outrs, "r", encoding="utf8").read()
-
-        t_arch = arch_map[t_arch]
-
-        if t_os == "darwin":
-            t_os = "macos"
-        elif t_os == "androideabi":
-            t_os = "android"
-
-        if t_env is not None and t_env in env_map:
-            t_env = env_map[t_env]
-
-        if t_env is not None:
-            cfg = f'#[cfg(all(target_arch="{t_arch}", target_os="{t_os}", target_env="{t_env}"))]'
-        else:
-            cfg = f'#[cfg(all(target_arch="{t_arch}", target_os="{t_os}"))]'
-
-        if target == "x86_64-unknown-linux-gnu":
-            cfg = '#[cfg(any(all(doc, windows), all(target_arch = "x86_64", target_os = "linux", target_env = "gnu")))]'
-
-        if (cfg in content_map) and content_map[cfg][1] == content:
-            a = target.ljust(40, " ")
-            b = content_map[cfg][0].ljust(40, " ")
-            print(f"// {a} ~ {b}")
-            print()
-            continue
-        content_map[cfg] = (target, content)
-
-        mod_name = target.replace("-", "_")
-        print(cfg)
-        print(f"pub mod {mod_name} {{")
-        print(content)
-        print("}")
-        print(cfg)
-        print(f"pub use self::{mod_name}::*;")
+        print(f"#[cfg({cfg})]")
+        print(f"pub const {resource}: u8 = libc::{resource} as u8;")
         print()
+
+        print(f"#[cfg({cfg})]")
+        print(f"const _: () = assert!(0 <= libc::{resource} && libc::{resource} < 128);")
+        print()
+
+        print(f"#[cfg(not({cfg}))]")
+        print(f"pub const {resource}: u8 = u8::MAX;")
+        print()
+
+        print("// " + "-" * 77)
+        print()
+
+    for ident in ["rlimit", "getrlimit", "setrlimit"]:
+        if ident == "rlimit":
+            cfg64 = emit_cfg(search("struct", ident + "64"), indent=0)
+            cfg = emit_cfg(search("struct", ident), indent=0)
+        else:
+            cfg64 = emit_cfg(search("fn", ident + "64"), indent=0)
+            cfg = emit_cfg(search("fn", ident), indent=0)
+
+        print(f"#[cfg({cfg64})]")
+        print(f"pub use libc::{ident}64 as {ident};")
+        print()
+        print(f"#[cfg(all(not({cfg64}), {cfg}))]")
+        print(f"pub use libc::{ident};")
+        print()
+
+    ident = "RLIM_INFINITY"
+    cfg = emit_cfg(search("const", ident), indent=0)
+    print(f"#[cfg({cfg})]")
+    print(f"pub const {ident}: u64 = libc::{ident} as u64;")
+    print()
+    print(f"#[cfg(not({cfg}))]")
+    print(f"pub const {ident}: u64 = u64::MAX;")
+    print()

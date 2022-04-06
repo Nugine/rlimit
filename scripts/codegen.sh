@@ -1,19 +1,14 @@
 #!/bin/bash
-OUTEXE=/tmp/rlimit_codegen
-OUTRS=$1
-if [ -z "$OUTRS" ]; then 
-    echo "missing OUTRS argument, please specify a file path"
-    exit 1
+echo "updating libc"
+if [ ! -d "libc" ]; then
+    git clone https://github.com/rust-lang/libc.git -b master --depth=1
+else
+    pushd libc
+    git pull
+    popd
 fi
-echo "try CODEGEN64"
-g++ ./scripts/codegen.cpp -DCODEGEN64 -std=c++11 -o $OUTEXE
-if [ $? -ne 0 ]; then
-    echo "try fallback"
-    g++ ./scripts/codegen.cpp -std=c++11 -o $OUTEXE
-fi
-if [ $? -ne 0 ]; then
-    echo "codegen failed"
-    exit 1
-fi
-$OUTEXE > $OUTRS
+mkdir -p target
+python3 ./scripts/codegen.py > target/out.rs
+rustfmt target/out.rs
+cp  target/out.rs src/bindings.rs
 echo "done"

@@ -72,7 +72,7 @@ macro_rules! declare_resource {
         impl Resource{
             $(
                 $(#[$attr])*
-                pub const $id: Self = Self{ tag: $tag, value: C::$c_enum };
+                pub const $id: Self = Self{ tag: $tag, value: C::$c_enum as u8 };
             )+
         }
 

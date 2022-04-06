@@ -117,24 +117,6 @@ jobs:
           target: ${{ matrix.target }}
           components: rustfmt
           override: true
-      - run: |
-          mv src/lib.rs tmp.rs
-          cp scripts/codegen.rs src/main.rs
-          cp scripts/build.rs ./
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: run
-          args: --target=${{ matrix.target }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.target }}
-          path: target/out.rs
-          retention-days: 1
-      - run: |
-          cat target/vars.txt
-          mv tmp.rs src/lib.rs
-          rm src/main.rs ./build.rs
       - uses: actions-rs/cargo@v1
         with:
           use-cross: true
@@ -156,23 +138,6 @@ jobs:
           toolchain: stable
           target: ${{ matrix.target }}
           override: true
-      - run: |
-          mv src/lib.rs tmp.rs
-          cp scripts/codegen.rs src/main.rs
-          cp scripts/build.rs ./
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: run
-          args: --target=${{ matrix.target }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.target }}
-          path: target/out.rs
-          retention-days: 1
-      - run: |
-          mv tmp.rs src/lib.rs
-          rm src/main.rs ./build.rs
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -191,25 +156,20 @@ jobs:
           command: test
           args: --all-features  -- --test-threads=1
 
-  check-codegen:
+  diff-codegen:
     name: check-codegen
     runs-on: ubuntu-latest
-    if: ${{ always() }}
-    needs: ["ubuntu", "macos"]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v3
-      - run: python3 ./scripts/codegen.py > bindings.rs
-      - run: rustfmt bindings.rs
-      - uses: actions/upload-artifact@v3
+      - uses: actions-rs/toolchain@v1
         with:
-          name: bindings
-          path: bindings.rs
+          toolchain: stable
+      - uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: ripgrep
       - name: diff
-        shell: bash
         run: |
-          set +e
-          diff bindings.rs src/bindings.rs
-          if [ $? -ne 0 ]; then
-            echo "::warning::bindings mismatch"
-          fi
+          cp src/bindings.rs bindings.rs
+          ./scripts/codegen.sh
+          diff src/bindings.rs bindings.rs 
