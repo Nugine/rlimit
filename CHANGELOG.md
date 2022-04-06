@@ -6,7 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.8.1...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/v0.8.2...HEAD
+
+## [0.8.2] - 2022-04-06
+
+[0.8.2]: https://github.com/Nugine/rlimit/compare/v0.8.1...v0.8.2
+
+rlimit v0.8.2 uses libc definitions again instead of incorrect custom bindings.
+
+rlimit v0.8.0 and v0.8.1 are yanked now.
 
 ## [0.8.1] - 2022-04-01
 
