@@ -117,15 +117,13 @@ if __name__ == "__main__":
         "unused_comparisons)]\n"
     )
 
+    resource_cfgs = []
     for resource in resources:
         cfg = emit_cfg(search("const", resource), indent=0)
+        resource_cfgs.append((resource, cfg))
 
         print(f"#[cfg({cfg})]")
         print(f"pub const {resource}: u8 = libc::{resource} as u8;")
-        print()
-
-        print(f"#[cfg({cfg})]")
-        print(f"const _: () = assert!(0 <= libc::{resource} && libc::{resource} < 128);")
         print()
 
         print(f"#[cfg(not({cfg}))]")
@@ -134,6 +132,16 @@ if __name__ == "__main__":
 
         print("// " + "-" * 77)
         print()
+
+    print("#[allow(clippy::too_many_lines)]")
+    print("#[test]")
+    print("fn resource_bound() {")
+    for resource, cfg in resource_cfgs:
+        print(f"    #[cfg({cfg})]")
+        print(f"    assert!((0..128).contains(&libc::{resource}));")
+        print()
+    print("}")
+    print()
 
     for ident in ["rlimit", "getrlimit", "setrlimit"]:
         if ident == "rlimit":
