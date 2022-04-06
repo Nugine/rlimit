@@ -1,6 +1,6 @@
 [package]
 name = "rlimit"
-version = "0.8.2"
+version = "0.8.3-dev"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
 description = "Resource limits"
