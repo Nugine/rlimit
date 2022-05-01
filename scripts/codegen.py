@@ -24,6 +24,7 @@ PREDICATES = {
     "unix/solarish/mod.rs": {"os": ["solaris", "illumos"]},
     "unix/linux_like/linux/gnu/mod.rs": {"os": ["linux"], "env": ["gnu"]},
     "unix/linux_like/linux/musl/mod.rs": {"os": ["linux"], "env": ["musl"]},
+    "unix/linux_like/linux/musl/b32/riscv32/mod.rs": {"os": ["linux"], "env": ["musl"], "arch": ["riscv32"]},
     "unix/linux_like/linux/uclibc/mod.rs": {"os": ["linux"], "env": ["uclibc"]},
     "unix/linux_like/android/b32/mod.rs": {"os": ["android"], "pointer_width": ["32"]},
     "unix/linux_like/android/b64/mod.rs": {"os": ["android"], "pointer_width": ["64"]},

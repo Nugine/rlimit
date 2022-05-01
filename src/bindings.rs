@@ -18,6 +18,7 @@
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 ))]
 pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
@@ -40,6 +41,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 )))]
 pub const RLIMIT_AS: u8 = u8::MAX;
@@ -291,6 +293,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 ))]
 pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
 
@@ -311,6 +314,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 )))]
 pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
 
@@ -406,6 +410,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 ))]
 pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
@@ -428,6 +433,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 )))]
 pub const RLIMIT_NOFILE: u8 = u8::MAX;
@@ -459,6 +465,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 ))]
 pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
 
@@ -479,6 +486,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 )))]
 pub const RLIMIT_NPROC: u8 = u8::MAX;
 
@@ -525,6 +533,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 ))]
 pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
 
@@ -545,6 +554,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
 )))]
 pub const RLIMIT_RSS: u8 = u8::MAX;
 
@@ -765,6 +775,7 @@ fn resource_bound() {
             target_os = "linux",
             any(target_arch = "sparc", target_arch = "sparc64")
         ),
+        all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
         any(target_os = "solaris", target_os = "illumos"),
     ))]
     assert!((0..128).contains(&libc::RLIMIT_AS));
@@ -894,6 +905,7 @@ fn resource_bound() {
             target_os = "linux",
             any(target_arch = "sparc", target_arch = "sparc64")
         ),
+        all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     ))]
     assert!((0..128).contains(&libc::RLIMIT_MEMLOCK));
 
@@ -949,6 +961,7 @@ fn resource_bound() {
             target_os = "linux",
             any(target_arch = "sparc", target_arch = "sparc64")
         ),
+        all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
         any(target_os = "solaris", target_os = "illumos"),
     ))]
     assert!((0..128).contains(&libc::RLIMIT_NOFILE));
@@ -973,6 +986,7 @@ fn resource_bound() {
             target_os = "linux",
             any(target_arch = "sparc", target_arch = "sparc64")
         ),
+        all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     ))]
     assert!((0..128).contains(&libc::RLIMIT_NPROC));
 
@@ -1002,6 +1016,7 @@ fn resource_bound() {
             target_os = "linux",
             any(target_arch = "sparc", target_arch = "sparc64")
         ),
+        all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     ))]
     assert!((0..128).contains(&libc::RLIMIT_RSS));
 
@@ -1224,6 +1239,7 @@ pub use libc::setrlimit;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 ))]
 pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
@@ -1246,6 +1262,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
         target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64")
     ),
+    all(target_os = "linux", target_arch = "riscv32", target_env = "musl"),
     any(target_os = "solaris", target_os = "illumos"),
 )))]
 pub const RLIM_INFINITY: u64 = u64::MAX;

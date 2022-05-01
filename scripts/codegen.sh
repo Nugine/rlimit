@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 echo "updating libc"
 if [ ! -d "libc" ]; then
     git clone https://github.com/rust-lang/libc.git -b master --depth=1
