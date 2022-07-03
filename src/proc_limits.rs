@@ -116,13 +116,11 @@ impl ProcLimits {
             io::Error::new(io::ErrorKind::Other, "ProcLimits: invalid table head")
         }
 
-        fn error_invalid_limit_number(e: ParseIntError) -> io::Error {
-            let ans = io::Error::new(
+        fn error_invalid_limit_number(e: &ParseIntError) -> io::Error {
+            io::Error::new(
                 io::ErrorKind::Other,
                 format!("ProcLimits: invalid limit number: {}", e),
-            );
-            drop(e);
-            ans
+            )
         }
 
         fn error_duplicate_limit_field() -> io::Error {
@@ -173,8 +171,8 @@ impl ProcLimits {
             let (hard, _) = line.split_at(hard_len);
 
             let name = name.trim().to_lowercase();
-            let soft_limit = parse_limit_number(soft.trim()).map_err(error_invalid_limit_number)?;
-            let hard_limit = parse_limit_number(hard.trim()).map_err(error_invalid_limit_number)?;
+            let soft_limit = parse_limit_number(soft.trim()).map_err(|e|error_invalid_limit_number(&e))?;
+            let hard_limit = parse_limit_number(hard.trim()).map_err(|e|error_invalid_limit_number(&e))?;
             let limit = ProcLimit {
                 soft_limit,
                 hard_limit,
