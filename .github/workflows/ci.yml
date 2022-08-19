@@ -12,48 +12,20 @@ on:
 name: CI
 
 jobs:
-  check:
+  develop:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: [stable, nightly]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
-          toolchain: stable
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: check
-
-  fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-      - run: rustup component add rustfmt
-      - uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
-
-  clippy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-      - run: rustup component add clippy
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
+          toolchain: ${{ matrix.toolchain }}
+          components: rustfmt, clippy
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy -- -D warnings
 
   ubuntu:
     runs-on: ubuntu-latest
@@ -156,17 +128,15 @@ jobs:
           set +e
           rm ~/.cargo/bin/rustfmt
           rm ~/.cargo/bin/cargo-fmt
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-          target: ${{ matrix.target }}
+          targets: ${{ matrix.target }}
           components: rustfmt
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: test
-          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
+      - run: |
+          cargo install cross --git https://github.com/cross-rs/cross
+      - run: |
+          cross test --all-features --target=${{ matrix.target }} -- --test-threads=1
 
   macos:
     runs-on: macos-latest
@@ -177,39 +147,27 @@ jobs:
           - x86_64-apple-darwin
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-          target: ${{ matrix.target }}
-          override: true
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features --target=${{ matrix.target }} -- --test-threads=1
+          targets: ${{ matrix.target }}
+      - run: |
+          cargo test --all-features --target=${{ matrix.target }} -- --test-threads=1
 
   windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all-features  -- --test-threads=1
+      - uses: dtolnay/rust-toolchain@stable
+      - run: |
+          cargo test --all-features  -- --test-threads=1
 
   diff-codegen:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: ripgrep
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo install ripgrep
       - name: diff
         run: |
           cp src/bindings.rs bindings.rs
