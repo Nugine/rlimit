@@ -79,6 +79,9 @@
     clippy::nursery,
     clippy::cargo
 )]
+#![allow(
+    clippy::option_if_let_else,  // I don't like it. The match expression is more readable.
+)]
 
 #[allow(unused_macros)]
 macro_rules! group {
