@@ -111,6 +111,7 @@ if __name__ == "__main__":
     ]
 
     print("#![allow(clippy::cast_possible_truncation)]\n")
+    print("#![allow(clippy::unnecessary_cast)]\n")
 
     resource_cfgs = []
     for resource in resources:

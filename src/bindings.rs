@@ -1,4 +1,5 @@
 #![allow(clippy::cast_possible_truncation)]
+#![allow(clippy::unnecessary_cast)]
 
 #[cfg(any(
     target_os = "fuchsia",

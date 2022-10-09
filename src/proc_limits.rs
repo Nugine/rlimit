@@ -87,7 +87,7 @@ impl ProcLimits {
                 "ProcLimits: pid must be non-negative",
             ));
         }
-        Self::read_proc_fs(format!("/proc/{}/limits", pid))
+        Self::read_proc_fs(format!("/proc/{pid}/limits"))
     }
 
     fn read_proc_fs(limits_path: impl AsRef<Path>) -> io::Result<Self> {
@@ -108,31 +108,21 @@ impl ProcLimits {
             }
         }
 
-        fn error_missing_table_head() -> io::Error {
-            io::Error::new(io::ErrorKind::Other, "ProcLimits: missing table head")
+        fn io_error_other(s: impl Into<String>) -> io::Error {
+            io::Error::new(io::ErrorKind::Other, s.into())
         }
 
-        fn error_invalid_table_head() -> io::Error {
-            io::Error::new(io::ErrorKind::Other, "ProcLimits: invalid table head")
-        }
+        let error_missing_table_head = || io_error_other("ProcLimits: missing table head");
 
-        fn error_invalid_limit_number(e: &ParseIntError) -> io::Error {
-            io::Error::new(
-                io::ErrorKind::Other,
-                format!("ProcLimits: invalid limit number: {}", e),
-            )
-        }
+        let error_invalid_table_head = || io_error_other("ProcLimits: invalid table head");
 
-        fn error_duplicate_limit_field() -> io::Error {
-            io::Error::new(io::ErrorKind::Other, "ProcLimits: duplicate limit field")
-        }
+        let error_invalid_limit_number =
+            |e| io_error_other(format!("ProcLimits: invalid limit number: {e}"));
 
-        fn error_unknown_limit_field(s: &str) -> io::Error {
-            io::Error::new(
-                io::ErrorKind::Other,
-                format!("ProcLimits: unknown limit field: {:?}", s),
-            )
-        }
+        let error_duplicate_limit_field = || io_error_other("ProcLimits: duplicate limit field");
+
+        let error_unknown_limit_field =
+            |s: &str| io_error_other(format!("ProcLimits: unknown limit field: {s:?}"));
 
         let reader = io::BufReader::new(fs::File::open(limits_path)?);
         let mut lines = reader.lines();
@@ -171,8 +161,8 @@ impl ProcLimits {
             let (hard, _) = line.split_at(hard_len);
 
             let name = name.trim().to_lowercase();
-            let soft_limit = parse_limit_number(soft.trim()).map_err(|e|error_invalid_limit_number(&e))?;
-            let hard_limit = parse_limit_number(hard.trim()).map_err(|e|error_invalid_limit_number(&e))?;
+            let soft_limit = parse_limit_number(soft.trim()).map_err(error_invalid_limit_number)?;
+            let hard_limit = parse_limit_number(hard.trim()).map_err(error_invalid_limit_number)?;
             let limit = ProcLimit {
                 soft_limit,
                 hard_limit,
