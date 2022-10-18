@@ -19,7 +19,7 @@ jobs:
       matrix:
         toolchain: [stable, nightly]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
@@ -122,7 +122,7 @@ jobs:
           # - x86_64-unknown-redox                  # (nightly)
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: | # workaround
           ls -al ~/.cargo/bin
           set +e
@@ -146,7 +146,7 @@ jobs:
         target:
           - x86_64-apple-darwin
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
@@ -157,7 +157,7 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --all-features  -- --test-threads=1
@@ -165,7 +165,7 @@ jobs:
   diff-codegen:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo install ripgrep
       - name: diff
