@@ -133,8 +133,9 @@ jobs:
           toolchain: stable
           targets: ${{ matrix.target }}
           components: rustfmt
-      - run: |
-          cargo install cross --git https://github.com/cross-rs/cross
+      - uses: taiki-e/install-action@v1
+        with:
+          tool: cross
       - run: |
           cross test --all-features --target=${{ matrix.target }} -- --test-threads=1
 
@@ -167,7 +168,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo install ripgrep
+      - uses: taiki-e/install-action@v1
+        with:
+          tool: ripgrep
       - name: diff
         run: |
           cp src/bindings.rs bindings.rs
