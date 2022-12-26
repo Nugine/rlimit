@@ -10,14 +10,14 @@ mod unix_limits {
     /// Try to increase NOFILE limit and return the current soft limit.
     pub fn increase_nofile_limit() -> io::Result<u64> {
         let (soft, hard) = Resource::NOFILE.get()?;
-        println!("Before increasing: soft   = {}, hard = {}", soft, hard);
+        println!("Before increasing: soft   = {soft}, hard = {hard}");
 
         let target = cmp::min(DEFAULT_NOFILE_LIMIT, hard);
-        println!("Try to increase:   target = {}", target);
+        println!("Try to increase:   target = {target}");
         Resource::NOFILE.set(target, hard)?;
 
         let (soft, hard) = Resource::NOFILE.get()?;
-        println!("After increasing:  soft   = {}, hard = {}", soft, hard);
+        println!("After increasing:  soft   = {soft}, hard = {hard}");
         Ok(soft)
     }
 }
@@ -26,8 +26,8 @@ fn main() {
     #[cfg(unix)]
     {
         match unix_limits::increase_nofile_limit() {
-            Ok(soft) => println!("NOFILE limit:      soft   = {}", soft),
-            Err(err) => println!("Failed to increase NOFILE limit: {}", err),
+            Ok(soft) => println!("NOFILE limit:      soft   = {soft}"),
+            Err(err) => println!("Failed to increase NOFILE limit: {err}"),
         }
     }
     #[cfg(not(unix))]
