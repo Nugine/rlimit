@@ -35,6 +35,7 @@ PREDICATES = {
     "unix/hermit/mod.rs": {"os": ["hermit"]},
     "unix/newlib/mod.rs": {"env": ["newlib"]},
     "unix/redox/mod.rs": {"os": ["redox"]},
+    "unix/nto/mod.rs": {"os": ["nto"]},
 }
 
 
