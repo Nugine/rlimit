@@ -1,6 +1,6 @@
 [package]
 name = "rlimit"
-version = "0.9.0-dev"
+version = "0.9.0"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2021"
 description = "Resource limits"
@@ -17,7 +17,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-libc = "0.2"
+libc = "0.2.139"
 
 [dev-dependencies]
 once_cell = "1.16.0"

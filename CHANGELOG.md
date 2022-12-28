@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.8.3...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/v0.9.0...HEAD
+
+## [0.9.0] - 2022-12-28
+
+[0.9.0]: https://github.com/Nugine/rlimit/v0.8.3...v0.9.0
+
++ rlimit v0.9.0 follows the latest libc definitions.
++ The MSRV of v0.9.* is explicitly guaranteed to be 1.59.0.
 
 ## [0.8.3] - 2022-04-06
 
