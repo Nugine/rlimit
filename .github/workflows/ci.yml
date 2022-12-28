@@ -17,7 +17,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [stable, nightly]
+        toolchain: 
+          - 1.59.0 # MSRV
+          - stable
+          - nightly
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@master
@@ -26,6 +29,7 @@ jobs:
           components: rustfmt, clippy
       - run: cargo fmt --all -- --check
       - run: cargo clippy -- -D warnings
+      - run: cargo test --all-features
 
   ubuntu:
     runs-on: ubuntu-latest
