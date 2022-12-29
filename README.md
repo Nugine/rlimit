@@ -3,6 +3,7 @@
 [![Latest Version]][crates.io]
 [![Documentation]][docs.rs] 
 ![License]
+[![Downloads]][downloads]
 
 Resource limits.
 
@@ -11,5 +12,6 @@ Resource limits.
 [Documentation]: https://docs.rs/rlimit/badge.svg
 [docs.rs]: https://docs.rs/rlimit
 [License]: https://img.shields.io/crates/l/rlimit.svg
+[downloads]: https://img.shields.io/crates/d/rlimit
 
 Documentation: <https://docs.rs/rlimit>

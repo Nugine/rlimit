@@ -1,7 +1,5 @@
 //! rlimit - Resource limits.
 //!
-//! # Examples
-//!
 //! ## Set resource limit
 //! ```no_run
 //! # #[cfg(unix)]
@@ -29,16 +27,6 @@
 //! # }
 //! ```
 //!
-//! ## Increase NOFILE limit
-//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.8.4-dev/examples/nofile.rs).
-//!
-//! You can also use the tool function showed below:
-//!
-//! ```no_run
-//! rlimit::increase_nofile_limit(10240).unwrap();
-//! rlimit::increase_nofile_limit(u64::MAX).unwrap();
-//! ```
-//!
 //! ## Windows
 //!
 //! Windows does not have Unix-like resource limits.
@@ -56,6 +44,16 @@
 //! rlimit::setmaxstdio(2048).unwrap();
 //! println!("{}", rlimit::getmaxstdio()); // 2048
 //! # }
+//! ```
+//!
+//! ## Increase NOFILE limit
+//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.8.4-dev/examples/nofile.rs).
+//!
+//! You can also use the tool function [`rlimit::increase_nofile_limit`][`crate::increase_nofile_limit`]
+//!
+//! ```no_run
+//! rlimit::increase_nofile_limit(10240).unwrap();
+//! rlimit::increase_nofile_limit(u64::MAX).unwrap();
 //! ```
 //!
 //! # Troubleshoot
