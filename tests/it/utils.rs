@@ -2,7 +2,11 @@ use std::io;
 
 #[track_caller]
 pub fn expect_ok(result: io::Result<()>) {
-    assert!(result.is_ok(), "result = {}, should be OK()", result.as_ref().unwrap_err());
+    assert!(
+        result.is_ok(),
+        "result = {}, should be OK()",
+        result.as_ref().unwrap_err(),
+    );
 }
 
 #[track_caller]
