@@ -1,13 +1,18 @@
 # https://github.com/casey/just
 
+dev:
+    just fmt
+    just check
+    just test
+
 fmt:
     cargo fmt --all
 
-check: fmt
+check:
     cargo check
     cargo clippy -- -D warnings
 
-test: check
+test:
     cargo test --all-features -- --test-threads=1 --nocapture
     cargo run --example nofile
 
@@ -18,3 +23,7 @@ codegen:
     #!/bin/bash -e
     cd {{justfile_directory()}}
     ./scripts/codegen.sh
+
+sync-version:
+    cargo set-version 0.9.0
+    rg '0.9.0'
