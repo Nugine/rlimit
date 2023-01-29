@@ -110,7 +110,7 @@ group! {
     pub use self::resource::Resource;
 }
 
-#[cfg(any(doc, target_os = "linux"))]
+#[cfg(any(doc, target_os = "linux", target_os = "android"))]
 group! {
     mod proc_limits;
 

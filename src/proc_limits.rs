@@ -11,7 +11,7 @@ use std::path::Path;
 ///
 /// See <https://man7.org/linux/man-pages/man5/proc.5.html>.
 ///
-#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
 #[derive(Debug, Clone, Default)]
 #[non_exhaustive]
 pub struct ProcLimits {
@@ -50,7 +50,7 @@ pub struct ProcLimits {
 }
 
 /// A process's resource limit field.
-#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ProcLimit {
     /// Soft limit. `None` indicates `unlimited`.

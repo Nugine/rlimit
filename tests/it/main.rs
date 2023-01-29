@@ -1,7 +1,7 @@
 mod utils;
 use self::utils::*;
 
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "android"))]
 mod linux;
 
 #[cfg(unix)]
