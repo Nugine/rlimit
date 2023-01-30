@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.9.1...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.9.1...HEAD
 
 ## [0.9.1] - 2023-01-30
 
