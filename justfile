@@ -25,5 +25,4 @@ codegen:
     ./scripts/codegen.sh
 
 sync-version:
-    cargo set-version 0.9.0
-    rg '0.9.0'
+    cargo set-version 0.9.1

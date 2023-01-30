@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/v0.9.0...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/v0.9.1...HEAD
+
+## [0.9.1] - 2023-01-30
+
+[0.9.1]: https://github.com/Nugine/rlimit/compare/v0.9.0...v0.9.1
+
++ [PR #46](https://github.com/Nugine/rlimit/pull/46): `prlimit` and `ProcLimits` are available on Android.
 
 ## [0.9.0] - 2022-12-28
 
