@@ -16,34 +16,7 @@ Resource limits.
 
 Documentation: <https://docs.rs/rlimit>
 
-## Develop
+## Contributing
 
-Toolchain
-
-+ [Rust 1.59.0 or newer](https://rustup.rs/)
-+ [just](https://github.com/casey/just)
-
-Get the source code
-
-```bash
-git clone https://github.com/Nugine/rlimit.git
-cd rlimit
-```
-
-#### Run basic checks and tests
-
-```bash
-just dev
-```
-
-#### Run the codegen
-
-```bash
-just codegen
-```
-
-#### Open documentation
-
-```bash
-just doc
-```
++ [Development Guide](./CONTRIBUTING.md)
++ [Code of Conduct](./CODE_OF_CONDUCT.md)
