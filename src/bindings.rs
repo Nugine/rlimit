@@ -3,6 +3,7 @@
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     target_os = "netbsd",
@@ -27,6 +28,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     target_os = "netbsd",
@@ -53,6 +55,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -76,6 +79,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -101,6 +105,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -124,6 +129,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -149,6 +155,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -172,6 +179,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -197,6 +205,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -220,6 +229,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -407,6 +417,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -431,6 +442,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -465,6 +477,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -487,6 +500,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -535,6 +549,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -557,6 +572,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -699,6 +715,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -722,6 +739,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    target_os = "aix",
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -782,6 +800,7 @@ pub const RLIMIT_VMEM: u8 = u8::MAX;
 fn resource_bound() {
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         target_os = "netbsd",
@@ -806,6 +825,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -829,6 +849,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -852,6 +873,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -875,6 +897,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -974,6 +997,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -1001,6 +1025,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -1032,6 +1057,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -1109,6 +1135,7 @@ fn resource_bound() {
 
     #[cfg(any(
         target_os = "fuchsia",
+        target_os = "aix",
         any(target_os = "macos", target_os = "ios"),
         any(target_os = "freebsd", target_os = "dragonfly"),
         any(target_os = "openbsd", target_os = "netbsd"),
@@ -1194,6 +1221,7 @@ pub use libc::getrlimit64 as getrlimit;
         all(target_os = "linux", target_env = "uclibc"),
     )),
     any(
+        target_os = "aix",
         any(
             target_os = "macos",
             target_os = "ios",
@@ -1236,6 +1264,7 @@ pub use libc::setrlimit64 as setrlimit;
         all(target_os = "linux", target_env = "uclibc"),
     )),
     any(
+        target_os = "aix",
         any(
             target_os = "macos",
             target_os = "ios",
@@ -1262,6 +1291,7 @@ pub use libc::setrlimit;
 
 #[cfg(any(
     target_os = "fuchsia",
+    all(target_os = "aix", target_arch = "powerpc64"),
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),
@@ -1286,6 +1316,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    all(target_os = "aix", target_arch = "powerpc64"),
     any(target_os = "macos", target_os = "ios"),
     any(target_os = "freebsd", target_os = "dragonfly"),
     any(target_os = "openbsd", target_os = "netbsd"),

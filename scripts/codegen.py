@@ -36,6 +36,8 @@ PREDICATES = {
     "unix/newlib/mod.rs": {"env": ["newlib"]},
     "unix/redox/mod.rs": {"os": ["redox"]},
     "unix/nto/mod.rs": {"os": ["nto"]},
+    "unix/aix/mod.rs": {"os": ["aix"]},
+    "unix/aix/powerpc64.rs": {"os": ["aix"], "arch": ["powerpc64"]},
 }
 
 
