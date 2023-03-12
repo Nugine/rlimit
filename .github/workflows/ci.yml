@@ -141,6 +141,12 @@ jobs:
         with:
           tool: cross
       - run: |
+          # TODO: remove this when `cross` updates
+          # See https://github.com/cross-rs/cross/issues/1217
+          export CROSS_TARGET_AARCH64_LINUX_ANDROID_IMAGE="ghcr.io/cross-rs/aarch64-linux-android:main"
+          export CROSS_TARGET_I686_LINUX_ANDROID_IMAGE="ghcr.io/cross-rs/i686-linux-android:main"
+          export CROSS_TARGET_X86_64_LINUX_ANDROID_IMAGE="ghcr.io/cross-rs/x86_64-linux-android:main"
+
           cross test --all-features --target=${{ matrix.target }}
 
   macos:
