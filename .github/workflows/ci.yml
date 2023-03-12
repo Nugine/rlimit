@@ -127,16 +127,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: | # workaround
-          ls -al ~/.cargo/bin
-          set +e
-          rm ~/.cargo/bin/rustfmt
-          rm ~/.cargo/bin/cargo-fmt
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
           targets: ${{ matrix.target }}
-          components: rustfmt
       - uses: taiki-e/install-action@v2
         with:
           tool: cross
