@@ -1,5 +1,8 @@
 #![deny(unsafe_code)]
 
+use super::getrlimit;
+use super::setrlimit;
+
 use crate::bindings as C;
 
 use std::error::Error;
@@ -170,18 +173,32 @@ macro_rules! declare_resource {
 impl Resource {
     /// Set resource limits.
     /// # Errors
-    /// See [`setrlimit`](fn.setrlimit.html)
+    /// See [`setrlimit`]
     #[inline]
     pub fn set(self, soft: u64, hard: u64) -> io::Result<()> {
-        super::setrlimit(self, soft, hard)
+        setrlimit(self, soft, hard)
     }
 
     /// Get resource limits.
     /// # Errors
-    /// See [`getrlimit`](fn.getrlimit.html)
+    /// See [`getrlimit`]
     #[inline]
     pub fn get(self) -> io::Result<(u64, u64)> {
-        super::getrlimit(self)
+        getrlimit(self)
+    }
+
+    /// Get soft resource limit (`rlim_cur`)
+    /// # Errors
+    /// See [`getrlimit`]
+    pub fn get_soft(self) -> io::Result<u64> {
+        Ok(self.get()?.0)
+    }
+
+    /// Get hard resource limit (`rlim_max`)
+    /// # Errors
+    /// See [`getrlimit`]
+    pub fn get_hard(self) -> io::Result<u64> {
+        Ok(self.get()?.1)
     }
 
     /// Returns the name of the resource.
