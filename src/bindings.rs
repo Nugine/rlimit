@@ -1173,6 +1173,7 @@ fn resource_bound() {
 
 #[cfg(any(
     target_os = "fuchsia",
+    target_os = "aix",
     all(target_os = "android", target_pointer_width = "32"),
     all(target_os = "android", target_pointer_width = "64"),
     target_os = "emscripten",
@@ -1184,6 +1185,7 @@ pub use libc::rlimit64 as rlimit;
 #[cfg(all(
     not(any(
         target_os = "fuchsia",
+        target_os = "aix",
         all(target_os = "android", target_pointer_width = "32"),
         all(target_os = "android", target_pointer_width = "64"),
         target_os = "emscripten",
@@ -1192,6 +1194,7 @@ pub use libc::rlimit64 as rlimit;
     )),
     any(
         target_os = "fuchsia",
+        target_os = "aix",
         all(target_os = "android", target_pointer_width = "32"),
         all(target_os = "android", target_pointer_width = "64"),
         target_os = "emscripten",
@@ -1204,6 +1207,7 @@ pub use libc::rlimit64 as rlimit;
 pub use libc::rlimit;
 
 #[cfg(any(
+    target_os = "aix",
     target_os = "android",
     target_os = "emscripten",
     all(target_os = "linux", target_env = "gnu"),
@@ -1214,6 +1218,7 @@ pub use libc::getrlimit64 as getrlimit;
 
 #[cfg(all(
     not(any(
+        target_os = "aix",
         target_os = "android",
         target_os = "emscripten",
         all(target_os = "linux", target_env = "gnu"),
@@ -1247,6 +1252,7 @@ pub use libc::getrlimit64 as getrlimit;
 pub use libc::getrlimit;
 
 #[cfg(any(
+    target_os = "aix",
     target_os = "android",
     target_os = "emscripten",
     all(target_os = "linux", target_env = "gnu"),
@@ -1257,6 +1263,7 @@ pub use libc::setrlimit64 as setrlimit;
 
 #[cfg(all(
     not(any(
+        target_os = "aix",
         target_os = "android",
         target_os = "emscripten",
         all(target_os = "linux", target_env = "gnu"),
