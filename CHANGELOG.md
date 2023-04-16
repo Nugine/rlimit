@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/Nugine/rlimit/compare/v0.9.1...HEAD
 
++ Update bindings for `aix` os.
++ Add `Resource::get_soft` and `Resource::get_hard`.
+
 ## [0.9.1] - 2023-01-30
 
 [0.9.1]: https://github.com/Nugine/rlimit/compare/v0.9.0...v0.9.1
@@ -35,13 +38,13 @@ rlimit v0.8.2 uses libc definitions again instead of incorrect custom bindings.
 
 rlimit v0.8.0 and v0.8.1 are yanked now.
 
-## [0.8.1] - 2022-04-01
+## ~~[0.8.1] - 2022-04-01~~
 
 [0.8.1]: https://github.com/Nugine/rlimit/compare/v0.8.0...v0.8.1
 
 [PR #36](https://github.com/Nugine/rlimit/pull/36): Fix the bindings for aarch64-apple-darwin.
 
-## [0.8.0] - 2022-03-31
+## ~~[0.8.0] - 2022-03-31~~
 
 [0.8.0]: https://github.com/Nugine/rlimit/compare/v0.7.0...v0.8.0
 
