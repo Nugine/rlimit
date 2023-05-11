@@ -1,0 +1,17 @@
+[package]
+name = "rlimit-codegen"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies.libc-cfg]
+git = "https://github.com/Nugine/codegen-tools"
+rev = "c980bde491ce2f523cced539e93283e6ac0ce7ac"
+
+[dependencies.codegen-writer]
+git = "https://github.com/Nugine/codegen-tools"
+rev = "c980bde491ce2f523cced539e93283e6ac0ce7ac"
+
+[dependencies.target-cfg]
+git = "https://github.com/Nugine/codegen-tools"
+rev = "c980bde491ce2f523cced539e93283e6ac0ce7ac"

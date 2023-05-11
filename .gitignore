@@ -3,6 +3,6 @@
 /Cargo.lock
 
 /.vscode
-/libc
+/temp
 
 __pycache__

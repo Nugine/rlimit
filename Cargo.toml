@@ -21,3 +21,6 @@ libc = "0.2.139"
 
 [dev-dependencies]
 once_cell = "1.16.0"
+
+[workspace]
+members = ["codegen"]
