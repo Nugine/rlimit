@@ -172,11 +172,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - uses: taiki-e/install-action@v1
-        with:
-          tool: ripgrep
       - name: diff
         run: |
-          cp src/bindings.rs bindings.rs
           ./scripts/codegen.sh
-          diff src/bindings.rs bindings.rs 
+          [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642
