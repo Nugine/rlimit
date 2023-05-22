@@ -203,6 +203,15 @@ pub use libc::setrlimit64 as setrlimit;
 pub use libc::setrlimit;
 
 #[cfg(any(
+    all(target_os = "android", not(target_env = "newlib")),
+    all(
+        any(target_env = "gnu", target_env = "musl", target_env = "ohos"),
+        any(target_os = "l4re", target_os = "linux")
+    )
+))]
+pub use libc::prlimit64 as prlimit;
+
+#[cfg(any(
     target_os = "fuchsia",
     all(
         target_arch = "powerpc64",

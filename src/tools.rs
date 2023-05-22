@@ -3,11 +3,7 @@ use std::io;
 /// Returns the value of `kern.maxfilesperproc` by sysctl.
 /// # Errors
 /// Returns an error if any syscall failed.
-#[cfg(any(
-    any(target_os = "macos", target_os = "ios"),
-    target_os = "dragonfly",
-    target_os = "freebsd",
-))]
+#[cfg(rlimit__get_kern_max_files_per_proc)]
 fn get_kern_max_files_per_proc() -> io::Result<u64> {
     use std::mem;
     use std::ptr;
@@ -66,11 +62,7 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
 
         lim = lim.min(hard);
 
-        #[cfg(any(
-            any(target_os = "macos", target_os = "ios"),
-            target_os = "dragonfly",
-            target_os = "freebsd",
-        ))]
+        #[cfg(rlimit__get_kern_max_files_per_proc)]
         {
             lim = lim.min(get_kern_max_files_per_proc()?)
         }

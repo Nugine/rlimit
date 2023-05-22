@@ -1,13 +1,7 @@
 use codegen_cfg::ast::*;
-use codegen_libc::{search, simplified_expr, CfgItem, RegexSet};
+use codegen_libc::{simplified_expr, CfgItem};
 use codegen_writer::g;
 use codegen_writer::glines;
-
-pub fn collect_item_list() -> Vec<CfgItem> {
-    let libc_path = "temp/libc";
-    let re = RegexSet::new(["RLIM", "rlimit", "RLIMIT_"]).unwrap();
-    search(libc_path, &re).unwrap()
-}
 
 pub fn codegen(item_list: &[CfgItem]) {
     glines!(
@@ -22,7 +16,7 @@ pub fn codegen(item_list: &[CfgItem]) {
 }
 
 fn codegen_64(item_list: &[CfgItem]) {
-    for name in ["rlimit", "getrlimit", "setrlimit"] {
+    for name in ["rlimit", "getrlimit", "setrlimit", "prlimit"] {
         let name64 = format!("{}64", name);
         let item64 = item_list.iter().find(|item| item.name == name64).unwrap();
         let cfg64 = item64.cfg.clone();
@@ -35,10 +29,13 @@ fn codegen_64(item_list: &[CfgItem]) {
         g!();
 
         let otherwise = simplified_expr(all((not(cfg64), cfg)));
-
-        g!("#[cfg({otherwise})]");
-        g!("pub use libc::{name};");
-        g!();
+        if otherwise.is_const_false() {
+            assert_eq!(name, "prlimit");
+        } else {
+            g!("#[cfg({otherwise})]");
+            g!("pub use libc::{name};");
+            g!();
+        }
     }
 }
 

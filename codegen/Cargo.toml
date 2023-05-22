@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-codegen-writer = "0.1.0"
-codegen-libc = "0.2.0"
 codegen-cfg = "0.2.0"
+codegen-libc = "0.2.1"
+codegen-writer = "0.1.0"
 nugine-rust-utils = "0.3.1"
