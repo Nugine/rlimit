@@ -1,6 +1,7 @@
+use codegen_cfg::ast::*;
+use codegen_libc::{search, simplified_expr, CfgItem, RegexSet};
 use codegen_writer::g;
 use codegen_writer::glines;
-use libc_cfg::generate_item_cfg;
 
 fn main() {
     let path = "src/bindings.rs";
@@ -9,8 +10,10 @@ fn main() {
 }
 
 fn codegen() {
-    let libc_repo_path = "temp/libc";
-    let item_list = libc_cfg::generate_item_list(libc_repo_path).unwrap();
+    let libc_path = "temp/libc";
+    let re = RegexSet::new(["RLIM", "rlimit", "RLIMIT_"]).unwrap();
+
+    let item_list = search(libc_path, &re).unwrap();
 
     glines!(
         "#![allow(clippy::cast_possible_truncation)]",
@@ -23,29 +26,31 @@ fn codegen() {
     codegen_resources(&item_list);
 }
 
-fn codegen_64(item_list: &[libc_cfg::Item]) {
+fn codegen_64(item_list: &[CfgItem]) {
     for name in ["rlimit", "getrlimit", "setrlimit"] {
         let name64 = format!("{}64", name);
         let item64 = item_list.iter().find(|item| item.name == name64).unwrap();
-        let cfg64 = generate_item_cfg(item64);
+        let cfg64 = item64.cfg.clone();
 
         let item = item_list.iter().find(|item| item.name == name).unwrap();
-        let cfg = generate_item_cfg(item);
+        let cfg = item.cfg.clone();
 
         g!("#[cfg({cfg64})]");
         g!("pub use libc::{name64} as {name};");
         g!();
 
-        g!("#[cfg(all(not({cfg64}), {cfg}))]");
+        let otherwise = simplified_expr(all((not(cfg64), cfg)));
+
+        g!("#[cfg({otherwise})]");
         g!("pub use libc::{name};");
         g!();
     }
 }
 
-fn codegen_inf(item_list: &[libc_cfg::Item]) {
+fn codegen_inf(item_list: &[CfgItem]) {
     let name = "RLIM_INFINITY";
     let item = item_list.iter().find(|item| item.name == name).unwrap();
-    let cfg = generate_item_cfg(item);
+    let cfg = &item.cfg;
 
     g!("#[cfg({cfg})]");
     g!("pub const {name}: u64 = libc::{name} as u64;");
@@ -56,7 +61,7 @@ fn codegen_inf(item_list: &[libc_cfg::Item]) {
     g!();
 }
 
-fn codegen_resources(item_list: &[libc_cfg::Item]) {
+fn codegen_resources(item_list: &[CfgItem]) {
     let resources = {
         let mut ans = Vec::new();
         for item in item_list {
@@ -68,15 +73,15 @@ fn codegen_resources(item_list: &[libc_cfg::Item]) {
             }
 
             if name.starts_with("RLIMIT_") {
-                let cfg = generate_item_cfg(item);
-                ans.push((item, cfg));
+                ans.push(item);
             }
         }
         ans
     };
 
-    for (item, cfg) in &resources {
+    for item in &resources {
         let name = item.name.as_str();
+        let cfg = &item.cfg;
 
         g!("#[cfg({cfg})]");
         g!("pub const {name}: u8 = libc::{name} as u8;");
@@ -94,8 +99,9 @@ fn codegen_resources(item_list: &[libc_cfg::Item]) {
     g!("#[test]");
     g!("fn resource_range() {{");
 
-    for (item, cfg) in &resources {
+    for item in &resources {
         let name = item.name.as_str();
+        let cfg = &item.cfg;
 
         g!("#[cfg({cfg})]");
         g!("assert!((0..128).contains(&libc::{name}));");
