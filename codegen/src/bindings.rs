@@ -62,8 +62,7 @@ fn codegen_resources(item_list: &[CfgItem]) {
         for item in item_list {
             let name = item.name.as_str();
 
-            // TODO
-            if matches!(name, "RLIMIT_NLIMITS" | "RLIMIT_THREADS") {
+            if name == "RLIMIT_NLIMITS" {
                 continue;
             }
 

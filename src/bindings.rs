@@ -2538,6 +2538,12 @@ pub const RLIMIT_SWAP: u8 = libc::RLIMIT_SWAP as u8;
 #[cfg(not(all(target_os = "freebsd", not(target_env = "newlib"))))]
 pub const RLIMIT_SWAP: u8 = u8::MAX;
 
+#[cfg(all(target_os = "aix", not(target_env = "newlib")))]
+pub const RLIMIT_THREADS: u8 = libc::RLIMIT_THREADS as u8;
+
+#[cfg(not(all(target_os = "aix", not(target_env = "newlib"))))]
+pub const RLIMIT_THREADS: u8 = u8::MAX;
+
 #[cfg(all(target_os = "freebsd", not(target_env = "newlib")))]
 pub const RLIMIT_UMTXP: u8 = libc::RLIMIT_UMTXP as u8;
 
@@ -3669,6 +3675,9 @@ mod tests {
 
         #[cfg(all(target_os = "freebsd", not(target_env = "newlib")))]
         assert!((0..128).contains(&libc::RLIMIT_SWAP));
+
+        #[cfg(all(target_os = "aix", not(target_env = "newlib")))]
+        assert!((0..128).contains(&libc::RLIMIT_THREADS));
 
         #[cfg(all(target_os = "freebsd", not(target_env = "newlib")))]
         assert!((0..128).contains(&libc::RLIMIT_UMTXP));

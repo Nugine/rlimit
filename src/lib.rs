@@ -74,7 +74,6 @@
     missing_debug_implementations,
     clippy::all,
     clippy::pedantic,
-    clippy::nursery,
     clippy::cargo
 )]
 #![allow(

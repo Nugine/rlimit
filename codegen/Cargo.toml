@@ -8,3 +8,4 @@ publish = false
 codegen-writer = "0.1.0"
 codegen-libc = "0.2.0"
 codegen-cfg = "0.2.0"
+nugine-rust-utils = "0.3.1"
