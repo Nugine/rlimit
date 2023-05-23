@@ -55,9 +55,10 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
 }
 
 /// The type of a process ID
+#[allow(non_camel_case_types)]
 #[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
-#[cfg(any(doc, rlimit__has_prlimit64))]
-pub use libc::pid_t;
+#[cfg(any(doc, target_os = "linux", target_os = "android"))]
+pub type pid_t = i32;
 
 /// Set and get the resource limits of an arbitrary process.
 /// # Errors
