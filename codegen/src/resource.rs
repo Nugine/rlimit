@@ -80,10 +80,10 @@ pub fn codegen(resources: &[Resource]) {
     let docs = load_docs();
 
     glines![
-        "use super::Resource;",           //
-        "use super::ParseResourceError;", //
-        "use crate::bindings as C;",      //
-        "",
+        "use super::Resource;"
+        "use super::ParseResourceError;"
+        "use crate::bindings as C;"
+        ""
     ];
 
     {

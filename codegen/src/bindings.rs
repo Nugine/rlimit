@@ -4,11 +4,11 @@ use codegen_writer::g;
 use codegen_writer::glines;
 
 pub fn codegen(item_list: &[CfgItem]) {
-    glines!(
-        "#![allow(clippy::cast_possible_truncation)]",
-        "#![allow(clippy::unnecessary_cast)]",
-        "",
-    );
+    glines![
+        "#![allow(clippy::cast_possible_truncation)]"
+        "#![allow(clippy::unnecessary_cast)]"
+        ""
+    ];
 
     codegen_64(item_list);
     codegen_inf(item_list);
