@@ -25,4 +25,7 @@ codegen:
     ./scripts/codegen.sh
 
 sync-version:
-    cargo set-version -p rlimit 0.10.0-dev
+    cargo set-version -p rlimit 0.10.0
+
+publish:
+    cargo publish -p rlimit

@@ -47,7 +47,7 @@
 //! ```
 //!
 //! ## Increase NOFILE limit
-//! See the example [nofile](https://github.com/Nugine/rlimit/tree/v0.9.1/examples/nofile.rs).
+//! See the example [nofile](https://github.com/Nugine/rlimit/blob/main/examples/nofile.rs).
 //!
 //! You can also use the tool function [`rlimit::increase_nofile_limit`][`crate::increase_nofile_limit`]
 //!

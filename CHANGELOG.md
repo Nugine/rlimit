@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.10.0...HEAD
 
-+ Update bindings for `aix` os.
+## [0.10.0] - 2023-07-04
+
+[0.10.0]: https://github.com/Nugine/rlimit/compare/v0.9.1...v0.10.0
+
++ Update libc bindings.
 + Add `Resource::get_soft` and `Resource::get_hard`.
+
+The MSRV of v0.10.* is explicitly guaranteed to be 1.60.0.
+
+If you have any idea that can help `rlimit` reach v1.0, please leave your comments in [this issue](https://github.com/Nugine/rlimit/issues/27).
 
 ## [0.9.1] - 2023-01-30
 
