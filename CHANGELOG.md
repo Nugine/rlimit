@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.10.1...HEAD
+
+## [0.10.1] - 2023-07-20
+
+[0.10.1]: https://github.com/Nugine/rlimit/compare/v0.10.0...v0.10.1
+
++ Update libc bindings.
++ Fix incorrect build script. ([Issue #55](https://github.com/Nugine/rlimit/issues/55))
 
 ## [0.10.0] - 2023-07-04
 
