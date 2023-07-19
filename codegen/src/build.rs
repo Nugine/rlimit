@@ -1,4 +1,6 @@
-use codegen_cfg::ast::{all, Expr};
+use std::fmt::Write as _;
+
+use codegen_cfg::ast::{all, All, Any, Expr, Not, Var};
 use codegen_libc::{simplified_expr, CfgItem};
 use codegen_writer::g;
 use rust_utils::iter::map_collect_vec;
@@ -11,8 +13,57 @@ fn find_many_cfg(item_list: &[CfgItem], items: &[&str]) -> Vec<Expr> {
     map_collect_vec(items, |name| find(item_list, name).cfg.clone())
 }
 
+fn cfg_eval(s: &mut String, depth: usize, cfg: &Expr) {
+    match cfg {
+        Expr::Any(Any(any)) => {
+            if depth > 0 {
+                write!(s, "(").unwrap();
+            }
+            let (first, xs) = any.split_first().unwrap();
+            cfg_eval(s, depth + 1, first);
+            for x in xs {
+                write!(s, " || ").unwrap();
+                cfg_eval(s, depth + 1, x);
+            }
+            if depth > 0 {
+                write!(s, ")").unwrap();
+            }
+        }
+        Expr::All(All(all)) => {
+            if depth > 0 {
+                write!(s, "(").unwrap();
+            }
+            let (first, xs) = all.split_first().unwrap();
+            cfg_eval(s, depth + 1, first);
+            for x in xs {
+                write!(s, " && ").unwrap();
+                cfg_eval(s, depth + 1, x);
+            }
+            if depth > 0 {
+                write!(s, ")").unwrap();
+            }
+        }
+        Expr::Not(Not(expr)) => {
+            let pred = &expr.as_var().unwrap().0;
+            let val = pred.value.as_ref().unwrap();
+            write!(s, "{} != {:?}", pred.key, val).unwrap();
+        }
+        Expr::Var(Var(pred)) => {
+            let val = pred.value.as_ref().unwrap();
+            write!(s, "{} == {:?}", pred.key, val).unwrap();
+        }
+        Expr::Const(_) => unimplemented!(),
+    }
+}
+
 fn set_cfg_if(key: &str, cfg: &Expr) {
-    g!("let {key} = cfg!({cfg});");
+    let cfg = {
+        let mut s = String::new();
+        cfg_eval(&mut s, 0, cfg);
+        s
+    };
+
+    g!("let {key} = {cfg};");
     g!("if {key} {{");
     g!(r#"println!("cargo:rustc-cfg=rlimit__{key}");"#);
     g!("}}");
@@ -27,6 +78,12 @@ fn forward_item_cfg(item_list: &[CfgItem], name: &str) {
 
 pub fn codegen(item_list: &[CfgItem]) {
     g!("fn main() {{");
+
+    {
+        g!("let target_os = std::env::var(\"CARGO_CFG_TARGET_OS\").unwrap();");
+        g!("let target_env = std::env::var(\"CARGO_CFG_TARGET_ENV\").unwrap();");
+        g!();
+    }
 
     forward_item_cfg(item_list, "prlimit64");
 
