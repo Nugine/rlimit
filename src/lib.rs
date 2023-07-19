@@ -120,3 +120,19 @@ group! {
 mod tools;
 #[doc(inline)]
 pub use self::tools::*;
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn build_cfg() {
+        if cfg!(target_os = "linux") || cfg!(target_os = "android") {
+            assert!(cfg!(rlimit__has_prlimit64));
+            assert!(cfg!(not(rlimit__get_kern_max_files_per_proc)));
+        }
+
+        if cfg!(target_os = "macos") {
+            assert!(cfg!(not(rlimit__has_prlimit64)));
+            assert!(cfg!(rlimit__get_kern_max_files_per_proc));
+        }
+    }
+}
