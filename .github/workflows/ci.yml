@@ -31,7 +31,7 @@ jobs:
       - run: cargo clippy -- -D warnings
       - run: cargo test --all-features
 
-  ubuntu:
+  cross:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -127,14 +127,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@master
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
           targets: ${{ matrix.target }}
       - uses: taiki-e/install-action@v2
         with:
           tool: cross
-      - run: |
+      - name: cross test
+        run: |
           # TODO: remove this when `cross` updates
           # See https://github.com/cross-rs/cross/issues/1217
           export CROSS_TARGET_AARCH64_LINUX_ANDROID_IMAGE="ghcr.io/cross-rs/aarch64-linux-android:main"
@@ -145,19 +145,11 @@ jobs:
 
   macos:
     runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - x86_64-apple-darwin
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-          targets: ${{ matrix.target }}
+      - uses: dtolnay/rust-toolchain@stable
       - run: |
-          cargo test --all-features --target=${{ matrix.target }}
+          cargo test --all-features
 
   windows:
     runs-on: windows-latest
@@ -166,6 +158,18 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --all-features
+
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-apple-darwin
+      - run: |
+          cargo test --all-features
+      - run: |
+          cargo check --target x86_64-apple-darwin
 
   diff-codegen:
     runs-on: ubuntu-latest
