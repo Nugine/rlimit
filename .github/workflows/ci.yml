@@ -75,13 +75,13 @@ jobs:
           # - i686-unknown-freebsd                  # (missing docker image)
           - i686-unknown-linux-gnu # (libc mismatch)
           - i686-unknown-linux-musl
-          - mips-unknown-linux-gnu # (libc mismatch)
+          # - mips-unknown-linux-gnu # (rust-std unavailable)
           - mips-unknown-linux-musl
-          - mips64-unknown-linux-gnuabi64
+          # - mips64-unknown-linux-gnuabi64 # (rust-std unavailable)
           # - mips64-unknown-linux-muslabi64        # (missing docker image)
-          - mips64el-unknown-linux-gnuabi64
+          # - mips64el-unknown-linux-gnuabi64 # (rust-std unavailable)
           # - mips64el-unknown-linux-muslabi64      # (missing docker image)
-          - mipsel-unknown-linux-gnu # (libc mismatch)
+          # - mipsel-unknown-linux-gnu # (rust-std unavailable)
           - mipsel-unknown-linux-musl
           # - nvptx64-nvidia-cuda                   # (no std)
           - powerpc-unknown-linux-gnu # (libc mismatch)
