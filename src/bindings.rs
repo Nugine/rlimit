@@ -7,6 +7,7 @@
         any(
             target_os = "aix",
             target_os = "emscripten",
+            target_os = "hurd",
             target_os = "l4re",
             target_os = "linux",
             target_os = "nto"
@@ -40,6 +41,7 @@ pub use libc::rlimit64 as rlimit;
             any(
                 target_os = "aix",
                 target_os = "emscripten",
+                target_os = "hurd",
                 target_os = "l4re",
                 target_os = "linux",
                 target_os = "nto"
@@ -62,7 +64,12 @@ pub use libc::rlimit;
 
 #[cfg(any(
     all(
-        any(target_os = "aix", target_os = "android", target_os = "emscripten"),
+        any(
+            target_os = "aix",
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "hurd"
+        ),
         not(target_env = "newlib")
     ),
     all(
@@ -87,6 +94,7 @@ pub use libc::getrlimit64 as getrlimit;
                 target_os = "emscripten",
                 target_os = "freebsd",
                 target_os = "haiku",
+                target_os = "hurd",
                 target_os = "illumos",
                 target_os = "ios",
                 target_os = "macos",
@@ -114,7 +122,12 @@ pub use libc::getrlimit64 as getrlimit;
     ),
     not(any(
         all(
-            any(target_os = "aix", target_os = "android", target_os = "emscripten"),
+            any(
+                target_os = "aix",
+                target_os = "android",
+                target_os = "emscripten",
+                target_os = "hurd"
+            ),
             not(target_env = "newlib")
         ),
         all(
@@ -132,7 +145,12 @@ pub use libc::getrlimit;
 
 #[cfg(any(
     all(
-        any(target_os = "aix", target_os = "android", target_os = "emscripten"),
+        any(
+            target_os = "aix",
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "hurd"
+        ),
         not(target_env = "newlib")
     ),
     all(
@@ -157,6 +175,7 @@ pub use libc::setrlimit64 as setrlimit;
                 target_os = "emscripten",
                 target_os = "freebsd",
                 target_os = "haiku",
+                target_os = "hurd",
                 target_os = "illumos",
                 target_os = "ios",
                 target_os = "macos",
@@ -184,7 +203,12 @@ pub use libc::setrlimit64 as setrlimit;
     ),
     not(any(
         all(
-            any(target_os = "aix", target_os = "android", target_os = "emscripten"),
+            any(
+                target_os = "aix",
+                target_os = "android",
+                target_os = "emscripten",
+                target_os = "hurd"
+            ),
             not(target_env = "newlib")
         ),
         all(
@@ -223,6 +247,7 @@ pub use libc::prlimit64 as prlimit;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -301,6 +326,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -375,6 +401,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -462,6 +489,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -549,6 +577,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -637,6 +666,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -725,6 +755,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -813,6 +844,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -901,6 +933,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -989,6 +1022,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -1077,6 +1111,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -1165,6 +1200,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -1401,6 +1437,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -1485,6 +1522,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -1859,6 +1897,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -1947,6 +1986,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -2040,6 +2080,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -2125,6 +2166,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -2228,6 +2270,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -2313,6 +2356,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
+            target_os = "hurd",
             target_os = "ios",
             target_os = "macos",
             target_os = "netbsd",
@@ -2670,13 +2714,23 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
 pub const RLIMIT_RTTIME: u8 = u8::MAX;
 
 #[cfg(all(
-    any(target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd"),
+    any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "hurd",
+        target_os = "netbsd"
+    ),
     not(target_env = "newlib")
 ))]
 pub const RLIMIT_SBSIZE: u8 = libc::RLIMIT_SBSIZE as u8;
 
 #[cfg(not(all(
-    any(target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd"),
+    any(
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "hurd",
+        target_os = "netbsd"
+    ),
     not(target_env = "newlib")
 )))]
 pub const RLIMIT_SBSIZE: u8 = u8::MAX;
@@ -2835,6 +2889,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -2923,6 +2978,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
             target_os = "emscripten",
             target_os = "freebsd",
             target_os = "haiku",
+            target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
             target_os = "macos",
@@ -3023,6 +3079,7 @@ pub const RLIMIT_UMTXP: u8 = u8::MAX;
     any(
         target_os = "dragonfly",
         target_os = "freebsd",
+        target_os = "hurd",
         target_os = "illumos",
         target_os = "nto",
         target_os = "solaris"
@@ -3035,6 +3092,7 @@ pub const RLIMIT_VMEM: u8 = libc::RLIMIT_VMEM as u8;
     any(
         target_os = "dragonfly",
         target_os = "freebsd",
+        target_os = "hurd",
         target_os = "illumos",
         target_os = "nto",
         target_os = "solaris"
@@ -3058,6 +3116,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3145,6 +3204,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3233,6 +3293,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3321,6 +3382,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3409,6 +3471,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3570,6 +3633,7 @@ mod tests {
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
+                    target_os = "hurd",
                     target_os = "ios",
                     target_os = "macos",
                     target_os = "netbsd",
@@ -3800,6 +3864,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -3890,6 +3955,7 @@ mod tests {
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
+                    target_os = "hurd",
                     target_os = "ios",
                     target_os = "macos",
                     target_os = "netbsd",
@@ -3984,6 +4050,7 @@ mod tests {
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
+                    target_os = "hurd",
                     target_os = "ios",
                     target_os = "macos",
                     target_os = "netbsd",
@@ -4201,7 +4268,12 @@ mod tests {
         assert!((0..128).contains(&libc::RLIMIT_RTTIME));
 
         #[cfg(all(
-            any(target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd"),
+            any(
+                target_os = "dragonfly",
+                target_os = "freebsd",
+                target_os = "hurd",
+                target_os = "netbsd"
+            ),
             not(target_env = "newlib")
         ))]
         assert!((0..128).contains(&libc::RLIMIT_SBSIZE));
@@ -4288,6 +4360,7 @@ mod tests {
                     target_os = "emscripten",
                     target_os = "freebsd",
                     target_os = "haiku",
+                    target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
                     target_os = "macos",
@@ -4379,6 +4452,7 @@ mod tests {
             any(
                 target_os = "dragonfly",
                 target_os = "freebsd",
+                target_os = "hurd",
                 target_os = "illumos",
                 target_os = "nto",
                 target_os = "solaris"

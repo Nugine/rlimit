@@ -63,6 +63,11 @@ fn codegen_resources(item_list: &[CfgItem]) {
                 continue;
             }
 
+            // FIXME: https://github.com/rust-lang/libc/pull/3325#pullrequestreview-1663168123
+            if name == "RLIMIT_OFILE" {
+                continue;
+            }
+
             if name.starts_with("RLIMIT_") {
                 ans.push(item);
             }

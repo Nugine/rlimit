@@ -21,6 +21,11 @@ pub fn collect_resources(item_list: &[CfgItem]) -> Vec<Resource> {
             continue;
         }
 
+        // FIXME: https://github.com/rust-lang/libc/pull/3325#pullrequestreview-1663168123
+        if name == "RLIMIT_OFILE" {
+            continue;
+        }
+
         if let Some(ident) = name.strip_prefix("RLIMIT_") {
             ans.push(Resource {
                 ident: ident.to_owned(),
