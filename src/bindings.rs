@@ -30,10 +30,7 @@ pub use libc::rlimit64 as rlimit;
 #[cfg(all(
     any(
         target_os = "vxworks",
-        all(
-            unix,
-            not(any(target_os = "psp", target_os = "solid_asp3", target_os = "switch"))
-        )
+        all(unix, not(any(target_os = "solid_asp3", target_os = "switch")))
     ),
     not(any(
         target_os = "fuchsia",
@@ -113,7 +110,6 @@ pub use libc::getrlimit64 as getrlimit;
             target_env = "newlib",
             not(any(
                 target_os = "fuchsia",
-                target_os = "psp",
                 target_os = "solid_asp3",
                 target_os = "switch",
                 target_os = "vxworks"
@@ -194,7 +190,6 @@ pub use libc::setrlimit64 as setrlimit;
             target_env = "newlib",
             not(any(
                 target_os = "fuchsia",
-                target_os = "psp",
                 target_os = "solid_asp3",
                 target_os = "switch",
                 target_os = "vxworks"
