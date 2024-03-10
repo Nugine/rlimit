@@ -15,37 +15,37 @@ use std::path::Path;
 #[derive(Debug, Clone, Default)]
 #[non_exhaustive]
 pub struct ProcLimits {
-    /// Max cpu time. See also [Resource::CPU](struct.Resource.html#associatedconstant.CPU).
+    /// Max cpu time. See also [`Resource::CPU`](struct.Resource.html#associatedconstant.CPU).
     pub max_cpu_time: Option<ProcLimit>,
-    /// Max file size. See also [Resource::FSIZE](struct.Resource.html#associatedconstant.FSIZE).
+    /// Max file size. See also [`Resource::FSIZE`](struct.Resource.html#associatedconstant.FSIZE).
     pub max_file_size: Option<ProcLimit>,
-    /// Max data size. See also [Resource::DATA](struct.Resource.html#associatedconstant.DATA).
+    /// Max data size. See also [`Resource::DATA`](struct.Resource.html#associatedconstant.DATA).
     pub max_data_size: Option<ProcLimit>,
-    /// Max stack size. See also [Resource::STACK](struct.Resource.html#associatedconstant.STACK).
+    /// Max stack size. See also [`Resource::STACK`](struct.Resource.html#associatedconstant.STACK).
     pub max_stack_size: Option<ProcLimit>,
-    /// Max core file size. See also [Resource::CORE](struct.Resource.html#associatedconstant.CORE).
+    /// Max core file size. See also [`Resource::CORE`](struct.Resource.html#associatedconstant.CORE).
     pub max_core_file_size: Option<ProcLimit>,
-    /// Max resident set. See also [Resource::RSS](struct.Resource.html#associatedconstant.RSS).
+    /// Max resident set. See also [`Resource::RSS`](struct.Resource.html#associatedconstant.RSS).
     pub max_resident_set: Option<ProcLimit>,
-    /// Max processes. See also [Resource::NPROC](struct.Resource.html#associatedconstant.NPROC).
+    /// Max processes. See also [`Resource::NPROC`](struct.Resource.html#associatedconstant.NPROC).
     pub max_processes: Option<ProcLimit>,
-    /// Max open files. See also [Resource::NOFILE](struct.Resource.html#associatedconstant.NOFILE).
+    /// Max open files. See also [`Resource::NOFILE`](struct.Resource.html#associatedconstant.NOFILE).
     pub max_open_files: Option<ProcLimit>,
-    /// Max locked memory. See also [Resource::MEMLOCK](struct.Resource.html#associatedconstant.MEMLOCK).
+    /// Max locked memory. See also [`Resource::MEMLOCK`](struct.Resource.html#associatedconstant.MEMLOCK).
     pub max_locked_memory: Option<ProcLimit>,
-    /// Max address space. See also [Resource::AS](struct.Resource.html#associatedconstant.AS).
+    /// Max address space. See also [`Resource::AS`](struct.Resource.html#associatedconstant.AS).
     pub max_address_space: Option<ProcLimit>,
-    /// Max file locks. See also [Resource::LOCKS](struct.Resource.html#associatedconstant.LOCKS).
+    /// Max file locks. See also [`Resource::LOCKS`](struct.Resource.html#associatedconstant.LOCKS).
     pub max_file_locks: Option<ProcLimit>,
-    /// Max pending signals. See also [Resource::SIGPENDING](struct.Resource.html#associatedconstant.SIGPENDING).
+    /// Max pending signals. See also [`Resource::SIGPENDING`](struct.Resource.html#associatedconstant.SIGPENDING).
     pub max_pending_signals: Option<ProcLimit>,
-    /// Max msgqueue size. See also [Resource::MSGQUEUE](struct.Resource.html#associatedconstant.MSGQUEUE).
+    /// Max msgqueue size. See also [`Resource::MSGQUEUE`](struct.Resource.html#associatedconstant.MSGQUEUE).
     pub max_msgqueue_size: Option<ProcLimit>,
-    /// Max nice priority. See also [Resource::NICE](struct.Resource.html#associatedconstant.NICE).
+    /// Max nice priority. See also [`Resource::NICE`](struct.Resource.html#associatedconstant.NICE).
     pub max_nice_priority: Option<ProcLimit>,
-    /// Max realtime priority. See also [Resource::RTPRIO](struct.Resource.html#associatedconstant.RTPRIO).
+    /// Max realtime priority. See also [`Resource::RTPRIO`](struct.Resource.html#associatedconstant.RTPRIO).
     pub max_realtime_priority: Option<ProcLimit>,
-    /// Max realtime timeout. See also [Resource::RTTIME](struct.Resource.html#associatedconstant.RTTIME).
+    /// Max realtime timeout. See also [`Resource::RTTIME`](struct.Resource.html#associatedconstant.RTTIME).
     pub max_realtime_timeout: Option<ProcLimit>,
 }
 
