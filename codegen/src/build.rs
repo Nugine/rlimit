@@ -64,6 +64,7 @@ fn set_cfg_if(key: &str, cfg: &Expr) {
     };
 
     g!("let {key} = {cfg};");
+    g!(r#"println!("cargo:rustc-check-cfg=cfg(rlimit__{key})");"#);
     g!("if {key} {{");
     g!(r#"println!("cargo:rustc-cfg=rlimit__{key}");"#);
     g!("}}");
@@ -83,6 +84,12 @@ pub fn codegen(item_list: &[CfgItem]) {
         g!("let target_os = std::env::var(\"CARGO_CFG_TARGET_OS\").unwrap();");
         g!("let target_env = std::env::var(\"CARGO_CFG_TARGET_ENV\").unwrap();");
         g!();
+    }
+
+    {
+        let extra_os = ["switch"];
+        let values = extra_os.join("\",\"");
+        g!(r#"println!("cargo:rustc-check-cfg=cfg(target_os, values(\"{values}\"))");"#)
     }
 
     forward_item_cfg(item_list, "prlimit64");
