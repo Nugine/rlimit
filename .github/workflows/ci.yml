@@ -28,7 +28,12 @@ jobs:
           toolchain: ${{ matrix.toolchain }}
           components: rustfmt, clippy
       - run: cargo fmt --all -- --check
-      - run: cargo clippy -- -D warnings
+      - run: |
+          if [ ${{ matrix.toolchain }} == "nightly" ]; then
+            cargo clippy -- -D warnings
+          else
+            cargo clippy -- -D warnings -A unknown-lints
+          fi
       - run: cargo test --all-features
 
   cross:

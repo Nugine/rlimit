@@ -29,3 +29,9 @@ sync-version:
 
 publish:
     cargo publish -p rlimit
+
+ci:
+    just fmt
+    cargo check
+    cargo +nightly clippy -- -D warnings
+    cargo +stable clippy -- -D warnings -A unknown-lints
