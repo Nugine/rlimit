@@ -18,6 +18,7 @@ fn check_supported(resource: Resource) -> io::Result<()> {
 /// Set resource limits.
 /// # Errors
 /// \[Linux\] See <https://man7.org/linux/man-pages/man2/setrlimit.2.html>
+#[allow(clippy::unnecessary_min_or_max)]
 #[inline]
 pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     check_supported(resource)?;
@@ -37,6 +38,7 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
 /// Get resource limits.
 /// # Errors
 /// \[Linux\] See <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
+#[allow(clippy::unnecessary_min_or_max)]
 #[inline]
 pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     check_supported(resource)?;
@@ -63,6 +65,7 @@ pub type pid_t = i32;
 /// Set and get the resource limits of an arbitrary process.
 /// # Errors
 /// See <https://man7.org/linux/man-pages/man2/prlimit.2.html>
+#[allow(clippy::unnecessary_min_or_max)]
 #[inline]
 #[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
 #[cfg(any(doc, rlimit__has_prlimit64))]
