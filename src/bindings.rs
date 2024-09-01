@@ -101,6 +101,7 @@ pub use libc::getrlimit64 as getrlimit;
                 target_os = "redox",
                 target_os = "solaris",
                 target_os = "tvos",
+                target_os = "visionos",
                 target_os = "watchos"
             ),
             not(target_env = "newlib")
@@ -181,6 +182,7 @@ pub use libc::setrlimit64 as setrlimit;
                 target_os = "redox",
                 target_os = "solaris",
                 target_os = "tvos",
+                target_os = "visionos",
                 target_os = "watchos"
             ),
             not(target_env = "newlib")
@@ -251,6 +253,7 @@ pub use libc::prlimit64 as prlimit;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -330,6 +333,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -404,6 +408,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
             target_os = "nto",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -492,6 +497,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
             target_os = "nto",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -581,6 +587,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -670,6 +677,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -759,6 +767,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -848,6 +857,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -937,6 +947,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1026,6 +1037,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1115,6 +1127,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1204,6 +1217,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1439,6 +1453,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1524,6 +1539,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1901,6 +1917,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -1990,6 +2007,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2082,6 +2100,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2168,6 +2187,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2272,6 +2292,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2358,6 +2379,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
             target_os = "nto",
             target_os = "openbsd",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2893,6 +2915,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -2982,6 +3005,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
             target_os = "openbsd",
             target_os = "solaris",
             target_os = "tvos",
+            target_os = "visionos",
             target_os = "watchos"
         ),
         not(target_env = "newlib")
@@ -3119,6 +3143,7 @@ mod tests {
                     target_os = "nto",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3208,6 +3233,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3297,6 +3323,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3386,6 +3413,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3475,6 +3503,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3635,6 +3664,7 @@ mod tests {
                     target_os = "nto",
                     target_os = "openbsd",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3868,6 +3898,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -3957,6 +3988,7 @@ mod tests {
                     target_os = "nto",
                     target_os = "openbsd",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -4052,6 +4084,7 @@ mod tests {
                     target_os = "nto",
                     target_os = "openbsd",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")
@@ -4364,6 +4397,7 @@ mod tests {
                     target_os = "openbsd",
                     target_os = "solaris",
                     target_os = "tvos",
+                    target_os = "visionos",
                     target_os = "watchos"
                 ),
                 not(target_env = "newlib")

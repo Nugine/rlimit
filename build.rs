@@ -16,6 +16,7 @@ fn main() {
         || target_os == "ios"
         || target_os == "macos"
         || target_os == "tvos"
+        || target_os == "visionos"
         || target_os == "watchos")
         && target_env != "newlib";
     println!("cargo:rustc-check-cfg=cfg(rlimit__get_kern_max_files_per_proc)");
