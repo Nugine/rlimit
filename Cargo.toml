@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["rlimit", "unix", "syscall"]
 categories = ["os::unix-apis"]
 documentation = "https://docs.rs/rlimit"
-rust-version = "1.60.0"
+rust-version = "1.63.0"
 
 [package.metadata.docs.rs]
 all-features = true
