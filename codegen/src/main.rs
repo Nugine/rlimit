@@ -9,8 +9,8 @@ use std::io::BufWriter;
 
 use codegen_cfg::ast::{Pred, Var};
 use codegen_cfg::bool_logic::ast::Expr;
-use codegen_cfg::bool_logic::visit_mut::{VisitMut, walk_mut_expr};
-use codegen_libc::{CfgItem, RegexSet, search, simplified_expr};
+use codegen_cfg::bool_logic::visit_mut::{walk_mut_expr, VisitMut};
+use codegen_libc::{search, simplified_expr, CfgItem, RegexSet};
 
 fn patch_cfg_expr(expr: &mut Expr<Pred>) {
     struct Visitor;
