@@ -2,7 +2,6 @@ use std::fmt::Write as _;
 
 use codegen_cfg::ast::{All, Any, Expr, Not, Var, all};
 use codegen_libc::{CfgItem, simplified_expr};
-use rust_utils::iter::map_collect_vec;
 use scoped_writer::g;
 
 fn find<'a>(item_list: &'a [CfgItem], name: &str) -> &'a CfgItem {
@@ -10,7 +9,10 @@ fn find<'a>(item_list: &'a [CfgItem], name: &str) -> &'a CfgItem {
 }
 
 fn find_many_cfg(item_list: &[CfgItem], items: &[&str]) -> Vec<Expr> {
-    map_collect_vec(items, |name| find(item_list, name).cfg.clone())
+    items
+        .iter()
+        .map(|name| find(item_list, name).cfg.clone())
+        .collect()
 }
 
 fn cfg_eval(s: &mut String, depth: usize, cfg: &Expr) {

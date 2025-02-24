@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use codegen_libc::CfgItem;
-use rust_utils::default::default;
 use scoped_writer::g;
+use stdx::default::default;
 
 pub struct Resource {
     ident: String,
