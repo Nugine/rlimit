@@ -1,11 +1,11 @@
 [package]
 name = "rlimit-codegen"
 version = "0.0.0"
-edition = "2021"
+edition = "2024"
 publish = false
 
 [dependencies]
 codegen-cfg = "0.2.0"
 codegen-libc = "0.2.1"
-codegen-writer = "0.2.0"
+scoped-writer = "0.1.2"
 nugine-rust-utils = "0.3.1"

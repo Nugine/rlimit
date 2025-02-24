@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
 use codegen_libc::CfgItem;
-use codegen_writer::g;
-use codegen_writer::glines;
 use rust_utils::default::default;
+use scoped_writer::g;
 
 pub struct Resource {
     ident: String,
@@ -84,12 +83,12 @@ fn load_docs() -> HashMap<&'static str, Vec<&'static str>> {
 pub fn codegen(resources: &[Resource]) {
     let docs = load_docs();
 
-    glines![
-        "use super::Resource;"
-        "use super::ParseResourceError;"
-        "use crate::bindings as C;"
-        ""
-    ];
+    g([
+        "use super::Resource;",
+        "use super::ParseResourceError;",
+        "use crate::bindings as C;",
+        "",
+    ]);
 
     {
         g!("impl Resource {{");

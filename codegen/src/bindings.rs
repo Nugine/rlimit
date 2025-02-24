@@ -1,14 +1,13 @@
 use codegen_cfg::ast::*;
-use codegen_libc::{simplified_expr, CfgItem};
-use codegen_writer::g;
-use codegen_writer::glines;
+use codegen_libc::{CfgItem, simplified_expr};
+use scoped_writer::g;
 
 pub fn codegen(item_list: &[CfgItem]) {
-    glines![
-        "#![allow(clippy::cast_possible_truncation)]"
-        "#![allow(clippy::unnecessary_cast)]"
-        ""
-    ];
+    g([
+        "#![allow(clippy::cast_possible_truncation)]",
+        "#![allow(clippy::unnecessary_cast)]",
+        "",
+    ]);
 
     codegen_64(item_list);
     codegen_inf(item_list);

@@ -4,11 +4,13 @@ mod bindings;
 mod build;
 mod resource;
 
+use std::fs::File;
+use std::io::BufWriter;
+
 use codegen_cfg::ast::{Pred, Var};
 use codegen_cfg::bool_logic::ast::Expr;
-use codegen_cfg::bool_logic::visit_mut::{walk_mut_expr, VisitMut};
-use codegen_libc::{search, simplified_expr, CfgItem, RegexSet};
-use codegen_writer::{scoped, Codegen};
+use codegen_cfg::bool_logic::visit_mut::{VisitMut, walk_mut_expr};
+use codegen_libc::{CfgItem, RegexSet, search, simplified_expr};
 
 fn patch_cfg_expr(expr: &mut Expr<Pred>) {
     struct Visitor;
@@ -51,25 +53,27 @@ fn collect_item_list() -> Vec<CfgItem> {
     item_list
 }
 
+fn write_file(path: &str, f: impl FnOnce()) {
+    let mut writer = BufWriter::new(File::create(path).unwrap());
+    scoped_writer::scoped(&mut writer, f)
+}
+
 fn main() {
     let item_list = collect_item_list();
     let resources = self::resource::collect_resources(&item_list);
 
     {
         let path = "src/bindings.rs";
-        let gen = Codegen::create_file(path).unwrap();
-        scoped(gen, || self::bindings::codegen(&item_list));
+        write_file(path, || self::bindings::codegen(&item_list));
     }
 
     {
         let path = "src/resource/generated.rs";
-        let gen = Codegen::create_file(path).unwrap();
-        scoped(gen, || self::resource::codegen(&resources));
+        write_file(path, || self::resource::codegen(&resources));
     }
 
     {
         let path = "build.rs";
-        let gen = Codegen::create_file(path).unwrap();
-        scoped(gen, || self::build::codegen(&item_list));
+        write_file(path, || self::build::codegen(&item_list));
     }
 }
