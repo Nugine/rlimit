@@ -87,6 +87,7 @@ pub use libc::getrlimit64 as getrlimit;
             any(
                 target_os = "aix",
                 target_os = "android",
+                target_os = "cygwin",
                 target_os = "dragonfly",
                 target_os = "emscripten",
                 target_os = "freebsd",
@@ -168,6 +169,7 @@ pub use libc::setrlimit64 as setrlimit;
             any(
                 target_os = "aix",
                 target_os = "android",
+                target_os = "cygwin",
                 target_os = "dragonfly",
                 target_os = "emscripten",
                 target_os = "freebsd",
@@ -240,6 +242,7 @@ pub use libc::prlimit64 as prlimit;
     all(
         any(
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -320,6 +323,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
     all(
         any(
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -396,6 +400,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -485,6 +490,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -574,6 +580,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -664,6 +671,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -754,6 +762,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -844,6 +853,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -934,6 +944,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -1024,6 +1035,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -1114,6 +1126,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -1204,6 +1217,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -1904,6 +1918,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -1994,6 +2009,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -2902,6 +2918,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -2992,6 +3009,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
         any(
             target_os = "aix",
             target_os = "android",
+            target_os = "cygwin",
             target_os = "dragonfly",
             target_os = "emscripten",
             target_os = "freebsd",
@@ -3131,6 +3149,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -3220,6 +3239,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -3310,6 +3330,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -3400,6 +3421,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -3490,6 +3512,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -3885,6 +3908,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
@@ -4384,6 +4408,7 @@ mod tests {
                 any(
                     target_os = "aix",
                     target_os = "android",
+                    target_os = "cygwin",
                     target_os = "dragonfly",
                     target_os = "emscripten",
                     target_os = "freebsd",
