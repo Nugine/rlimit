@@ -2,7 +2,7 @@
 
 [![Latest Version]][crates.io]
 [![Documentation]][docs.rs] 
-![License]
+[![License]](LICENSE)
 [![Downloads]][downloads]
 
 Resource limits.
