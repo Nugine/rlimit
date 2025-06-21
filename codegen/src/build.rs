@@ -75,7 +75,7 @@ fn set_cfg_if(key: &str, cfg: &Expr) {
 
 fn forward_item_cfg(item_list: &[CfgItem], name: &str) {
     let item = find(item_list, name);
-    let key = format!("has_{}", name);
+    let key = format!("has_{name}");
     set_cfg_if(&key, &item.cfg);
 }
 

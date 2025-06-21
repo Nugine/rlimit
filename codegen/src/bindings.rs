@@ -16,7 +16,7 @@ pub fn codegen(item_list: &[CfgItem]) {
 
 fn codegen_64(item_list: &[CfgItem]) {
     for name in ["rlimit", "getrlimit", "setrlimit", "prlimit"] {
-        let name64 = format!("{}64", name);
+        let name64 = format!("{name}64");
         let item64 = item_list.iter().find(|item| item.name == name64).unwrap();
         let cfg64 = item64.cfg.clone();
 
