@@ -1,7 +1,7 @@
 use std::fmt::Write as _;
 
-use codegen_cfg::ast::{all, All, Any, Expr, Not, Var};
-use codegen_libc::{simplified_expr, CfgItem};
+use bool_logic::cfg::ast::{all, All, Any, Expr, Not, Var};
+use libc_cfg::{simplified_expr, CfgItem};
 use scoped_writer::g;
 
 fn find<'a>(item_list: &'a [CfgItem], name: &str) -> &'a CfgItem {

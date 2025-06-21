@@ -7,16 +7,16 @@ mod resource;
 use std::fs::File;
 use std::io::BufWriter;
 
-use codegen_cfg::ast::{Pred, Var};
-use codegen_cfg::bool_logic::ast::Expr;
-use codegen_cfg::bool_logic::visit_mut::{walk_mut_expr, VisitMut};
-use codegen_libc::{search, simplified_expr, CfgItem, RegexSet};
+use bool_logic::cfg::ast::Expr;
+use bool_logic::cfg::ast::{Pred, Var};
+use bool_logic::visit_mut::{walk_mut_expr, VisitMut};
+use libc_cfg::{search, simplified_expr, CfgItem, RegexSet};
 
-fn patch_cfg_expr(expr: &mut Expr<Pred>) {
+fn patch_cfg_expr(expr: &mut Expr) {
     struct Visitor;
 
     impl VisitMut<Pred> for Visitor {
-        fn visit_mut_expr(&mut self, expr: &mut Expr<Pred>) {
+        fn visit_mut_expr(&mut self, expr: &mut Expr) {
             walk_mut_expr(self, expr);
 
             if let Expr::Var(Var(Pred { key, value: None })) = expr {

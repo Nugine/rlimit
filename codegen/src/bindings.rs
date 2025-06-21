@@ -1,5 +1,5 @@
-use codegen_cfg::ast::*;
-use codegen_libc::{simplified_expr, CfgItem};
+use bool_logic::cfg::ast::*;
+use libc_cfg::{simplified_expr, CfgItem};
 use scoped_writer::g;
 
 pub fn codegen(item_list: &[CfgItem]) {

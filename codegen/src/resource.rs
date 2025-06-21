@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use codegen_libc::CfgItem;
+use libc_cfg::CfgItem;
 use scoped_writer::g;
 use stdx::default::default;
 
