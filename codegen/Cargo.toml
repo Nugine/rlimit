@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-bool-logic = "0.3.1"
+bool-logic = "0.3.2"
 scoped-writer = "0.3.0"
 std-next = "0.1.5"
-libc-cfg = "0.3.1"
+libc-cfg = "0.3.2"
