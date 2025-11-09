@@ -123,6 +123,7 @@ pub use self::tools::*;
 
 #[cfg(test)]
 mod tests {
+    #[allow(clippy::assertions_on_constants)]
     #[test]
     fn build_cfg() {
         if cfg!(target_os = "linux") || cfg!(target_os = "android") {
