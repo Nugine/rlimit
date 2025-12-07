@@ -80,7 +80,10 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
 ///
 /// // Check if we need to increase the limit
 /// if current < 1024 {
-///     rlimit::setmaxstdio(1024).unwrap();
+///     match rlimit::setmaxstdio(1024) {
+///         Ok(new_max) => println!("Increased limit to {}", new_max),
+///         Err(e) => eprintln!("Failed to increase limit: {}", e),
+///     }
 /// }
 /// # }
 /// ```

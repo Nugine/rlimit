@@ -108,8 +108,7 @@
 //! increase_nofile_limit(u64::MAX).unwrap();
 //! ```
 //!
-//! See the example [nofile](https://github.com/Nugine/rlimit/blob/main/examples/nofile.rs)
-//! for a more detailed demonstration.
+//! For a more detailed demonstration, see the `nofile.rs` example in the repository.
 //!
 //! ## Linux-specific: prlimit
 //!
