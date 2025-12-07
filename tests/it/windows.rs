@@ -20,11 +20,8 @@ fn maxstdio_overflow() {
 #[test]
 fn maxstdio_large_value() {
     // Test that values larger than c_int::MAX are rejected
-    let c_int_max = std::os::raw::c_int::MAX as u32;
-    // Only test if we can represent a value larger than c_int::MAX in u32
-    if let Some(test_value) = c_int_max.checked_add(1) {
-        let result = rlimit::setmaxstdio(test_value);
-        assert!(result.is_err());
-        assert_eq!(result.unwrap_err().kind(), std::io::ErrorKind::InvalidInput);
-    }
+    let test_value = (std::os::raw::c_int::MAX as u32) + 1;
+    let result = rlimit::setmaxstdio(test_value);
+    assert!(result.is_err());
+    assert_eq!(result.unwrap_err().kind(), std::io::ErrorKind::InvalidInput);
 }
