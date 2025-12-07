@@ -1,5 +1,9 @@
 #![allow(clippy::cast_possible_truncation)]
 #![allow(clippy::unnecessary_cast)]
+#![cfg_attr(feature = "linux_raw", allow(unused_imports, dead_code))]
+
+#[cfg(not(feature = "linux_raw"))]
+use libc;
 
 #[cfg(any(
     target_os = "fuchsia",
