@@ -161,10 +161,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - runner: macos-latest
           - runner: macos-13
-            arch: x86_64
-          - runner: macos-14
-            arch: aarch64
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
@@ -185,14 +183,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-apple-darwin,aarch64-apple-darwin
       - run: |
           cargo test --all-features
-      - run: |
-          cargo check --target x86_64-apple-darwin
-      - run: |
-          cargo check --target aarch64-apple-darwin
 
   diff-codegen:
     runs-on: ubuntu-latest
