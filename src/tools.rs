@@ -65,8 +65,9 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// }
 ///
 /// // Request the maximum possible limit
-/// let max_limit = increase_nofile_limit(u64::MAX).unwrap();
-/// println!("Maximum NOFILE limit: {}", max_limit);
+/// if let Ok(max_limit) = increase_nofile_limit(u64::MAX) {
+///     println!("Maximum NOFILE limit: {}", max_limit);
+/// }
 /// ```
 ///
 /// # Errors

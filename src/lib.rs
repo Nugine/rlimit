@@ -27,11 +27,15 @@
 //! use rlimit::{getrlimit, Resource};
 //!
 //! // Get NOFILE (max open files) limits
-//! let (soft, hard) = Resource::NOFILE.get().unwrap();
-//! println!("NOFILE limits: soft={}, hard={}", soft, hard);
+//! match Resource::NOFILE.get() {
+//!     Ok((soft, hard)) => println!("NOFILE limits: soft={}, hard={}", soft, hard),
+//!     Err(e) => eprintln!("Failed to get NOFILE limits: {}", e),
+//! }
 //!
 //! // Alternative function-style syntax
-//! assert!(getrlimit(Resource::CPU).is_ok());
+//! if let Ok((soft, hard)) = getrlimit(Resource::CPU) {
+//!     println!("CPU limits: soft={}, hard={}", soft, hard);
+//! }
 //! # }
 //! ```
 //!
@@ -44,12 +48,14 @@
 //! // Set FSIZE (max file size) limits using method syntax
 //! const DEFAULT_SOFT_LIMIT: u64 = 4 * 1024 * 1024;  // 4 MB
 //! const DEFAULT_HARD_LIMIT: u64 = 8 * 1024 * 1024;  // 8 MB
-//! Resource::FSIZE.set(DEFAULT_SOFT_LIMIT, DEFAULT_HARD_LIMIT).unwrap();
+//! if let Err(e) = Resource::FSIZE.set(DEFAULT_SOFT_LIMIT, DEFAULT_HARD_LIMIT) {
+//!     eprintln!("Failed to set FSIZE limits: {}", e);
+//! }
 //!
 //! // Set NOFILE limits using function syntax
 //! let soft = 1024;
 //! let hard = 2048;
-//! setrlimit(Resource::NOFILE, soft, hard).unwrap();
+//! setrlimit(Resource::NOFILE, soft, hard).expect("Failed to set NOFILE limits");
 //! # }
 //! ```
 //!
@@ -84,8 +90,10 @@
 //! println!("Current max stdio: {}", current); // Default is usually 512
 //!
 //! // Set a new limit
-//! rlimit::setmaxstdio(2048).unwrap();
-//! println!("New max stdio: {}", rlimit::getmaxstdio()); // 2048
+//! match rlimit::setmaxstdio(2048) {
+//!     Ok(new_max) => println!("New max stdio: {}", new_max),
+//!     Err(e) => eprintln!("Failed to set max stdio: {}", e),
+//! }
 //! # }
 //! ```
 //!
@@ -105,7 +113,9 @@
 //! }
 //!
 //! // Try to set to the maximum possible value
-//! increase_nofile_limit(u64::MAX).unwrap();
+//! if let Ok(max_limit) = increase_nofile_limit(u64::MAX) {
+//!     println!("Maximum NOFILE limit: {}", max_limit);
+//! }
 //! ```
 //!
 //! For a more detailed demonstration, see the `nofile.rs` example in the repository.
@@ -125,14 +135,16 @@
 //! let mut old_hard = 0;
 //!
 //! // Set new limits and retrieve old limits in one call
-//! prlimit(
+//! if let Err(e) = prlimit(
 //!     pid,
 //!     Resource::NOFILE,
 //!     Some((2048, 4096)),                    // new limits
 //!     Some((&mut old_soft, &mut old_hard)),  // old limits
-//! ).unwrap();
-//!
-//! println!("Previous NOFILE: soft={}, hard={}", old_soft, old_hard);
+//! ) {
+//!     eprintln!("Failed to set limits: {}", e);
+//! } else {
+//!     println!("Previous NOFILE: soft={}, hard={}", old_soft, old_hard);
+//! }
 //! # }
 //! ```
 //!

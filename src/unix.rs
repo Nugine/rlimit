@@ -40,10 +40,13 @@ fn check_supported(resource: Resource) -> io::Result<()> {
 /// use rlimit::{setrlimit, Resource};
 ///
 /// // Set NOFILE limits: soft=1024, hard=2048
-/// setrlimit(Resource::NOFILE, 1024, 2048).unwrap();
+/// if let Err(e) = setrlimit(Resource::NOFILE, 1024, 2048) {
+///     eprintln!("Failed to set NOFILE limits: {}", e);
+/// }
 ///
 /// // Set unlimited CPU time
-/// setrlimit(Resource::CPU, rlimit::INFINITY, rlimit::INFINITY).unwrap();
+/// setrlimit(Resource::CPU, rlimit::INFINITY, rlimit::INFINITY)
+///     .expect("Failed to set CPU limits");
 /// # }
 /// ```
 ///
@@ -93,13 +96,16 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
 /// # {
 /// use rlimit::{getrlimit, Resource};
 ///
-/// let (soft, hard) = getrlimit(Resource::NOFILE).unwrap();
-/// println!("NOFILE: soft={}, hard={}", soft, hard);
+/// match getrlimit(Resource::NOFILE) {
+///     Ok((soft, hard)) => println!("NOFILE: soft={}, hard={}", soft, hard),
+///     Err(e) => eprintln!("Failed to get limits: {}", e),
+/// }
 ///
 /// // Check if a resource has unlimited limits
-/// let (cpu_soft, cpu_hard) = getrlimit(Resource::CPU).unwrap();
-/// if cpu_soft == rlimit::INFINITY {
-///     println!("CPU time is unlimited");
+/// if let Ok((cpu_soft, cpu_hard)) = getrlimit(Resource::CPU) {
+///     if cpu_soft == rlimit::INFINITY {
+///         println!("CPU time is unlimited");
+///     }
 /// }
 /// # }
 /// ```
@@ -157,8 +163,11 @@ pub type pid_t = i32;
 /// // Get limits for the current process
 /// let mut soft = 0;
 /// let mut hard = 0;
-/// prlimit(0, Resource::NOFILE, None, Some((&mut soft, &mut hard))).unwrap();
-/// println!("Current NOFILE: soft={}, hard={}", soft, hard);
+/// if let Err(e) = prlimit(0, Resource::NOFILE, None, Some((&mut soft, &mut hard))) {
+///     eprintln!("Failed to get limits: {}", e);
+/// } else {
+///     println!("Current NOFILE: soft={}, hard={}", soft, hard);
+/// }
 ///
 /// // Set new limits and get old limits in one call
 /// let mut old_soft = 0;
@@ -168,12 +177,14 @@ pub type pid_t = i32;
 ///     Resource::NOFILE,
 ///     Some((2048, 4096)),
 ///     Some((&mut old_soft, &mut old_hard)),
-/// ).unwrap();
+/// ).expect("Failed to set limits");
 /// println!("Changed from soft={}, hard={}", old_soft, old_hard);
 ///
 /// // Set limits for another process (requires permissions)
 /// let other_pid = 1234;
-/// prlimit(other_pid, Resource::CPU, Some((60, 120)), None).unwrap();
+/// if let Err(e) = prlimit(other_pid, Resource::CPU, Some((60, 120)), None) {
+///     eprintln!("Failed to set limits for process {}: {}", other_pid, e);
+/// }
 /// # }
 /// ```
 ///

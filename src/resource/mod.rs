@@ -40,8 +40,10 @@ use std::io;
 ///
 /// // Check if a resource is supported
 /// if Resource::NOFILE.is_supported() {
-///     let (soft, hard) = Resource::NOFILE.get().unwrap();
-///     println!("NOFILE: soft={}, hard={}", soft, hard);
+///     match Resource::NOFILE.get() {
+///         Ok((soft, hard)) => println!("NOFILE: soft={}, hard={}", soft, hard),
+///         Err(e) => eprintln!("Failed to get NOFILE limits: {}", e),
+///     }
 /// }
 ///
 /// // Get the resource name
