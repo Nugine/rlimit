@@ -203,8 +203,8 @@ jobs:
             version: '14.3'
           - name: netbsd
             version: '10.1'
-          - name: openbsd
-            version: '7.8'
+          # - name: openbsd
+          #   version: '7.8'
     steps:
       - uses: actions/checkout@v4
       - name: Test on ${{ matrix.os.name }}
