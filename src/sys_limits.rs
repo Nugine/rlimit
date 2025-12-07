@@ -1,7 +1,7 @@
 #![deny(unsafe_code)]
 
 use std::fs;
-use std::io::{self, Write};
+use std::io;
 use std::path::Path;
 
 /// System-wide file descriptor limits and statistics.
@@ -24,7 +24,7 @@ pub struct SystemLimits {
     ///
     /// This corresponds to `/proc/sys/fs/file-nr` and contains three values:
     /// - `allocated`: Number of allocated file descriptors
-    /// - `free`: Number of free file descriptors  
+    /// - `free`: Number of free file descriptors
     /// - `maximum`: Maximum number of file descriptors (same as `file_max`)
     ///
     /// This field is read-only.
@@ -170,10 +170,7 @@ fn read_file_nr(path: impl AsRef<Path>) -> io::Result<FileNr> {
 
 /// Writes a u64 value to a file in `/proc/sys/fs/`.
 fn write_u64_to_file(path: impl AsRef<Path>, value: u64) -> io::Result<()> {
-    let mut file = fs::OpenOptions::new().write(true).open(path)?;
-    write!(file, "{value}")?;
-    file.flush()?;
-    Ok(())
+    fs::write(path, value.to_string())
 }
 
 #[cfg(test)]
