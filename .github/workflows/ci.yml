@@ -11,6 +11,9 @@ on:
 
 name: CI
 
+permissions:
+  contents: read
+
 jobs:
   develop:
     runs-on: ubuntu-latest
@@ -154,7 +157,13 @@ jobs:
           cross test --all-features --target=${{ matrix.target }}
 
   macos:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-latest
+          - runner: macos-13
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -174,12 +183,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-apple-darwin
       - run: |
           cargo test --all-features
-      - run: |
-          cargo check --target x86_64-apple-darwin
 
   diff-codegen:
     runs-on: ubuntu-latest
