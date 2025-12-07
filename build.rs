@@ -4,8 +4,8 @@ fn main() {
 
     println!("cargo:rustc-check-cfg=cfg(target_os, values(\"switch\"))");
     let has_prlimit64 = (target_os == "android" && target_env != "newlib")
-        || ((target_env == "gnu" || target_env == "musl" || target_env == "ohos")
-            && (target_os == "l4re" || target_os == "linux"));
+        || (target_os == "linux"
+            && (target_env == "gnu" || target_env == "musl" || target_env == "ohos"));
     println!("cargo:rustc-check-cfg=cfg(rlimit__has_prlimit64)");
     if has_prlimit64 {
         println!("cargo:rustc-cfg=rlimit__has_prlimit64");

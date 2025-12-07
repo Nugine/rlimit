@@ -69,15 +69,10 @@ pub use libc::rlimit;
         ),
         not(target_env = "newlib")
     ),
-    all(
-        any(
-            target_env = "gnu",
-            target_env = "musl",
-            target_env = "ohos",
-            target_env = "uclibc"
-        ),
-        any(target_os = "l4re", target_os = "linux")
-    )
+    all(target_env = "uclibc", target_os = "l4re"),
+    all(target_env = "gnu", target_os = "linux"),
+    all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+    all(target_env = "uclibc", target_os = "linux")
 ))]
 pub use libc::getrlimit64 as getrlimit;
 
@@ -128,15 +123,10 @@ pub use libc::getrlimit64 as getrlimit;
             ),
             not(target_env = "newlib")
         ),
-        all(
-            any(
-                target_env = "gnu",
-                target_env = "musl",
-                target_env = "ohos",
-                target_env = "uclibc"
-            ),
-            any(target_os = "l4re", target_os = "linux")
-        )
+        all(target_env = "uclibc", target_os = "l4re"),
+        all(target_env = "gnu", target_os = "linux"),
+        all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+        all(target_env = "uclibc", target_os = "linux")
     ))
 ))]
 pub use libc::getrlimit;
@@ -151,15 +141,10 @@ pub use libc::getrlimit;
         ),
         not(target_env = "newlib")
     ),
-    all(
-        any(
-            target_env = "gnu",
-            target_env = "musl",
-            target_env = "ohos",
-            target_env = "uclibc"
-        ),
-        any(target_os = "l4re", target_os = "linux")
-    )
+    all(target_env = "uclibc", target_os = "l4re"),
+    all(target_env = "gnu", target_os = "linux"),
+    all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+    all(target_env = "uclibc", target_os = "linux")
 ))]
 pub use libc::setrlimit64 as setrlimit;
 
@@ -210,15 +195,10 @@ pub use libc::setrlimit64 as setrlimit;
             ),
             not(target_env = "newlib")
         ),
-        all(
-            any(
-                target_env = "gnu",
-                target_env = "musl",
-                target_env = "ohos",
-                target_env = "uclibc"
-            ),
-            any(target_os = "l4re", target_os = "linux")
-        )
+        all(target_env = "uclibc", target_os = "l4re"),
+        all(target_env = "gnu", target_os = "linux"),
+        all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+        all(target_env = "uclibc", target_os = "linux")
     ))
 ))]
 pub use libc::setrlimit;
@@ -226,8 +206,8 @@ pub use libc::setrlimit;
 #[cfg(any(
     all(target_os = "android", not(target_env = "newlib")),
     all(
-        any(target_env = "gnu", target_env = "musl", target_env = "ohos"),
-        any(target_os = "l4re", target_os = "linux")
+        target_os = "linux",
+        any(target_env = "gnu", target_env = "musl", target_env = "ohos")
     )
 ))]
 pub use libc::prlimit64 as prlimit;
@@ -262,8 +242,9 @@ pub use libc::prlimit64 as prlimit;
         ),
         not(target_env = "newlib")
     ),
+    all(target_env = "uclibc", target_os = "l4re"),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         not(any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -278,7 +259,7 @@ pub use libc::prlimit64 as prlimit;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -287,30 +268,26 @@ pub use libc::prlimit64 as prlimit;
         )
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "mips64", target_arch = "mips64r6"),
         any(target_env = "gnu", target_env = "uclibc")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "mips", target_arch = "mips32r6"),
         any(target_env = "gnu", target_env = "uclibc")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64"),
         not(target_env = "newlib")
     ),
     all(
         target_arch = "sparc64",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         not(target_env = "newlib")
     ),
-    all(
-        target_arch = "sparc",
-        any(target_os = "l4re", target_os = "linux"),
-        not(target_env = "newlib")
-    )
+    all(target_arch = "sparc", target_os = "linux", not(target_env = "newlib"))
 ))]
 pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
 
@@ -344,8 +321,9 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
         ),
         not(target_env = "newlib")
     ),
+    all(target_env = "uclibc", target_os = "l4re"),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         not(any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -360,7 +338,7 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -369,30 +347,26 @@ pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
         )
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "mips64", target_arch = "mips64r6"),
         any(target_env = "gnu", target_env = "uclibc")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "mips", target_arch = "mips32r6"),
         any(target_env = "gnu", target_env = "uclibc")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64"),
         not(target_env = "newlib")
     ),
     all(
         target_arch = "sparc64",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         not(target_env = "newlib")
     ),
-    all(
-        target_arch = "sparc",
-        any(target_os = "l4re", target_os = "linux"),
-        not(target_env = "newlib")
-    )
+    all(target_arch = "sparc", target_os = "linux", not(target_env = "newlib"))
 )))]
 pub const RLIM_INFINITY: u64 = u64::MAX;
 
@@ -410,6 +384,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -422,7 +397,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -436,7 +411,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -450,7 +425,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -461,7 +436,7 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -471,16 +446,16 @@ pub const RLIM_INFINITY: u64 = u64::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -501,6 +476,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -513,7 +489,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -527,7 +503,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -541,7 +517,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -552,7 +528,7 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -562,16 +538,16 @@ pub const RLIMIT_AS: u8 = libc::RLIMIT_AS as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -592,6 +568,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -605,7 +582,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -619,7 +596,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -633,7 +610,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -644,7 +621,7 @@ pub const RLIMIT_AS: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -654,16 +631,16 @@ pub const RLIMIT_AS: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -684,6 +661,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -697,7 +675,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -711,7 +689,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -725,7 +703,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -736,7 +714,7 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -746,16 +724,16 @@ pub const RLIMIT_CORE: u8 = libc::RLIMIT_CORE as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -776,6 +754,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -789,7 +768,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -803,7 +782,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -817,7 +796,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -828,7 +807,7 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -838,16 +817,16 @@ pub const RLIMIT_CORE: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -868,6 +847,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -881,7 +861,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -895,7 +875,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -909,7 +889,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -920,7 +900,7 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -930,16 +910,16 @@ pub const RLIMIT_CPU: u8 = libc::RLIMIT_CPU as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -960,6 +940,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -973,7 +954,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -987,7 +968,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1001,7 +982,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1012,7 +993,7 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1022,16 +1003,16 @@ pub const RLIMIT_CPU: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1052,6 +1033,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1065,7 +1047,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1079,7 +1061,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1093,7 +1075,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1104,7 +1086,7 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1114,16 +1096,16 @@ pub const RLIMIT_DATA: u8 = libc::RLIMIT_DATA as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1144,6 +1126,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1157,7 +1140,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1171,7 +1154,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1185,7 +1168,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1196,7 +1179,7 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1206,16 +1189,16 @@ pub const RLIMIT_DATA: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1236,6 +1219,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1249,7 +1233,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1263,7 +1247,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1277,7 +1261,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1288,7 +1272,7 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1298,16 +1282,16 @@ pub const RLIMIT_FSIZE: u8 = libc::RLIMIT_FSIZE as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1323,11 +1307,16 @@ pub const RLIMIT_KQUEUES: u8 = u8::MAX;
 #[cfg(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1341,7 +1330,7 @@ pub const RLIMIT_KQUEUES: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1355,7 +1344,7 @@ pub const RLIMIT_KQUEUES: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1366,7 +1355,7 @@ pub const RLIMIT_KQUEUES: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1376,16 +1365,16 @@ pub const RLIMIT_KQUEUES: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1395,11 +1384,16 @@ pub const RLIMIT_LOCKS: u8 = libc::RLIMIT_LOCKS as u8;
 #[cfg(not(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1413,7 +1407,7 @@ pub const RLIMIT_LOCKS: u8 = libc::RLIMIT_LOCKS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1427,7 +1421,7 @@ pub const RLIMIT_LOCKS: u8 = libc::RLIMIT_LOCKS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1438,7 +1432,7 @@ pub const RLIMIT_LOCKS: u8 = libc::RLIMIT_LOCKS as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1448,16 +1442,16 @@ pub const RLIMIT_LOCKS: u8 = libc::RLIMIT_LOCKS as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1474,6 +1468,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1486,7 +1481,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1500,7 +1495,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1514,7 +1509,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1525,7 +1520,7 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1535,16 +1530,16 @@ pub const RLIMIT_LOCKS: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1561,6 +1556,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1573,7 +1569,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1587,7 +1583,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1601,7 +1597,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1612,7 +1608,7 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1622,16 +1618,16 @@ pub const RLIMIT_MEMLOCK: u8 = libc::RLIMIT_MEMLOCK as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1641,11 +1637,16 @@ pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
 #[cfg(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1659,7 +1660,7 @@ pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1673,7 +1674,7 @@ pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1684,7 +1685,7 @@ pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1694,16 +1695,16 @@ pub const RLIMIT_MEMLOCK: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1713,11 +1714,16 @@ pub const RLIMIT_MSGQUEUE: u8 = libc::RLIMIT_MSGQUEUE as u8;
 #[cfg(not(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1731,7 +1737,7 @@ pub const RLIMIT_MSGQUEUE: u8 = libc::RLIMIT_MSGQUEUE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1745,7 +1751,7 @@ pub const RLIMIT_MSGQUEUE: u8 = libc::RLIMIT_MSGQUEUE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1756,7 +1762,7 @@ pub const RLIMIT_MSGQUEUE: u8 = libc::RLIMIT_MSGQUEUE as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1766,16 +1772,16 @@ pub const RLIMIT_MSGQUEUE: u8 = libc::RLIMIT_MSGQUEUE as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1785,11 +1791,16 @@ pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
 #[cfg(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1803,7 +1814,7 @@ pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1817,7 +1828,7 @@ pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1828,7 +1839,7 @@ pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1838,16 +1849,16 @@ pub const RLIMIT_MSGQUEUE: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1857,11 +1868,16 @@ pub const RLIMIT_NICE: u8 = libc::RLIMIT_NICE as u8;
 #[cfg(not(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1875,7 +1891,7 @@ pub const RLIMIT_NICE: u8 = libc::RLIMIT_NICE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1889,7 +1905,7 @@ pub const RLIMIT_NICE: u8 = libc::RLIMIT_NICE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1900,7 +1916,7 @@ pub const RLIMIT_NICE: u8 = libc::RLIMIT_NICE as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1910,16 +1926,16 @@ pub const RLIMIT_NICE: u8 = libc::RLIMIT_NICE as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -1940,6 +1956,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -1953,7 +1970,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -1967,7 +1984,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -1981,7 +1998,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -1992,7 +2009,7 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2002,16 +2019,16 @@ pub const RLIMIT_NICE: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2032,6 +2049,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2045,7 +2063,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2059,7 +2077,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2073,7 +2091,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2084,7 +2102,7 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2094,16 +2112,16 @@ pub const RLIMIT_NOFILE: u8 = libc::RLIMIT_NOFILE as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2127,6 +2145,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2139,7 +2158,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2153,7 +2172,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2167,7 +2186,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2178,7 +2197,7 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2188,16 +2207,16 @@ pub const RLIMIT_NOVMON: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2215,6 +2234,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2227,7 +2247,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2241,7 +2261,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2255,7 +2275,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2266,7 +2286,7 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2276,16 +2296,16 @@ pub const RLIMIT_NPROC: u8 = libc::RLIMIT_NPROC as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2321,6 +2341,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2333,7 +2354,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2347,7 +2368,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2361,7 +2382,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2372,7 +2393,7 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2382,16 +2403,16 @@ pub const RLIMIT_POSIXLOCKS: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2409,6 +2430,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
             target_os = "freebsd",
             target_os = "hurd",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2421,7 +2443,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2435,7 +2457,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2449,7 +2471,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2460,7 +2482,7 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2470,16 +2492,16 @@ pub const RLIMIT_RSS: u8 = libc::RLIMIT_RSS as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2489,11 +2511,16 @@ pub const RLIMIT_RSS: u8 = u8::MAX;
 #[cfg(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2507,7 +2534,7 @@ pub const RLIMIT_RSS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2521,7 +2548,7 @@ pub const RLIMIT_RSS: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2532,7 +2559,7 @@ pub const RLIMIT_RSS: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2542,16 +2569,16 @@ pub const RLIMIT_RSS: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2561,11 +2588,16 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
 #[cfg(not(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2579,7 +2611,7 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2593,7 +2625,7 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2604,7 +2636,7 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2614,16 +2646,16 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2632,8 +2664,9 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
 
 #[cfg(any(
     target_os = "fuchsia",
+    all(target_os = "l4re", not(target_env = "newlib")),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2647,7 +2680,7 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2661,7 +2694,7 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2672,7 +2705,7 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2682,16 +2715,16 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2700,8 +2733,9 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
 
 #[cfg(not(any(
     target_os = "fuchsia",
+    all(target_os = "l4re", not(target_env = "newlib")),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2715,7 +2749,7 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2729,7 +2763,7 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2740,7 +2774,7 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2750,16 +2784,16 @@ pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2791,11 +2825,16 @@ pub const RLIMIT_SBSIZE: u8 = u8::MAX;
 #[cfg(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2809,7 +2848,7 @@ pub const RLIMIT_SBSIZE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2823,7 +2862,7 @@ pub const RLIMIT_SBSIZE: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2834,7 +2873,7 @@ pub const RLIMIT_SBSIZE: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2844,16 +2883,16 @@ pub const RLIMIT_SBSIZE: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2863,11 +2902,16 @@ pub const RLIMIT_SIGPENDING: u8 = libc::RLIMIT_SIGPENDING as u8;
 #[cfg(not(any(
     target_os = "fuchsia",
     all(
-        any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+        any(
+            target_os = "android",
+            target_os = "emscripten",
+            target_os = "l4re",
+            target_os = "redox"
+        ),
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2881,7 +2925,7 @@ pub const RLIMIT_SIGPENDING: u8 = libc::RLIMIT_SIGPENDING as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2895,7 +2939,7 @@ pub const RLIMIT_SIGPENDING: u8 = libc::RLIMIT_SIGPENDING as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2906,7 +2950,7 @@ pub const RLIMIT_SIGPENDING: u8 = libc::RLIMIT_SIGPENDING as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2916,16 +2960,16 @@ pub const RLIMIT_SIGPENDING: u8 = libc::RLIMIT_SIGPENDING as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -2946,6 +2990,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -2959,7 +3004,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -2973,7 +3018,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -2987,7 +3032,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -2998,7 +3043,7 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -3008,16 +3053,16 @@ pub const RLIMIT_SIGPENDING: u8 = u8::MAX;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -3038,6 +3083,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
             target_os = "hurd",
             target_os = "illumos",
             target_os = "ios",
+            target_os = "l4re",
             target_os = "macos",
             target_os = "netbsd",
             target_os = "nto",
@@ -3051,7 +3097,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
         not(target_env = "newlib")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "gnu", target_env = "uclibc"),
         not(any(
             target_arch = "mips",
@@ -3065,7 +3111,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_env = "musl", target_env = "ohos"),
         not(any(
             target_arch = "mips",
@@ -3079,7 +3125,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
         ))
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -3090,7 +3136,7 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(
             target_arch = "mips",
             target_arch = "mips32r6",
@@ -3100,16 +3146,16 @@ pub const RLIMIT_STACK: u8 = libc::RLIMIT_STACK as u8;
     ),
     all(
         target_env = "gnu",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
         target_env = "musl",
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "powerpc", target_arch = "powerpc64")
     ),
     all(
-        any(target_os = "l4re", target_os = "linux"),
+        target_os = "linux",
         any(target_arch = "sparc", target_arch = "sparc64"),
         not(target_env = "newlib")
     )
@@ -3179,6 +3225,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3191,7 +3238,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3205,7 +3252,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3219,7 +3266,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3230,7 +3277,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3240,16 +3287,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3270,6 +3317,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3283,7 +3331,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3297,7 +3345,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3311,7 +3359,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3322,7 +3370,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3332,16 +3380,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3362,6 +3410,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3375,7 +3424,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3389,7 +3438,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3403,7 +3452,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3414,7 +3463,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3424,16 +3473,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3454,6 +3503,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3467,7 +3517,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3481,7 +3531,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3495,7 +3545,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3506,7 +3556,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3516,16 +3566,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3546,6 +3596,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3559,7 +3610,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3573,7 +3624,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3587,7 +3638,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3598,7 +3649,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3608,16 +3659,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3630,11 +3681,16 @@ mod tests {
         #[cfg(any(
             target_os = "fuchsia",
             all(
-                any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+                any(
+                    target_os = "android",
+                    target_os = "emscripten",
+                    target_os = "l4re",
+                    target_os = "redox"
+                ),
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3648,7 +3704,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3662,7 +3718,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3673,7 +3729,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3683,16 +3739,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3709,6 +3765,7 @@ mod tests {
                     target_os = "freebsd",
                     target_os = "hurd",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3721,7 +3778,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3735,7 +3792,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3749,7 +3806,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3760,7 +3817,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3770,16 +3827,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3789,11 +3846,16 @@ mod tests {
         #[cfg(any(
             target_os = "fuchsia",
             all(
-                any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+                any(
+                    target_os = "android",
+                    target_os = "emscripten",
+                    target_os = "l4re",
+                    target_os = "redox"
+                ),
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3807,7 +3869,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3821,7 +3883,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3832,7 +3894,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3842,16 +3904,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3861,11 +3923,16 @@ mod tests {
         #[cfg(any(
             target_os = "fuchsia",
             all(
-                any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+                any(
+                    target_os = "android",
+                    target_os = "emscripten",
+                    target_os = "l4re",
+                    target_os = "redox"
+                ),
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3879,7 +3946,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3893,7 +3960,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3904,7 +3971,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3914,16 +3981,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -3944,6 +4011,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -3957,7 +4025,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -3971,7 +4039,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -3985,7 +4053,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -3996,7 +4064,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4006,16 +4074,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4036,6 +4104,7 @@ mod tests {
                     target_os = "freebsd",
                     target_os = "hurd",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -4048,7 +4117,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4062,7 +4131,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4076,7 +4145,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4087,7 +4156,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4097,16 +4166,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4133,6 +4202,7 @@ mod tests {
                     target_os = "freebsd",
                     target_os = "hurd",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -4145,7 +4215,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4159,7 +4229,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4173,7 +4243,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4184,7 +4254,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4194,16 +4264,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4213,11 +4283,16 @@ mod tests {
         #[cfg(any(
             target_os = "fuchsia",
             all(
-                any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+                any(
+                    target_os = "android",
+                    target_os = "emscripten",
+                    target_os = "l4re",
+                    target_os = "redox"
+                ),
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4231,7 +4306,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4245,7 +4320,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4256,7 +4331,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4266,16 +4341,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4284,8 +4359,9 @@ mod tests {
 
         #[cfg(any(
             target_os = "fuchsia",
+            all(target_os = "l4re", not(target_env = "newlib")),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4299,7 +4375,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4313,7 +4389,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4324,7 +4400,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4334,16 +4410,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4364,11 +4440,16 @@ mod tests {
         #[cfg(any(
             target_os = "fuchsia",
             all(
-                any(target_os = "android", target_os = "emscripten", target_os = "redox"),
+                any(
+                    target_os = "android",
+                    target_os = "emscripten",
+                    target_os = "l4re",
+                    target_os = "redox"
+                ),
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4382,7 +4463,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4396,7 +4477,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4407,7 +4488,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4417,16 +4498,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
@@ -4447,6 +4528,7 @@ mod tests {
                     target_os = "hurd",
                     target_os = "illumos",
                     target_os = "ios",
+                    target_os = "l4re",
                     target_os = "macos",
                     target_os = "netbsd",
                     target_os = "nto",
@@ -4460,7 +4542,7 @@ mod tests {
                 not(target_env = "newlib")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "gnu", target_env = "uclibc"),
                 not(any(
                     target_arch = "mips",
@@ -4474,7 +4556,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_env = "musl", target_env = "ohos"),
                 not(any(
                     target_arch = "mips",
@@ -4488,7 +4570,7 @@ mod tests {
                 ))
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4499,7 +4581,7 @@ mod tests {
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(
                     target_arch = "mips",
                     target_arch = "mips32r6",
@@ -4509,16 +4591,16 @@ mod tests {
             ),
             all(
                 target_env = "gnu",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
                 target_env = "musl",
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "powerpc", target_arch = "powerpc64")
             ),
             all(
-                any(target_os = "l4re", target_os = "linux"),
+                target_os = "linux",
                 any(target_arch = "sparc", target_arch = "sparc64"),
                 not(target_env = "newlib")
             )
