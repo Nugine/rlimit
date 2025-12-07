@@ -11,6 +11,9 @@ on:
 
 name: CI
 
+permissions:
+  contents: read
+
 jobs:
   develop:
     runs-on: ubuntu-latest
@@ -154,7 +157,13 @@ jobs:
           cross test --all-features --target=${{ matrix.target }}
 
   macos:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-latest
+          - runner: macos-13
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -174,12 +183,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-apple-darwin
       - run: |
           cargo test --all-features
-      - run: |
-          cargo check --target x86_64-apple-darwin
 
   diff-codegen:
     runs-on: ubuntu-latest
@@ -190,3 +195,43 @@ jobs:
         run: |
           ./scripts/codegen.sh
           [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642
+
+  bsd:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - name: freebsd
+            version: '14.3'
+          - name: netbsd
+            version: '10.1'
+          # - name: openbsd
+          #   version: '7.8'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test on ${{ matrix.os.name }}
+        uses: cross-platform-actions/action@v0.30.0
+        with:
+          operating_system: ${{ matrix.os.name }}
+          version: ${{ matrix.os.version }}
+          run: |
+            uname -a
+            # Install curl if needed (NetBSD may not have it by default)
+            if ! command -v curl > /dev/null 2>&1; then
+              if command -v pkgin > /dev/null 2>&1; then
+                sudo pkgin -y install curl
+              elif command -v pkg_add > /dev/null 2>&1; then
+                sudo pkg_add -v curl
+              elif command -v pkg > /dev/null 2>&1; then
+                sudo pkg install -y curl
+              fi
+            fi
+            # Install rustup
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal
+            . "$HOME/.cargo/env"
+            rustc --version
+            cargo --version
+            cargo test --all-features
