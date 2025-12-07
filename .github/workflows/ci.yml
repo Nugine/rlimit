@@ -11,6 +11,9 @@ on:
 
 name: CI
 
+permissions:
+  contents: read
+
 jobs:
   develop:
     runs-on: ubuntu-latest
