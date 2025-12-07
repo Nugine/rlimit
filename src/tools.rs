@@ -32,13 +32,49 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 
 /// Try to increase NOFILE limit and return the current soft limit.
 ///
-/// `lim` is the expected limit which can be up to [`u64::MAX`].
+/// This is a convenience function that safely increases the `NOFILE` (maximum number of open
+/// file descriptors) limit to the requested value, or as high as possible if the requested
+/// value exceeds system limits.
 ///
-/// This function does nothing and returns `Ok(lim)`
-/// if `RLIMIT_NOFILE` does not exist on current platform.
+/// # Parameters
+///
+/// - `lim`: The desired limit value (can be [`u64::MAX`] to request the maximum possible)
+///
+/// # Returns
+///
+/// Returns the actual limit that was set, which may be lower than requested if:
+/// - The requested limit exceeds the hard limit
+/// - The requested limit exceeds system maximums (e.g., `kern.maxfilesperproc` on macOS)
+/// - The current soft limit is already at or above the requested limit
+///
+/// # Platform-specific behavior
+///
+/// - **Unix/Linux**: Increases `RLIMIT_NOFILE` up to the hard limit
+/// - **macOS**: Respects `kern.maxfilesperproc` sysctl value to avoid errors
+/// - **Windows**: Does nothing and returns the requested limit
+///
+/// # Examples
+///
+/// ```no_run
+/// use rlimit::increase_nofile_limit;
+///
+/// // Try to set NOFILE to 10240
+/// match increase_nofile_limit(10240) {
+///     Ok(lim) => println!("NOFILE limit is now {}", lim),
+///     Err(e) => eprintln!("Failed: {}", e),
+/// }
+///
+/// // Request the maximum possible limit
+/// let max_limit = increase_nofile_limit(u64::MAX).unwrap();
+/// println!("Maximum NOFILE limit: {}", max_limit);
+/// ```
 ///
 /// # Errors
-/// Returns an error if any syscall failed.
+///
+/// Returns an error if:
+/// - Getting the current limits fails
+/// - Setting the new limit fails (e.g., permission denied)
+/// - On macOS, if querying `kern.maxfilesperproc` fails
 pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
     #[cfg(unix)]
     {

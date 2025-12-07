@@ -7,13 +7,50 @@ use std::io;
 
 /// A kind of resource.
 ///
-/// All resource constants are available on all unix platforms.
-/// Passing an unsupported resource to `[set|get|p]rlimit` will
-/// result in a custom IO error.
+/// Represents a system resource type that can have limits set on it. Each resource
+/// controls a different aspect of process behavior (memory usage, open files, CPU time, etc.).
 ///
-/// **Be careful**: The documentation of [`Resource`](Resource) constants are based on a few systems.
+/// # Platform Support
 ///
-/// It may be inconsistent with other platforms.
+/// All resource constants are available on all Unix platforms for convenience, but not all
+/// resources are supported on every platform. Passing an unsupported resource to
+/// [`setrlimit`], [`getrlimit`], or `prlimit` will result in an error.
+///
+/// Use [`Resource::is_supported`] to check if a resource is available on the current platform.
+///
+/// # Common Resources
+///
+/// - [`Resource::NOFILE`] - Maximum number of open file descriptors
+/// - [`Resource::NPROC`] - Maximum number of processes/threads
+/// - [`Resource::FSIZE`] - Maximum file size
+/// - [`Resource::DATA`] - Maximum data segment size
+/// - [`Resource::STACK`] - Maximum stack size
+/// - [`Resource::AS`] - Maximum address space (virtual memory)
+/// - [`Resource::CORE`] - Maximum core file size
+/// - [`Resource::CPU`] - Maximum CPU time in seconds
+///
+/// See the individual constant documentation for detailed descriptions.
+///
+/// # Examples
+///
+/// ```
+/// # #[cfg(unix)]
+/// # {
+/// use rlimit::Resource;
+///
+/// // Check if a resource is supported
+/// if Resource::NOFILE.is_supported() {
+///     let (soft, hard) = Resource::NOFILE.get().unwrap();
+///     println!("NOFILE: soft={}, hard={}", soft, hard);
+/// }
+///
+/// // Get the resource name
+/// assert_eq!(Resource::CPU.as_name(), "RLIMIT_CPU");
+/// # }
+/// ```
+///
+/// **Note**: The documentation for resource constants is based on common systems.
+/// Some details may vary across different platforms.
 ///
 /// ## References
 ///
@@ -54,6 +91,20 @@ impl std::error::Error for ParseResourceError {}
 
 impl Resource {
     /// Set resource limits.
+    ///
+    /// Convenience method equivalent to [`setrlimit(self, soft, hard)`][setrlimit].
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # #[cfg(unix)]
+    /// # {
+    /// use rlimit::Resource;
+    ///
+    /// Resource::NOFILE.set(1024, 2048).unwrap();
+    /// # }
+    /// ```
+    ///
     /// # Errors
     /// See [`setrlimit`]
     #[inline]
@@ -62,6 +113,25 @@ impl Resource {
     }
 
     /// Get resource limits.
+    ///
+    /// Convenience method equivalent to [`getrlimit(self)`][getrlimit].
+    ///
+    /// # Returns
+    ///
+    /// Returns a tuple `(soft, hard)` containing the current soft and hard limits.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # #[cfg(unix)]
+    /// # {
+    /// use rlimit::Resource;
+    ///
+    /// let (soft, hard) = Resource::NOFILE.get().unwrap();
+    /// println!("NOFILE: soft={}, hard={}", soft, hard);
+    /// # }
+    /// ```
+    ///
     /// # Errors
     /// See [`getrlimit`]
     #[inline]
@@ -70,6 +140,21 @@ impl Resource {
     }
 
     /// Get soft resource limit (`rlim_cur`)
+    ///
+    /// Returns only the soft limit, which is the currently enforced limit.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # #[cfg(unix)]
+    /// # {
+    /// use rlimit::Resource;
+    ///
+    /// let soft = Resource::NOFILE.get_soft().unwrap();
+    /// println!("Current NOFILE soft limit: {}", soft);
+    /// # }
+    /// ```
+    ///
     /// # Errors
     /// See [`getrlimit`]
     pub fn get_soft(self) -> io::Result<u64> {
@@ -77,6 +162,22 @@ impl Resource {
     }
 
     /// Get hard resource limit (`rlim_max`)
+    ///
+    /// Returns only the hard limit, which is the maximum value that the soft limit
+    /// can be raised to by an unprivileged process.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # #[cfg(unix)]
+    /// # {
+    /// use rlimit::Resource;
+    ///
+    /// let hard = Resource::NOFILE.get_hard().unwrap();
+    /// println!("Maximum NOFILE limit: {}", hard);
+    /// # }
+    /// ```
+    ///
     /// # Errors
     /// See [`getrlimit`]
     pub fn get_hard(self) -> io::Result<u64> {
