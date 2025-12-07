@@ -130,6 +130,10 @@ pub type pid_t = i32;
 /// Set and get the resource limits of an arbitrary process.
 /// # Errors
 /// See <https://man7.org/linux/man-pages/man2/prlimit.2.html>
+///
+/// # Note
+/// When using the `linux_raw` feature, getting limits from another process (pid != 0)
+/// without setting new limits is not supported due to rustix API limitations.
 #[cfg(all(feature = "linux_raw", any(target_os = "linux", target_os = "android")))]
 #[allow(clippy::unnecessary_min_or_max)]
 #[inline]
@@ -153,6 +157,16 @@ pub fn prlimit(
         return Ok(());
     }
 
+    // For other processes or when setting limits, we need to use prlimit
+    if new_limit.is_none() && pid != 0 {
+        // Rustix doesn't support getting limits from another process without setting
+        // (the underlying prlimit64 syscall does via NULL new_rlim, but rustix's API doesn't expose this)
+        return Err(io::Error::new(
+            io::ErrorKind::Unsupported,
+            "getting limits from another process without setting is not supported with linux_raw feature"
+        ));
+    }
+
     let rustix_pid = if pid == 0 {
         None
     } else {
@@ -161,17 +175,12 @@ pub fn prlimit(
         })?)
     };
 
-    // When new_limit is None but pid != 0, we need to use prlimit with the current values
-    // to get the old values without changing them
-    let new_rlim = if let Some((soft, hard)) = new_limit {
-        rustix::process::Rlimit {
-            current: if soft == INFINITY { None } else { Some(soft) },
-            maximum: if hard == INFINITY { None } else { Some(hard) },
-        }
-    } else {
-        // Get current values first to use as "new" values (no change)
-        rustix::process::getrlimit(rustix_resource)
-    };
+    let new_rlim = new_limit.map(|(soft, hard)| rustix::process::Rlimit {
+        current: if soft == INFINITY { None } else { Some(soft) },
+        maximum: if hard == INFINITY { None } else { Some(hard) },
+    }).ok_or_else(|| {
+        io::Error::new(io::ErrorKind::InvalidInput, "new_limit required for pid != 0 with linux_raw")
+    })?;
 
     let old_rlim = rustix::process::prlimit(rustix_pid, rustix_resource, new_rlim)
         .map_err(io::Error::from)?;
