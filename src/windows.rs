@@ -22,7 +22,6 @@ extern "C" {
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
     // Validate that new_max fits in c_int to prevent overflow
-    #[allow(clippy::cast_possible_wrap)]
     if new_max > c_int::MAX as u32 {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
