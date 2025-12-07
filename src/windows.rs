@@ -8,15 +8,27 @@ extern "C" {
 
 /// Sets a maximum for the number of simultaneously open files at the stream I/O level.
 ///
+/// The maximum allowed value is platform-dependent, typically 8192 on modern systems.
+/// Values that would overflow when converted to `c_int` or exceed the platform's
+/// maximum will result in an error.
+///
 /// See <https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/setmaxstdio?view=msvc-170>
 ///
 /// # Errors
-/// See the official documentation
+/// Returns an error if:
+/// - `new_max` exceeds `c_int::MAX` (typically 2,147,483,647)
+/// - `new_max` is below the minimum (typically 20) or above the platform maximum (typically 8192)
+/// - The underlying `_setmaxstdio` call fails
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
-    // A negative `new_max` will cause EINVAL.
-    // A negative `ret` should never appear.
-    // It is safe even if the return value is wrong.
+    // Validate that new_max fits in c_int to prevent overflow
+    if new_max > c_int::MAX as u32 {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "new_max exceeds maximum allowed value",
+        ));
+    }
+
     #[allow(clippy::cast_possible_wrap, clippy::cast_sign_loss)]
     unsafe {
         let ret = _setmaxstdio(new_max as c_int);
