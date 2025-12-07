@@ -16,6 +16,18 @@ Resource limits.
 
 Documentation: <https://docs.rs/rlimit>
 
+## Features
+
+### Linux raw syscalls
+
+On Linux, you can enable the `linux_raw` feature to use direct syscalls via [rustix](https://crates.io/crates/rustix) instead of going through libc. This enables **pure Rust** binaries without libc dependency.
+
+Add this to your `Cargo.toml`:
+```toml
+[dependencies]
+rlimit = { version = "0.10", features = ["linux_raw"] }
+```
+
 ## Contributing
 
 + [Development Guide](./CONTRIBUTING.md)

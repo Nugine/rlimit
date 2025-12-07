@@ -3,6 +3,7 @@
 #![cfg_attr(feature = "linux_raw", allow(unused_imports, dead_code))]
 
 #[cfg(not(feature = "linux_raw"))]
+#[allow(clippy::single_component_path_imports)]
 use libc;
 
 #[cfg(any(

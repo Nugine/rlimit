@@ -61,7 +61,7 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
         current: if soft == INFINITY { None } else { Some(soft) },
         maximum: if hard == INFINITY { None } else { Some(hard) },
     };
-    rustix::process::setrlimit(rustix_resource, rlimit).map_err(|e| e.into())
+    rustix::process::setrlimit(rustix_resource, rlimit).map_err(std::convert::Into::into)
 }
 
 /// Set resource limits.
@@ -163,23 +163,22 @@ pub fn prlimit(
 
     // When new_limit is None but pid != 0, we need to use prlimit with the current values
     // to get the old values without changing them
-    let new_rlimit = if let Some((soft, hard)) = new_limit {
+    let new_rlim = if let Some((soft, hard)) = new_limit {
         rustix::process::Rlimit {
             current: if soft == INFINITY { None } else { Some(soft) },
             maximum: if hard == INFINITY { None } else { Some(hard) },
         }
     } else {
         // Get current values first to use as "new" values (no change)
-        let current = rustix::process::getrlimit(rustix_resource);
-        current
+        rustix::process::getrlimit(rustix_resource)
     };
 
-    let old_rlimit = rustix::process::prlimit(rustix_pid, rustix_resource, new_rlimit)
-        .map_err(|e| io::Error::from(e))?;
+    let old_rlim = rustix::process::prlimit(rustix_pid, rustix_resource, new_rlim)
+        .map_err(io::Error::from)?;
 
     if let Some((soft, hard)) = old_limit {
-        *soft = old_rlimit.current.unwrap_or(INFINITY);
-        *hard = old_rlimit.maximum.unwrap_or(INFINITY);
+        *soft = old_rlim.current.unwrap_or(INFINITY);
+        *hard = old_rlim.maximum.unwrap_or(INFINITY);
     }
 
     Ok(())
