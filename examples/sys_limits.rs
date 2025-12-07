@@ -25,7 +25,7 @@ fn main() {
                 println!("  Allocated:           {}", file_nr.allocated);
                 println!("  Free:                {}", file_nr.free);
                 println!("  Maximum:             {}", file_nr.maximum);
-                
+
                 let usage_percent = if file_nr.maximum > 0 {
                     (file_nr.allocated as f64 / file_nr.maximum as f64) * 100.0
                 } else {
