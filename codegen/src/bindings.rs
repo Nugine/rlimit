@@ -9,6 +9,12 @@ pub fn codegen(item_list: &[CfgItem]) {
         "",
     ]);
 
+    // Add conditional compilation for rustix backend
+    g!("#[cfg(not(feature = \"linux_raw\"))]");
+    g!("#[allow(clippy::single_component_path_imports)]");
+    g!("use libc;");
+    g!();
+
     codegen_64(item_list);
     codegen_inf(item_list);
     codegen_resources(item_list);
@@ -23,7 +29,7 @@ fn codegen_64(item_list: &[CfgItem]) {
         let item = item_list.iter().find(|item| item.name == name).unwrap();
         let cfg = item.cfg.clone();
 
-        g!("#[cfg({cfg64})]");
+        g!("#[cfg(all(not(feature = \"linux_raw\"), {cfg64}))]");
         g!("pub use libc::{name64} as {name};");
         g!();
 
@@ -31,7 +37,7 @@ fn codegen_64(item_list: &[CfgItem]) {
         if otherwise.is_const_false() {
             assert_eq!(name, "prlimit");
         } else {
-            g!("#[cfg({otherwise})]");
+            g!("#[cfg(all(not(feature = \"linux_raw\"), {otherwise}))]");
             g!("pub use libc::{name};");
             g!();
         }
@@ -43,11 +49,12 @@ fn codegen_inf(item_list: &[CfgItem]) {
     let item = item_list.iter().find(|item| item.name == name).unwrap();
     let cfg = &item.cfg;
 
-    g!("#[cfg({cfg})]");
+    g!("#[cfg(all(not(feature = \"linux_raw\"), {cfg}))]");
     g!("pub const {name}: u64 = libc::{name} as u64;");
     g!();
 
-    g!("#[cfg(not({cfg}))]");
+    g!("#[cfg(any(feature = \"linux_raw\", not({cfg})))]");
+    g!("#[allow(dead_code)]");
     g!("pub const {name}: u64 = u64::MAX;");
     g!();
 }
@@ -78,11 +85,11 @@ fn codegen_resources(item_list: &[CfgItem]) {
         let name = item.name.as_str();
         let cfg = &item.cfg;
 
-        g!("#[cfg({cfg})]");
+        g!("#[cfg(all(not(feature = \"linux_raw\"), {cfg}))]");
         g!("pub const {name}: u8 = libc::{name} as u8;");
         g!();
 
-        g!("#[cfg(not({cfg}))]");
+        g!("#[cfg(any(feature = \"linux_raw\", not({cfg})))]");
         g!("pub const {name}: u8 = u8::MAX;");
         g!();
     }
@@ -98,7 +105,7 @@ fn codegen_resources(item_list: &[CfgItem]) {
         let name = item.name.as_str();
         let cfg = &item.cfg;
 
-        g!("#[cfg({cfg})]");
+        g!("#[cfg(all(not(feature = \"linux_raw\"), {cfg}))]");
         g!("assert!((0..128).contains(&libc::{name}));");
         g!();
     }

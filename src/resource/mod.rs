@@ -110,7 +110,7 @@ impl Resource {
     /// `u8::MAX` indicates unsupported resource.
     #[inline]
     #[must_use]
-    #[cfg_attr(feature = "linux_raw", allow(dead_code))]
+    #[cfg(not(feature = "linux_raw"))]
     pub(crate) const fn as_raw(self) -> u8 {
         self.value
     }
