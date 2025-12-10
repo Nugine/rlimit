@@ -41,6 +41,31 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
 
 /// Returns the number of simultaneously open files permitted at the stream I/O level.
 ///
+/// Windows-specific function that queries the current maximum number of files that can be
+/// opened simultaneously using the C runtime stream I/O functions.
+///
+/// # Returns
+///
+/// The current maximum number of open files (typically 512 by default).
+///
+/// # Examples
+///
+/// ```no_run
+/// # #[cfg(windows)]
+/// # {
+/// let current = rlimit::getmaxstdio();
+/// println!("Current max stdio: {}", current);
+///
+/// // Check if we need to increase the limit
+/// if current < 1024 {
+///     match rlimit::setmaxstdio(1024) {
+///         Ok(new_max) => println!("Increased limit to {}", new_max),
+///         Err(e) => eprintln!("Failed to increase limit: {}", e),
+///     }
+/// }
+/// # }
+/// ```
+///
 /// See <https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/getmaxstdio?view=msvc-170>
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 #[must_use]
