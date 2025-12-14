@@ -59,10 +59,8 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
         // SAFETY: On platforms where rlim_t is u64, this cast is lossless (no-op).
         // On platforms where rlim_t is smaller (e.g., u32), this is a widening cast
         // which is always safe. The min(INFINITY) clamps to our portable maximum.
-        let soft_val = rlim.rlim_cur as u64;
-        let hard_val = rlim.rlim_max as u64;
-        let soft = soft_val.min(INFINITY);
-        let hard = hard_val.min(INFINITY);
+        let soft = (rlim.rlim_cur as u64).min(INFINITY);
+        let hard = (rlim.rlim_max as u64).min(INFINITY);
         Ok((soft, hard))
     } else {
         Err(io::Error::last_os_error())
@@ -118,12 +116,8 @@ pub fn prlimit(
     if ret == 0 {
         if let Some((soft, hard)) = old_limit {
             // SAFETY: See getrlimit() for detailed explanation of cast safety.
-            // Casting rlim_t to u64: lossless on most platforms (u64 -> u64),
-            // widening on 32-bit platforms (u32 -> u64).
-            let soft_val = old_rlim.rlim_cur as u64;
-            let hard_val = old_rlim.rlim_max as u64;
-            *soft = soft_val.min(INFINITY);
-            *hard = hard_val.min(INFINITY);
+            *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
+            *hard = (old_rlim.rlim_max as u64).min(INFINITY);
         }
 
         Ok(())
