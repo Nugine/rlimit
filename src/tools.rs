@@ -26,7 +26,10 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
         return Err(io::Error::last_os_error());
     }
 
+    // SAFETY: sysctl should return a non-negative value for KERN_MAXFILESPERPROC.
+    // Casting a non-negative c_int to u64 is always safe (widening conversion).
     debug_assert!(max_files_per_proc >= 0);
+    #[allow(clippy::cast_sign_loss)]
     Ok(max_files_per_proc as u64)
 }
 
