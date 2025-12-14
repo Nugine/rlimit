@@ -14,7 +14,7 @@ use std::path::Path;
 #[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 #[non_exhaustive]
-pub struct SystemLimits {
+pub struct SysLimits {
     /// System-wide limit on the total number of file descriptors that can be allocated.
     ///
     /// This corresponds to `/proc/sys/fs/file-max`.
@@ -49,7 +49,7 @@ pub struct FileNr {
     pub maximum: u64,
 }
 
-impl SystemLimits {
+impl SysLimits {
     /// Reads system-wide file descriptor limits from `/proc/sys/fs/`.
     ///
     /// # Errors
@@ -59,9 +59,9 @@ impl SystemLimits {
     /// ```no_run
     /// # #[cfg(any(target_os = "linux", target_os = "android"))]
     /// # {
-    /// use rlimit::SystemLimits;
+    /// use rlimit::SysLimits;
     ///
-    /// let limits = SystemLimits::read().unwrap();
+    /// let limits = SysLimits::read().unwrap();
     /// println!("System file-max: {:?}", limits.file_max);
     /// println!("Current usage: {:?}", limits.file_nr);
     /// println!("Per-process nr_open: {:?}", limits.nr_open);
@@ -93,10 +93,10 @@ impl SystemLimits {
     /// ```no_run
     /// # #[cfg(any(target_os = "linux", target_os = "android"))]
     /// # {
-    /// use rlimit::SystemLimits;
+    /// use rlimit::SysLimits;
     ///
     /// // This typically requires root privileges
-    /// SystemLimits::set_file_max(1048576).unwrap();
+    /// SysLimits::set_file_max(1048576).unwrap();
     /// # }
     /// ```
     pub fn set_file_max(value: u64) -> io::Result<()> {
@@ -117,10 +117,10 @@ impl SystemLimits {
     /// ```no_run
     /// # #[cfg(any(target_os = "linux", target_os = "android"))]
     /// # {
-    /// use rlimit::SystemLimits;
+    /// use rlimit::SysLimits;
     ///
     /// // This typically requires root privileges
-    /// SystemLimits::set_nr_open(1048576).unwrap();
+    /// SysLimits::set_nr_open(1048576).unwrap();
     /// # }
     /// ```
     pub fn set_nr_open(value: u64) -> io::Result<()> {
@@ -181,18 +181,18 @@ mod tests {
     fn test_read_system_limits() {
         // This test only verifies that the function doesn't crash
         // The actual values depend on the system configuration
-        let result = SystemLimits::read();
-        
+        let result = SysLimits::read();
+
         // Should succeed on Linux/Android systems
         if cfg!(any(target_os = "linux", target_os = "android")) {
             let limits = result.unwrap();
-            
+
             // At least one of the fields should be populated
             assert!(
                 limits.file_max.is_some() || limits.file_nr.is_some() || limits.nr_open.is_some(),
                 "At least one limit should be readable"
             );
-            
+
             // If file_nr is present, validate its structure
             if let Some(file_nr) = limits.file_nr {
                 // Maximum should match file_max if both are present
@@ -207,22 +207,22 @@ mod tests {
     fn test_file_nr_parsing() {
         // Test the internal parsing logic with mock data
         use std::io::Write;
-        
+
         let temp_dir = std::env::temp_dir();
         let test_file = temp_dir.join("test_file_nr.txt");
-        
+
         // Write test data
         let mut file = fs::File::create(&test_file).unwrap();
         write!(file, "2208\t0\t9223372036854775807").unwrap();
         file.flush().unwrap();
         drop(file);
-        
+
         // Read and verify
         let result = read_file_nr(&test_file).unwrap();
         assert_eq!(result.allocated, 2208);
         assert_eq!(result.free, 0);
-        assert_eq!(result.maximum, 9223372036854775807);
-        
+        assert_eq!(result.maximum, 9_223_372_036_854_775_807);
+
         // Clean up
         fs::remove_file(&test_file).ok();
     }
@@ -230,20 +230,20 @@ mod tests {
     #[test]
     fn test_u64_parsing() {
         use std::io::Write;
-        
+
         let temp_dir = std::env::temp_dir();
         let test_file = temp_dir.join("test_u64.txt");
-        
+
         // Write test data
         let mut file = fs::File::create(&test_file).unwrap();
-        write!(file, "1048576\n").unwrap();
+        writeln!(file, "1048576").unwrap();
         file.flush().unwrap();
         drop(file);
-        
+
         // Read and verify
         let result = read_u64_from_file(&test_file).unwrap();
-        assert_eq!(result, 1048576);
-        
+        assert_eq!(result, 1_048_576);
+
         // Clean up
         fs::remove_file(&test_file).ok();
     }

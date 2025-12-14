@@ -8,12 +8,12 @@
 
 #[cfg(any(target_os = "linux", target_os = "android"))]
 fn main() {
-    use rlimit::{Resource, SystemLimits};
+    use rlimit::{Resource, SysLimits};
 
     println!("=== System-wide File Descriptor Limits ===\n");
 
     // Read system-wide limits
-    match SystemLimits::read() {
+    match SysLimits::read() {
         Ok(limits) => {
             if let Some(file_max) = limits.file_max {
                 println!("System file-max:       {}", file_max);

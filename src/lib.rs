@@ -27,23 +27,6 @@
 //! # }
 //! ```
 //!
-//! ## System-wide file descriptor limits (Linux/Android only)
-//!
-//! On Linux and Android, you can read system-wide file descriptor limits from `/proc/sys/fs/`.
-//! See the example [sys_limits](https://github.com/Nugine/rlimit/blob/main/examples/sys_limits.rs).
-//!
-//! ```no_run
-//! # #[cfg(any(target_os = "linux", target_os = "android"))]
-//! # {
-//! use rlimit::SystemLimits;
-//!
-//! let limits = SystemLimits::read().unwrap();
-//! println!("System-wide file-max: {:?}", limits.file_max);
-//! println!("Current file usage: {:?}", limits.file_nr);
-//! println!("Per-process nr_open: {:?}", limits.nr_open);
-//! # }
-//! ```
-//!
 //! ## Windows
 //!
 //! Windows does not have Unix-like resource limits.

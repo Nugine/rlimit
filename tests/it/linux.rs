@@ -95,11 +95,11 @@ fn linux_proc_limits() {
 
 #[test]
 fn linux_sys_limits() {
-    use rlimit::SystemLimits;
+    use rlimit::SysLimits;
 
     atomically(|| {
         // Test reading system limits
-        let limits = SystemLimits::read().unwrap();
+        let limits = SysLimits::read().unwrap();
 
         // file_max should be present
         assert!(limits.file_max.is_some(), "file_max should be readable");
