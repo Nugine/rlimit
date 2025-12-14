@@ -104,7 +104,7 @@ fn linux_sys_limits() {
         // file_max should be present
         assert!(limits.file_max.is_some(), "file_max should be readable");
         let file_max = limits.file_max.unwrap();
-        println!("file_max: {}", file_max);
+        println!("file_max: {file_max}");
 
         // file_nr should be present and valid
         assert!(limits.file_nr.is_some(), "file_nr should be readable");
@@ -123,7 +123,7 @@ fn linux_sys_limits() {
         // nr_open should be present
         assert!(limits.nr_open.is_some(), "nr_open should be readable");
         let nr_open = limits.nr_open.unwrap();
-        println!("nr_open: {}", nr_open);
+        println!("nr_open: {nr_open}");
 
         // nr_open should be greater than 0
         assert!(nr_open > 0, "nr_open should be positive");

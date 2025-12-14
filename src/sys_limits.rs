@@ -24,7 +24,7 @@ pub struct SysLimits {
     ///
     /// This corresponds to `/proc/sys/fs/file-nr` and contains three values:
     /// - `allocated`: Number of allocated file descriptors
-    /// - `free`: Number of free file descriptors
+    /// - `free`: Number of free file descriptors (deprecated, always 0 in modern kernels)
     /// - `maximum`: Maximum number of file descriptors (same as `file_max`)
     ///
     /// This field is read-only.
@@ -38,12 +38,17 @@ pub struct SysLimits {
 }
 
 /// File descriptor usage statistics from `/proc/sys/fs/file-nr`.
+///
+/// **Note:** The "free" field has been deprecated since Linux 2.6 and is always 0 in modern kernels.
 #[cfg_attr(docsrs, doc(cfg(any(target_os = "linux", target_os = "android"))))]
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct FileNr {
     /// Number of allocated file descriptors.
     pub allocated: u64,
     /// Number of free file descriptors.
+    ///
+    /// **Deprecated:** This field has been deprecated since Linux 2.6 and is always 0 in modern kernels.
+    /// It does not contain meaningful data.
     pub free: u64,
     /// Maximum number of file descriptors (same as `file_max`).
     pub maximum: u64,
@@ -139,7 +144,7 @@ fn read_u64_from_file(path: impl AsRef<Path>) -> io::Result<u64> {
 
 /// Reads file descriptor statistics from `/proc/sys/fs/file-nr`.
 ///
-/// The file contains three tab-separated values: allocated, free, and maximum.
+/// The file contains three whitespace-separated values: allocated, free, and maximum.
 fn read_file_nr(path: impl AsRef<Path>) -> io::Result<FileNr> {
     let content = fs::read_to_string(path)?;
     let parts: Vec<&str> = content.split_whitespace().collect();
@@ -209,7 +214,10 @@ mod tests {
         use std::io::Write;
 
         let temp_dir = std::env::temp_dir();
-        let test_file = temp_dir.join("test_file_nr.txt");
+        let test_file = temp_dir.join(format!(
+            "test_file_nr_{:?}.txt",
+            std::thread::current().id()
+        ));
 
         // Write test data
         let mut file = fs::File::create(&test_file).unwrap();
@@ -232,7 +240,10 @@ mod tests {
         use std::io::Write;
 
         let temp_dir = std::env::temp_dir();
-        let test_file = temp_dir.join("test_u64.txt");
+        let test_file = temp_dir.join(format!(
+            "test_u64_{:?}.txt",
+            std::thread::current().id()
+        ));
 
         // Write test data
         let mut file = fs::File::create(&test_file).unwrap();
