@@ -94,6 +94,46 @@ fn linux_proc_limits() {
 }
 
 #[test]
+fn linux_sys_limits() {
+    use rlimit::SysLimits;
+
+    atomically(|| {
+        // Test reading system limits
+        let limits = SysLimits::read().unwrap();
+
+        // file_max should be present
+        assert!(limits.file_max.is_some(), "file_max should be readable");
+        let file_max = limits.file_max.unwrap();
+        println!("file_max: {file_max}");
+
+        // file_nr should be present and valid
+        assert!(limits.file_nr.is_some(), "file_nr should be readable");
+        let file_nr = limits.file_nr.as_ref().unwrap();
+        println!(
+            "file_nr: allocated={}, free={}, maximum={}",
+            file_nr.allocated, file_nr.free, file_nr.maximum
+        );
+
+        // file_nr.maximum should match file_max
+        assert_eq!(
+            file_nr.maximum, file_max,
+            "file_nr.maximum should match file_max"
+        );
+
+        // nr_open should be present
+        assert!(limits.nr_open.is_some(), "nr_open should be readable");
+        let nr_open = limits.nr_open.unwrap();
+        println!("nr_open: {nr_open}");
+
+        // nr_open should be greater than 0
+        assert!(nr_open > 0, "nr_open should be positive");
+
+        // Note: We don't test writing to system limits here because it requires root privileges
+        // and would affect the entire system
+    });
+}
+
+#[test]
 fn unsupported() {
     assert!(Resource::UMTXP.is_supported().not());
     let err = Resource::UMTXP.get().unwrap_err();

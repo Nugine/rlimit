@@ -115,6 +115,11 @@ group! {
 
     #[doc(inline)]
     pub use self::proc_limits::*;
+
+    mod sys_limits;
+
+    #[doc(inline)]
+    pub use self::sys_limits::*;
 }
 
 mod tools;
