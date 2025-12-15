@@ -49,7 +49,7 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 #[must_use]
 pub fn getmaxstdio() -> u32 {
-    // A negative `ret` should never appear.
+    // SAFETY: A negative `ret` should never appear.
     // It is safe even if the return value is wrong.
     #[allow(clippy::cast_sign_loss)]
     unsafe {
