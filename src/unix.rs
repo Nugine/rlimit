@@ -29,7 +29,6 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     // by the platform's rlim_t type. On platforms where rlim_t is u64, this is a no-op.
     // On platforms where rlim_t is smaller (e.g., u32), the min() ensures we don't
     // exceed the platform's maximum value before truncating.
-    #[allow(clippy::cast_possible_truncation)]
     let rlim = C::rlimit {
         rlim_cur: soft.min(INFINITY) as _,
         rlim_max: hard.min(INFINITY) as _,
@@ -54,7 +53,7 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     #[allow(clippy::cast_lossless)]
     let ret = unsafe { C::getrlimit(resource.as_raw() as _, &mut rlim) };
 
-    #[allow(clippy::unnecessary_cast, clippy::cast_lossless)]
+    #[allow(clippy::unnecessary_cast)]
     if ret == 0 {
         // SAFETY: On platforms where rlim_t is u64, this cast is lossless (no-op).
         // On platforms where rlim_t is smaller (e.g., u32), this is a widening cast
@@ -90,7 +89,6 @@ pub fn prlimit(
 
     // SAFETY: Values are clamped to INFINITY before casting to rlim_t.
     // See setrlimit() for detailed explanation of truncation safety.
-    #[allow(clippy::cast_possible_truncation)]
     let new_rlim: Option<C::rlimit> = new_limit.map(|(soft, hard)| C::rlimit {
         rlim_cur: soft.min(INFINITY) as _,
         rlim_max: hard.min(INFINITY) as _,
@@ -112,8 +110,8 @@ pub fn prlimit(
     #[allow(clippy::cast_lossless)]
     let ret = unsafe { C::prlimit(pid, resource.as_raw() as _, new_rlimit_ptr, old_rlimit_ptr) };
 
-    #[allow(clippy::unnecessary_cast, clippy::cast_lossless)]
     if ret == 0 {
+        #[allow(clippy::unnecessary_cast)]
         if let Some((soft, hard)) = old_limit {
             // SAFETY: See getrlimit() for detailed explanation of cast safety.
             *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
