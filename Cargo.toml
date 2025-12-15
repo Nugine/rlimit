@@ -16,6 +16,9 @@ rust-version = "1.65.0"
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
+[features]
+asm = []
+
 [dependencies]
 libc = "0.2.178"
 

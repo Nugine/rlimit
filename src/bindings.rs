@@ -1,5 +1,6 @@
 #![allow(clippy::cast_possible_truncation)]
 #![allow(clippy::unnecessary_cast)]
+#![cfg_attr(feature = "asm", allow(unused_imports))]
 
 #[cfg(any(
     target_os = "fuchsia",
