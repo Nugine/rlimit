@@ -21,7 +21,8 @@ extern "C" {
 /// - The underlying `_setmaxstdio` call fails
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
-    // Validate that new_max fits in c_int to prevent overflow
+    // Validate that new_max fits in c_int to prevent overflow.
+    // SAFETY: c_int::MAX (i32::MAX = 2147483647) fits in u32, so this cast is safe.
     if new_max > c_int::MAX as u32 {
         return Err(io::Error::new(
             io::ErrorKind::InvalidInput,
@@ -29,6 +30,9 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
         ));
     }
 
+    // SAFETY: We've validated that new_max fits in c_int, so the cast is safe
+    // (though clippy warns about possible wrapping). The cast back to u32 is
+    // safe because we've checked that ret >= 0.
     #[allow(clippy::cast_possible_wrap, clippy::cast_sign_loss)]
     unsafe {
         let ret = _setmaxstdio(new_max as c_int);
@@ -45,7 +49,7 @@ pub fn setmaxstdio(new_max: u32) -> io::Result<u32> {
 #[cfg_attr(docsrs, doc(cfg(windows)))]
 #[must_use]
 pub fn getmaxstdio() -> u32 {
-    // A negative `ret` should never appear.
+    // SAFETY: A negative `ret` should never appear.
     // It is safe even if the return value is wrong.
     #[allow(clippy::cast_sign_loss)]
     unsafe {

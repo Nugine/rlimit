@@ -4,6 +4,9 @@ use crate::resource::Resource;
 use std::{io, mem};
 
 /// A value indicating no limit.
+///
+/// This constant is the minimum of the platform's `RLIM_INFINITY` and `u64::MAX`.
+/// On most platforms, `RLIM_INFINITY` is already `u64`, making this cast lossless.
 #[allow(clippy::unnecessary_cast)]
 pub const INFINITY: u64 = C::RLIM_INFINITY as u64;
 
@@ -22,6 +25,10 @@ fn check_supported(resource: Resource) -> io::Result<()> {
 #[inline]
 pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     check_supported(resource)?;
+    // SAFETY: Values are clamped to INFINITY, which is the maximum value representable
+    // by the platform's rlim_t type. On platforms where rlim_t is u64, this is a no-op.
+    // On platforms where rlim_t is smaller (e.g., u32), the min() ensures we don't
+    // exceed the platform's maximum value before truncating.
     let rlim = C::rlimit {
         rlim_cur: soft.min(INFINITY) as _,
         rlim_max: hard.min(INFINITY) as _,
@@ -48,6 +55,9 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
 
     #[allow(clippy::unnecessary_cast)]
     if ret == 0 {
+        // SAFETY: On platforms where rlim_t is u64, this cast is lossless (no-op).
+        // On platforms where rlim_t is smaller (e.g., u32), this is a widening cast
+        // which is always safe. The min(INFINITY) clamps to our portable maximum.
         let soft = (rlim.rlim_cur as u64).min(INFINITY);
         let hard = (rlim.rlim_max as u64).min(INFINITY);
         Ok((soft, hard))
@@ -77,6 +87,8 @@ pub fn prlimit(
 ) -> io::Result<()> {
     check_supported(resource)?;
 
+    // SAFETY: Values are clamped to INFINITY before casting to rlim_t.
+    // See setrlimit() for detailed explanation of truncation safety.
     let new_rlim: Option<C::rlimit> = new_limit.map(|(soft, hard)| C::rlimit {
         rlim_cur: soft.min(INFINITY) as _,
         rlim_max: hard.min(INFINITY) as _,
@@ -101,6 +113,7 @@ pub fn prlimit(
     if ret == 0 {
         #[allow(clippy::unnecessary_cast)]
         if let Some((soft, hard)) = old_limit {
+            // SAFETY: See getrlimit() for detailed explanation of cast safety.
             *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
             *hard = (old_rlim.rlim_max as u64).min(INFINITY);
         }
