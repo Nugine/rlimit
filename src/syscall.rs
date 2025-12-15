@@ -7,15 +7,22 @@
 use std::arch::asm;
 
 /// `RLIM_INFINITY` value for Linux
-/// For most modern Linux systems, this is `u64::MAX`
-/// For some architectures (MIPS, SPARC, `PowerPC`), it may differ but we use `u64::MAX` as default
+///
+/// For most modern Linux systems (`x86_64`, `aarch64`, `riscv64`), this is `u64::MAX`.
+///
+/// **Note**: Some architectures (MIPS, SPARC, `PowerPC` with certain configurations)
+/// may use different values for `RLIM_INFINITY`. This implementation uses `u64::MAX`
+/// which is correct for the commonly used architectures. If you're targeting an
+/// architecture with a different `RLIM_INFINITY`, you should use the default libc-based
+/// implementation instead of the `asm` feature.
 pub const RLIM_INFINITY: u64 = u64::MAX;
 
 /// Syscall numbers for `x86_64` Linux
+/// Note: On `x86_64`, getrlimit/setrlimit use the 64-bit versions automatically
 #[cfg(target_arch = "x86_64")]
 mod syscall_nr {
-    pub const SYS_GETRLIMIT: usize = 97;
-    pub const SYS_SETRLIMIT: usize = 160;
+    pub const SYS_GETRLIMIT: usize = 97;  // getrlimit (64-bit on x86_64)
+    pub const SYS_SETRLIMIT: usize = 160; // setrlimit (64-bit on x86_64)
     pub const SYS_PRLIMIT64: usize = 302;
 }
 
@@ -226,6 +233,13 @@ pub struct rlimit {
 }
 
 /// Get resource limit
+///
+/// # Safety
+/// The caller must ensure `rlim` points to valid memory for a `rlimit` struct.
+///
+/// # Returns
+/// Returns 0 on success, or a negative error code on failure (to match libc behavior).
+/// The error code is truncated to i32 which is safe because Linux error codes fit in this range.
 #[inline]
 #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn getrlimit(resource: i32, rlim: *mut rlimit) -> i32 {
@@ -238,6 +252,12 @@ pub unsafe fn getrlimit(resource: i32, rlim: *mut rlimit) -> i32 {
 }
 
 /// Set resource limit
+///
+/// # Safety
+/// The caller must ensure `rlim` points to valid memory for a `rlimit` struct.
+///
+/// # Returns
+/// Returns 0 on success, or a negative error code on failure (to match libc behavior).
 #[inline]
 #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn setrlimit(resource: i32, rlim: *const rlimit) -> i32 {
@@ -250,6 +270,12 @@ pub unsafe fn setrlimit(resource: i32, rlim: *const rlimit) -> i32 {
 }
 
 /// Get and set resource limits of an arbitrary process
+///
+/// # Safety
+/// The caller must ensure that any non-null pointers point to valid memory for `rlimit` structs.
+///
+/// # Returns
+/// Returns 0 on success, or a negative error code on failure (to match libc behavior).
 #[inline]
 #[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn prlimit(
