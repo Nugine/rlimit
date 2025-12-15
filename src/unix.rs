@@ -1,4 +1,8 @@
+#[cfg(not(all(feature = "asm", target_os = "linux")))]
 use crate::bindings as C;
+#[cfg(all(feature = "asm", target_os = "linux"))]
+use crate::syscall as C;
+
 use crate::resource::Resource;
 
 use std::{io, mem};
@@ -31,7 +35,14 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     if ret == 0 {
         Ok(())
     } else {
-        Err(io::Error::last_os_error())
+        #[cfg(all(feature = "asm", target_os = "linux"))]
+        {
+            Err(io::Error::from_raw_os_error(-ret))
+        }
+        #[cfg(not(all(feature = "asm", target_os = "linux")))]
+        {
+            Err(io::Error::last_os_error())
+        }
     }
 }
 
@@ -52,7 +63,14 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
         let hard = (rlim.rlim_max as u64).min(INFINITY);
         Ok((soft, hard))
     } else {
-        Err(io::Error::last_os_error())
+        #[cfg(all(feature = "asm", target_os = "linux"))]
+        {
+            Err(io::Error::from_raw_os_error(-ret))
+        }
+        #[cfg(not(all(feature = "asm", target_os = "linux")))]
+        {
+            Err(io::Error::last_os_error())
+        }
     }
 }
 
@@ -107,6 +125,13 @@ pub fn prlimit(
 
         Ok(())
     } else {
-        Err(io::Error::last_os_error())
+        #[cfg(all(feature = "asm", target_os = "linux"))]
+        {
+            Err(io::Error::from_raw_os_error(-ret))
+        }
+        #[cfg(not(all(feature = "asm", target_os = "linux")))]
+        {
+            Err(io::Error::last_os_error())
+        }
     }
 }

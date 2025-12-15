@@ -99,6 +99,9 @@ group! {
 group! {
     mod bindings;
 
+    #[cfg(all(feature = "asm", target_os = "linux"))]
+    mod syscall;
+
     mod unix;
     mod resource;
 
