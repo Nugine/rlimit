@@ -6,12 +6,12 @@
 
 use std::arch::asm;
 
-/// RLIM_INFINITY value for Linux
-/// For most modern Linux systems, this is u64::MAX
-/// For some architectures (MIPS, SPARC, PowerPC), it may differ but we use u64::MAX as default
+/// `RLIM_INFINITY` value for Linux
+/// For most modern Linux systems, this is `u64::MAX`
+/// For some architectures (MIPS, SPARC, `PowerPC`), it may differ but we use `u64::MAX` as default
 pub const RLIM_INFINITY: u64 = u64::MAX;
 
-/// Syscall numbers for x86_64 Linux
+/// Syscall numbers for `x86_64` Linux
 #[cfg(target_arch = "x86_64")]
 mod syscall_nr {
     pub const SYS_GETRLIMIT: usize = 97;
@@ -51,7 +51,7 @@ mod syscall_nr {
     pub const SYS_PRLIMIT64: usize = 261;
 }
 
-use syscall_nr::*;
+use syscall_nr::{SYS_GETRLIMIT, SYS_PRLIMIT64, SYS_SETRLIMIT};
 
 /// Perform a syscall with 2 arguments
 #[cfg(target_arch = "x86_64")]
@@ -227,6 +227,7 @@ pub struct rlimit {
 
 /// Get resource limit
 #[inline]
+#[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn getrlimit(resource: i32, rlim: *mut rlimit) -> i32 {
     let ret = syscall2(SYS_GETRLIMIT, resource as usize, rlim as usize);
     if ret < 0 {
@@ -238,6 +239,7 @@ pub unsafe fn getrlimit(resource: i32, rlim: *mut rlimit) -> i32 {
 
 /// Set resource limit
 #[inline]
+#[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn setrlimit(resource: i32, rlim: *const rlimit) -> i32 {
     let ret = syscall2(SYS_SETRLIMIT, resource as usize, rlim as usize);
     if ret < 0 {
@@ -249,6 +251,7 @@ pub unsafe fn setrlimit(resource: i32, rlim: *const rlimit) -> i32 {
 
 /// Get and set resource limits of an arbitrary process
 #[inline]
+#[allow(clippy::cast_sign_loss, clippy::cast_possible_truncation)]
 pub unsafe fn prlimit(
     pid: i32,
     resource: i32,

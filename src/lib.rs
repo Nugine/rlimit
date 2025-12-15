@@ -1,5 +1,26 @@
 //! rlimit - Resource limits.
 //!
+//! ## Features
+//!
+//! ### `asm` feature (Linux only)
+//!
+//! The `asm` feature enables direct syscalls using inline assembly on Linux,
+//! bypassing libc entirely. This allows for creating pure Rust binaries without
+//! any libc dependency for rlimit operations.
+//!
+//! To enable this feature, add to your `Cargo.toml`:
+//! ```toml
+//! [dependencies]
+//! rlimit = { version = "*", features = ["asm"] }
+//! ```
+//!
+//! The `asm` feature is currently supported on the following Linux architectures:
+//! - `x86_64`
+//! - `aarch64` (ARM64)
+//! - `x86` (32-bit)
+//! - `arm` (32-bit)
+//! - `riscv64`
+//!
 //! ## Set resource limit
 //! ```no_run
 //! # #[cfg(unix)]
