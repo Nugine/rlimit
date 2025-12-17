@@ -3,11 +3,7 @@ use crate::resource::Resource;
 
 use std::{io, mem};
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 use core::arch::asm;
 
 /// A value indicating no limit.
@@ -25,34 +21,17 @@ fn check_supported(resource: Resource) -> io::Result<()> {
     Ok(())
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 // x86_64 Linux syscall numbers (matching libc::SYS_* definitions).
 const SYS_GETRLIMIT: isize = 97;
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 const SYS_SETRLIMIT: isize = 160;
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android"),
-    rlimit__has_prlimit64
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall, rlimit__has_prlimit64))]
 const SYS_PRLIMIT64: isize = 302;
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 #[inline]
 /// Convert a syscall return value into `io::Result`.
 ///
@@ -67,11 +46,7 @@ unsafe fn syscall_result(ret: isize) -> io::Result<()> {
     }
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 #[inline]
 /// Invoke a two-argument syscall.
 ///
@@ -91,11 +66,7 @@ unsafe fn syscall2(nr: isize, arg1: usize, arg2: usize) -> io::Result<()> {
     syscall_result(ret)
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 #[inline]
 /// Invoke a four-argument syscall.
 ///
@@ -123,11 +94,7 @@ unsafe fn syscall4(
     syscall_result(ret)
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 #[inline]
 /// Perform `setrlimit` via inline assembly.
 ///
@@ -142,11 +109,7 @@ unsafe fn asm_setrlimit(resource: Resource, rlim: &C::rlimit) -> io::Result<()> 
     )
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android")
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall))]
 #[inline]
 /// Perform `getrlimit` via inline assembly.
 ///
@@ -161,12 +124,7 @@ unsafe fn asm_getrlimit(resource: Resource, rlim: &mut C::rlimit) -> io::Result<
     )
 }
 
-#[cfg(all(
-    feature = "asm",
-    target_arch = "x86_64",
-    any(target_os = "linux", target_os = "android"),
-    rlimit__has_prlimit64
-))]
+#[cfg(all(feature = "asm", rlimit__asm_syscall, rlimit__has_prlimit64))]
 #[inline]
 /// Perform `prlimit64` via inline assembly.
 ///

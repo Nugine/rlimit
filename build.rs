@@ -1,6 +1,7 @@
 fn main() {
     let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_env = std::env::var("CARGO_CFG_TARGET_ENV").unwrap();
+    let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
 
     println!("cargo:rustc-check-cfg=cfg(target_os, values(\"switch\"))");
     let has_prlimit64 = (target_os == "android" && target_env != "newlib")
@@ -22,5 +23,12 @@ fn main() {
     println!("cargo:rustc-check-cfg=cfg(rlimit__get_kern_max_files_per_proc)");
     if get_kern_max_files_per_proc {
         println!("cargo:rustc-cfg=rlimit__get_kern_max_files_per_proc");
+    }
+
+    let asm_syscall =
+        target_arch == "x86_64" && (target_os == "linux" || target_os == "android");
+    println!("cargo:rustc-check-cfg=cfg(rlimit__asm_syscall)");
+    if asm_syscall {
+        println!("cargo:rustc-cfg=rlimit__asm_syscall");
     }
 }
