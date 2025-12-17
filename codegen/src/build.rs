@@ -85,6 +85,7 @@ pub fn codegen(item_list: &[CfgItem]) {
     {
         g!("let target_os = std::env::var(\"CARGO_CFG_TARGET_OS\").unwrap();");
         g!("let target_env = std::env::var(\"CARGO_CFG_TARGET_ENV\").unwrap();");
+        g!("let target_arch = std::env::var(\"CARGO_CFG_TARGET_ARCH\").unwrap();");
         g!();
     }
 
@@ -102,6 +103,18 @@ pub fn codegen(item_list: &[CfgItem]) {
             &["CTL_KERN", "KERN_MAXFILESPERPROC", "sysctl"],
         )));
         set_cfg_if("get_kern_max_files_per_proc", &cfg);
+    }
+
+    {
+        g!(r#"let asm_feature = std::env::var("CARGO_FEATURE_ASM").is_ok();"#);
+        g!(
+            r#"let asm_syscall = asm_feature && target_arch == "x86_64" && (target_os == "linux" || target_os == "android");"#
+        );
+        g!(r#"println!("cargo:rustc-check-cfg=cfg(rlimit__asm_syscall)");"#);
+        g!("if asm_syscall {{");
+        g!(r#"println!("cargo:rustc-cfg=rlimit__asm_syscall");"#);
+        g!("}}");
+        g!();
     }
 
     g!("}}")

@@ -18,19 +18,30 @@ fn codegen_64(item_list: &[CfgItem]) {
     for name in ["rlimit", "getrlimit", "setrlimit", "prlimit"] {
         let name64 = format!("{name}64");
         let item64 = item_list.iter().find(|item| item.name == name64).unwrap();
-        let cfg64 = item64.cfg.clone();
+        let cfg64 = format!("{cfg}", cfg = item64.cfg);
 
         let item = item_list.iter().find(|item| item.name == name).unwrap();
-        let cfg = item.cfg.clone();
+        let cfg64 = if name == "rlimit" {
+            cfg64
+        } else {
+            format!("all(not(rlimit__asm_syscall), {cfg64})")
+        };
 
         g!("#[cfg({cfg64})]");
         g!("pub use libc::{name64} as {name};");
         g!();
 
-        let otherwise = simplified_expr(all((not(cfg64), cfg)));
+        let otherwise = simplified_expr(all((not(item64.cfg.clone()), item.cfg.clone())));
         if otherwise.is_const_false() {
             assert_eq!(name, "prlimit");
         } else {
+            let otherwise = format!("{otherwise}");
+            let otherwise = if name == "rlimit" {
+                otherwise
+            } else {
+                format!("all(not(rlimit__asm_syscall), {otherwise})")
+            };
+
             g!("#[cfg({otherwise})]");
             g!("pub use libc::{name};");
             g!();

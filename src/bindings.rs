@@ -1,7 +1,5 @@
 #![allow(clippy::cast_possible_truncation)]
 #![allow(clippy::unnecessary_cast)]
-#![cfg_attr(feature = "asm", allow(unused_imports))]
-
 #[cfg(any(
     target_os = "fuchsia",
     all(
@@ -60,24 +58,28 @@ pub use libc::rlimit64 as rlimit;
 ))]
 pub use libc::rlimit;
 
-#[cfg(any(
-    all(
-        any(
-            target_os = "aix",
-            target_os = "android",
-            target_os = "emscripten",
-            target_os = "hurd"
+#[cfg(all(
+    not(rlimit__asm_syscall),
+    any(
+        all(
+            any(
+                target_os = "aix",
+                target_os = "android",
+                target_os = "emscripten",
+                target_os = "hurd"
+            ),
+            not(target_env = "newlib")
         ),
-        not(target_env = "newlib")
-    ),
-    all(target_env = "uclibc", target_os = "l4re"),
-    all(target_env = "gnu", target_os = "linux"),
-    all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
-    all(target_env = "uclibc", target_os = "linux")
+        all(target_env = "uclibc", target_os = "l4re"),
+        all(target_env = "gnu", target_os = "linux"),
+        all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+        all(target_env = "uclibc", target_os = "linux")
+    )
 ))]
 pub use libc::getrlimit64 as getrlimit;
 
 #[cfg(all(
+    not(rlimit__asm_syscall),
     any(
         all(
             any(
@@ -132,24 +134,28 @@ pub use libc::getrlimit64 as getrlimit;
 ))]
 pub use libc::getrlimit;
 
-#[cfg(any(
-    all(
-        any(
-            target_os = "aix",
-            target_os = "android",
-            target_os = "emscripten",
-            target_os = "hurd"
+#[cfg(all(
+    not(rlimit__asm_syscall),
+    any(
+        all(
+            any(
+                target_os = "aix",
+                target_os = "android",
+                target_os = "emscripten",
+                target_os = "hurd"
+            ),
+            not(target_env = "newlib")
         ),
-        not(target_env = "newlib")
-    ),
-    all(target_env = "uclibc", target_os = "l4re"),
-    all(target_env = "gnu", target_os = "linux"),
-    all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
-    all(target_env = "uclibc", target_os = "linux")
+        all(target_env = "uclibc", target_os = "l4re"),
+        all(target_env = "gnu", target_os = "linux"),
+        all(target_os = "linux", any(target_env = "musl", target_env = "ohos")),
+        all(target_env = "uclibc", target_os = "linux")
+    )
 ))]
 pub use libc::setrlimit64 as setrlimit;
 
 #[cfg(all(
+    not(rlimit__asm_syscall),
     any(
         all(
             any(
@@ -204,11 +210,14 @@ pub use libc::setrlimit64 as setrlimit;
 ))]
 pub use libc::setrlimit;
 
-#[cfg(any(
-    all(target_os = "android", not(target_env = "newlib")),
-    all(
-        target_os = "linux",
-        any(target_env = "gnu", target_env = "musl", target_env = "ohos")
+#[cfg(all(
+    not(rlimit__asm_syscall),
+    any(
+        all(target_os = "android", not(target_env = "newlib")),
+        all(
+            target_os = "linux",
+            any(target_env = "gnu", target_env = "musl", target_env = "ohos")
+        )
     )
 ))]
 pub use libc::prlimit64 as prlimit;

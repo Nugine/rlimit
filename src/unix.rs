@@ -3,7 +3,7 @@ use crate::resource::Resource;
 
 use std::{io, mem};
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 use core::arch::asm;
 
 /// A value indicating no limit.
@@ -21,17 +21,17 @@ fn check_supported(resource: Resource) -> io::Result<()> {
     Ok(())
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 // x86_64 Linux syscall numbers (matching libc::SYS_* definitions).
 const SYS_GETRLIMIT: isize = 97;
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 const SYS_SETRLIMIT: isize = 160;
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall, rlimit__has_prlimit64))]
+#[cfg(all(rlimit__asm_syscall, rlimit__has_prlimit64))]
 const SYS_PRLIMIT64: isize = 302;
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 #[inline]
 /// Convert a syscall return value into `io::Result`.
 ///
@@ -46,7 +46,7 @@ unsafe fn syscall_result(ret: isize) -> io::Result<()> {
     }
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 #[inline]
 /// Invoke a two-argument syscall.
 ///
@@ -66,7 +66,7 @@ unsafe fn syscall2(nr: isize, arg1: usize, arg2: usize) -> io::Result<()> {
     syscall_result(ret)
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 #[inline]
 /// Invoke a four-argument syscall.
 ///
@@ -94,7 +94,7 @@ unsafe fn syscall4(
     syscall_result(ret)
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 #[inline]
 /// Perform `setrlimit` via inline assembly.
 ///
@@ -109,7 +109,7 @@ unsafe fn asm_setrlimit(resource: Resource, rlim: &C::rlimit) -> io::Result<()> 
     )
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall))]
+#[cfg(rlimit__asm_syscall)]
 #[inline]
 /// Perform `getrlimit` via inline assembly.
 ///
@@ -124,7 +124,7 @@ unsafe fn asm_getrlimit(resource: Resource, rlim: &mut C::rlimit) -> io::Result<
     )
 }
 
-#[cfg(all(feature = "asm", rlimit__asm_syscall, rlimit__has_prlimit64))]
+#[cfg(all(rlimit__asm_syscall, rlimit__has_prlimit64))]
 #[inline]
 /// Perform `prlimit64` via inline assembly.
 ///
@@ -162,20 +162,12 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
         rlim_max: hard.min(INFINITY) as _,
     };
 
-    #[cfg(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android")
-    ))]
+    #[cfg(rlimit__asm_syscall)]
     unsafe {
         asm_setrlimit(resource, &rlim)?;
     }
 
-    #[cfg(not(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android")
-    )))]
+    #[cfg(not(rlimit__asm_syscall))]
     {
         #[allow(clippy::cast_lossless)]
         let ret = unsafe { C::setrlimit(resource.as_raw() as _, &rlim) };
@@ -196,20 +188,12 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     check_supported(resource)?;
     let mut rlim = unsafe { mem::zeroed() };
 
-    #[cfg(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android")
-    ))]
+    #[cfg(rlimit__asm_syscall)]
     unsafe {
         asm_getrlimit(resource, &mut rlim)?;
     }
 
-    #[cfg(not(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android")
-    )))]
+    #[cfg(not(rlimit__asm_syscall))]
     {
         #[allow(clippy::cast_lossless)]
         let ret = unsafe { C::getrlimit(resource.as_raw() as _, &mut rlim) };
@@ -269,22 +253,12 @@ pub fn prlimit(
         std::ptr::null_mut()
     };
 
-    #[cfg(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android"),
-        rlimit__has_prlimit64
-    ))]
+    #[cfg(all(rlimit__asm_syscall, rlimit__has_prlimit64))]
     unsafe {
         asm_prlimit(pid, resource, new_rlimit_ptr, old_rlimit_ptr)?;
     }
 
-    #[cfg(not(all(
-        feature = "asm",
-        target_arch = "x86_64",
-        any(target_os = "linux", target_os = "android"),
-        rlimit__has_prlimit64
-    )))]
+    #[cfg(not(all(rlimit__asm_syscall, rlimit__has_prlimit64)))]
     {
         #[allow(clippy::cast_lossless)]
         let ret =
