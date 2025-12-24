@@ -102,6 +102,9 @@ group! {
     mod unix;
     mod resource;
 
+    #[cfg(rlimit__asm_syscall)]
+    mod linux_asm;
+
     #[doc(inline)]
     pub use self::unix::*;
 

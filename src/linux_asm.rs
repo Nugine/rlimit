@@ -1,5 +1,3 @@
-#![cfg(rlimit__asm_syscall)]
-
 use crate::bindings as C;
 use crate::resource::Resource;
 use super::pid_t;

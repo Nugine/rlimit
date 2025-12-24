@@ -25,8 +25,7 @@ fn main() {
         println!("cargo:rustc-cfg=rlimit__get_kern_max_files_per_proc");
     }
 
-    let asm_feature = std::env::var("CARGO_FEATURE_ASM").is_ok();
-    let asm_syscall = asm_feature
+    let asm_syscall = cfg!(feature = "asm_syscall")
         && target_arch == "x86_64"
         && (target_os == "linux" || target_os == "android");
     println!("cargo:rustc-check-cfg=cfg(rlimit__asm_syscall)");

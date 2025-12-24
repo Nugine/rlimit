@@ -17,7 +17,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
-asm = []
+asm_syscall = []
 
 [dependencies]
 libc = "0.2.178"

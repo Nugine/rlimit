@@ -4,9 +4,7 @@ use crate::resource::Resource;
 use std::{io, mem};
 
 #[cfg(rlimit__asm_syscall)]
-mod unix_asm;
-#[cfg(rlimit__asm_syscall)]
-use unix_asm::{getrlimit_syscall, prlimit_syscall, setrlimit_syscall};
+use crate::linux_asm::{getrlimit_syscall, prlimit_syscall, setrlimit_syscall};
 
 /// A value indicating no limit.
 ///
