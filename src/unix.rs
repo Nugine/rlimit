@@ -3,6 +3,11 @@ use crate::resource::Resource;
 
 use std::{io, mem};
 
+#[cfg(rlimit__asm_syscall)]
+mod unix_asm;
+#[cfg(rlimit__asm_syscall)]
+use unix_asm::{getrlimit_syscall, prlimit_syscall, setrlimit_syscall};
+
 /// A value indicating no limit.
 ///
 /// This constant is the minimum of the platform's `RLIM_INFINITY` and `u64::MAX`.
@@ -33,13 +38,22 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
         rlim_cur: soft.min(INFINITY) as _,
         rlim_max: hard.min(INFINITY) as _,
     };
-    #[allow(clippy::cast_lossless)]
-    let ret = unsafe { C::setrlimit(resource.as_raw() as _, &rlim) };
-    if ret == 0 {
-        Ok(())
-    } else {
-        Err(io::Error::last_os_error())
+
+    #[cfg(rlimit__asm_syscall)]
+    unsafe {
+        setrlimit_syscall(resource, &rlim)?;
     }
+
+    #[cfg(not(rlimit__asm_syscall))]
+    {
+        #[allow(clippy::cast_lossless)]
+        let ret = unsafe { C::setrlimit(resource.as_raw() as _, &rlim) };
+        if ret != 0 {
+            return Err(io::Error::last_os_error());
+        }
+    }
+
+    Ok(())
 }
 
 /// Get resource limits.
@@ -50,20 +64,29 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
 pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     check_supported(resource)?;
     let mut rlim = unsafe { mem::zeroed() };
-    #[allow(clippy::cast_lossless)]
-    let ret = unsafe { C::getrlimit(resource.as_raw() as _, &mut rlim) };
+
+    #[cfg(rlimit__asm_syscall)]
+    unsafe {
+        getrlimit_syscall(resource, &mut rlim)?;
+    }
+
+    #[cfg(not(rlimit__asm_syscall))]
+    {
+        #[allow(clippy::cast_lossless)]
+        let ret = unsafe { C::getrlimit(resource.as_raw() as _, &mut rlim) };
+
+        if ret != 0 {
+            return Err(io::Error::last_os_error());
+        }
+    }
 
     #[allow(clippy::unnecessary_cast)]
-    if ret == 0 {
-        // SAFETY: On platforms where rlim_t is u64, this cast is lossless (no-op).
-        // On platforms where rlim_t is smaller (e.g., u32), this is a widening cast
-        // which is always safe. The min(INFINITY) clamps to our portable maximum.
-        let soft = (rlim.rlim_cur as u64).min(INFINITY);
-        let hard = (rlim.rlim_max as u64).min(INFINITY);
-        Ok((soft, hard))
-    } else {
-        Err(io::Error::last_os_error())
-    }
+    // SAFETY: On platforms where rlim_t is u64, this cast is lossless (no-op).
+    // On platforms where rlim_t is smaller (e.g., u32), this is a widening cast
+    // which is always safe. The min(INFINITY) clamps to our portable maximum.
+    let soft = (rlim.rlim_cur as u64).min(INFINITY);
+    let hard = (rlim.rlim_max as u64).min(INFINITY);
+    Ok((soft, hard))
 }
 
 /// The type of a process ID
@@ -107,19 +130,28 @@ pub fn prlimit(
         std::ptr::null_mut()
     };
 
-    #[allow(clippy::cast_lossless)]
-    let ret = unsafe { C::prlimit(pid, resource.as_raw() as _, new_rlimit_ptr, old_rlimit_ptr) };
-
-    if ret == 0 {
-        #[allow(clippy::unnecessary_cast)]
-        if let Some((soft, hard)) = old_limit {
-            // SAFETY: See getrlimit() for detailed explanation of cast safety.
-            *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
-            *hard = (old_rlim.rlim_max as u64).min(INFINITY);
-        }
-
-        Ok(())
-    } else {
-        Err(io::Error::last_os_error())
+    #[cfg(all(rlimit__asm_syscall, rlimit__has_prlimit64))]
+    unsafe {
+        prlimit_syscall(pid, resource, new_rlimit_ptr, old_rlimit_ptr)?;
     }
+
+    #[cfg(not(all(rlimit__asm_syscall, rlimit__has_prlimit64)))]
+    {
+        #[allow(clippy::cast_lossless)]
+        let ret =
+            unsafe { C::prlimit(pid, resource.as_raw() as _, new_rlimit_ptr, old_rlimit_ptr) };
+
+        if ret != 0 {
+            return Err(io::Error::last_os_error());
+        }
+    }
+
+    #[allow(clippy::unnecessary_cast)]
+    if let Some((soft, hard)) = old_limit {
+        // SAFETY: See getrlimit() for detailed explanation of cast safety.
+        *soft = (old_rlim.rlim_cur as u64).min(INFINITY);
+        *hard = (old_rlim.rlim_max as u64).min(INFINITY);
+    }
+
+    Ok(())
 }
