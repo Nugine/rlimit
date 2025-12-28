@@ -1,6 +1,6 @@
+use super::pid_t;
 use crate::bindings as C;
 use crate::resource::Resource;
-use super::pid_t;
 
 use core::arch::asm;
 use std::io;
@@ -8,15 +8,17 @@ use std::io;
 // x86_64 Linux syscall numbers (matching libc::SYS_* definitions).
 const SYS_GETRLIMIT: isize = 97;
 const SYS_SETRLIMIT: isize = 160;
+
 #[cfg(rlimit__has_prlimit64)]
 const SYS_PRLIMIT64: isize = 302;
 
-#[inline]
 /// Convert a syscall return value into `io::Result`.
 ///
 /// # Safety
 /// The caller must ensure `ret` originates from a Linux syscall that returns
 /// negative errno values on failure.
+#[allow(clippy::cast_possible_truncation)]
+#[inline]
 unsafe fn syscall_result(ret: isize) -> io::Result<()> {
     if ret < 0 {
         Err(io::Error::from_raw_os_error(-ret as i32))
@@ -77,10 +79,7 @@ unsafe fn syscall4(
 /// # Safety
 /// The caller must ensure `resource` is supported and `rlim` points to a valid
 /// `rlimit` structure.
-pub(crate) unsafe fn setrlimit_syscall(
-    resource: Resource,
-    rlim: &C::rlimit,
-) -> io::Result<()> {
+pub(crate) unsafe fn setrlimit_syscall(resource: Resource, rlim: &C::rlimit) -> io::Result<()> {
     syscall2(
         SYS_SETRLIMIT,
         usize::from(resource.as_raw()),
@@ -94,10 +93,7 @@ pub(crate) unsafe fn setrlimit_syscall(
 /// # Safety
 /// The caller must ensure `resource` is supported and `rlim` is valid for
 /// writes.
-pub(crate) unsafe fn getrlimit_syscall(
-    resource: Resource,
-    rlim: &mut C::rlimit,
-) -> io::Result<()> {
+pub(crate) unsafe fn getrlimit_syscall(resource: Resource, rlim: &mut C::rlimit) -> io::Result<()> {
     syscall2(
         SYS_GETRLIMIT,
         usize::from(resource.as_raw()),
@@ -106,12 +102,13 @@ pub(crate) unsafe fn getrlimit_syscall(
 }
 
 #[cfg(rlimit__has_prlimit64)]
-#[inline]
 /// Perform `prlimit64` via inline assembly.
 ///
 /// # Safety
 /// The caller must ensure pointer arguments reference valid `rlimit` storage or
 /// are null when unused.
+#[allow(clippy::cast_sign_loss)]
+#[inline]
 pub(crate) unsafe fn prlimit_syscall(
     pid: pid_t,
     resource: Resource,
