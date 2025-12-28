@@ -106,15 +106,15 @@ pub fn codegen(item_list: &[CfgItem]) {
     }
 
     {
-        g!(r#"let asm_feature = std::env::var("CARGO_FEATURE_ASM").is_ok();"#);
-        g!(
-            r#"let asm_syscall = asm_feature && target_arch == "x86_64" && (target_os == "linux" || target_os == "android");"#
-        );
-        g!(r#"println!("cargo:rustc-check-cfg=cfg(rlimit__asm_syscall)");"#);
-        g!("if asm_syscall {{");
-        g!(r#"println!("cargo:rustc-cfg=rlimit__asm_syscall");"#);
-        g!("}}");
-        g!();
+        g!(r#"
+        let asm_syscall = cfg!(feature = "asm_syscall")
+            && target_arch == "x86_64"
+            && (target_os == "linux" || target_os == "android");
+        println!("cargo:rustc-check-cfg=cfg(rlimit__asm_syscall)");
+        if asm_syscall {{
+            println!("cargo:rustc-cfg=rlimit__asm_syscall");
+        }}
+        "#);
     }
 
     g!("}}")

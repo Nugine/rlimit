@@ -13,6 +13,7 @@ check:
     cargo clippy -- -D warnings
 
 test:
+    cargo test -- --test-threads=1 --nocapture
     cargo test --all-features -- --test-threads=1 --nocapture
     cargo run --example nofile
 
