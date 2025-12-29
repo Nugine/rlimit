@@ -89,9 +89,10 @@ pub fn codegen(item_list: &[CfgItem]) {
     }
 
     {
-        let extra_os = ["switch"];
-        let values = extra_os.join("\",\"");
-        g!(r#"println!("cargo:rustc-check-cfg=cfg(target_os, values(\"{values}\"))");"#)
+        let extra_os = ["switch", "qurt"];
+        let values = extra_os.join("\\\",\\\"");
+        g!(r#"println!("cargo:rustc-check-cfg=cfg(target_os, values(\"{values}\"))");"#);
+        g!();
     }
 
     forward_item_cfg(item_list, "prlimit64");
