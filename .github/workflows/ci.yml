@@ -18,7 +18,7 @@ jobs:
   develop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@nightly
         with:
           components: rustfmt, clippy
@@ -36,7 +36,7 @@ jobs:
           - 1.65.0 # MSRV
           - stable
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: taiki-e/install-action@just
       - uses: dtolnay/rust-toolchain@master
         with:
@@ -139,7 +139,7 @@ jobs:
           # - x86_64-unknown-redox                  # (nightly)
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -165,7 +165,7 @@ jobs:
           - runner: macos-15-intel
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --all-features
@@ -173,7 +173,7 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --all-features
@@ -181,7 +181,7 @@ jobs:
   ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --all-features
@@ -189,7 +189,7 @@ jobs:
   diff-codegen:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - name: diff
         run: |
@@ -211,9 +211,9 @@ jobs:
           # - name: openbsd
           #   version: '7.8'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Test on ${{ matrix.os.name }}
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v0.32.0
         with:
           operating_system: ${{ matrix.os.name }}
           version: ${{ matrix.os.version }}
