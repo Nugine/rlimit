@@ -29,9 +29,12 @@ pub use libc::rlimit64 as rlimit;
 
 #[cfg(all(
     any(
-        target_os = "qurt",
         target_os = "vxworks",
-        all(unix, not(any(target_os = "solid_asp3", target_os = "switch")))
+        all(target_os = "qurt", not(target_vendor = "apple")),
+        all(
+            unix,
+            not(any(target_os = "qurt", target_os = "solid_asp3", target_os = "switch"))
+        )
     ),
     not(any(
         target_os = "fuchsia",
