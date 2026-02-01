@@ -6,7 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.10.2...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.11.0...HEAD
+
+## [0.11.0] - 2026-02-02
+
+[0.11.0]: https://github.com/Nugine/rlimit/compare/v0.10.2...v0.11.0
+
++ [PR #71](https://github.com/Nugine/rlimit/pull/71): Add system-wide file descriptor limits support (`SysLimits`) on Linux/Android.
++ [PR #75](https://github.com/Nugine/rlimit/pull/75): Fix `setmaxstdio` crash on Windows when values exceed `c_int::MAX`.
++ [PR #78](https://github.com/Nugine/rlimit/pull/78): Document number casting safety across platform boundaries.
++ Bump MSRV to 1.65.0.
++ Update libc bindings (libc 0.2.180).
 
 ## [0.10.2] - 2024-09-01
 
