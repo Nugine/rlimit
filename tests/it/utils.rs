@@ -15,10 +15,9 @@ pub fn expect_err(result: io::Result<()>, kind: io::ErrorKind) {
 }
 
 pub fn atomically<R>(f: impl FnOnce() -> R) -> R {
-    use once_cell::sync::Lazy;
     use std::sync::Mutex;
 
-    static LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+    static LOCK: Mutex<()> = Mutex::new(());
     let _guard = LOCK.lock().unwrap();
     f()
 }
