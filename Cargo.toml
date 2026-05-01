@@ -17,7 +17,7 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [dependencies]
-libc = "0.2.183"
+libc = "0.2.186"
 
 [workspace]
 members = ["codegen"]
