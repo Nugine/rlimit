@@ -4,6 +4,8 @@ fn main() {
 
     println!("cargo:rustc-check-cfg=cfg(target_os, values(\"switch\",\"qurt\"))");
 
+    println!("cargo:rustc-check-cfg=cfg(gnu_file_offset_bits64)");
+
     let has_prlimit64 = (target_os == "android" && target_env != "newlib")
         || (target_os == "linux"
             && (target_env == "gnu" || target_env == "musl" || target_env == "ohos"));
