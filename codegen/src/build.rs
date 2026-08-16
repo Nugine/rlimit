@@ -95,6 +95,16 @@ pub fn codegen(item_list: &[CfgItem]) {
         g!();
     }
 
+    {
+        // libc custom cfg variables (defined in libc's cfg_alias / build.rs;
+        // unknown to rustc, so they must be declared explicitly)
+        let extra_cfg = ["gnu_file_offset_bits64"];
+        for name in extra_cfg {
+            g!(r#"println!("cargo:rustc-check-cfg=cfg({name})");"#);
+        }
+        g!();
+    }
+
     forward_item_cfg(item_list, "prlimit64");
 
     {
