@@ -49,7 +49,9 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
 ///
 /// This platform does not provide the `setrlimit` function.
 /// # Errors
-/// Returns `io::ErrorKind::Unsupported` for every supported resource.
+/// Returns `io::ErrorKind::Unsupported` when the resource exists on this
+/// platform; a resource that does not exist is rejected with the usual
+/// "unsupported resource" error, like the regular implementations.
 #[inline]
 #[cfg(not(rlimit__has_setrlimit))]
 pub fn setrlimit(resource: Resource, _soft: u64, _hard: u64) -> io::Result<()> {
@@ -86,7 +88,9 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
 ///
 /// This platform does not provide the `getrlimit` function.
 /// # Errors
-/// Returns `io::ErrorKind::Unsupported` for every supported resource.
+/// Returns `io::ErrorKind::Unsupported` when the resource exists on this
+/// platform; a resource that does not exist is rejected with the usual
+/// "unsupported resource" error, like the regular implementations.
 #[inline]
 #[cfg(not(rlimit__has_getrlimit))]
 pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
