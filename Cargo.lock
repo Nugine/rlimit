@@ -37,9 +37,9 @@ checksum = "3eaf3ede3fee6db1a4c2ee091bf8a8b4dccdc6d17f656fb07896ee72867612f2"
 
 [[package]]
 name = "libc-cfg"
-version = "0.3.6"
+version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f7bd67abe83d91729f35ca64a5979815c5c0db9ace5c16fdc1f97f8ef78ce4db"
+checksum = "65670e6fd0c8a15a7493fa63ce21ca242d78f10efb3d3369318d53386e650d27"
 dependencies = [
  "anyhow",
  "bool-logic",
