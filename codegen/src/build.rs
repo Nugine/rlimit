@@ -1,6 +1,6 @@
 use std::fmt::Write as _;
 
-use bool_logic::cfg::ast::{all, All, Any, Expr, Not, Var};
+use bool_logic::cfg::ast::{all, any, All, Any, Expr, Not, Var};
 use libc_cfg::{simplified_expr, CfgItem};
 use scoped_writer::g;
 
@@ -46,14 +46,24 @@ fn cfg_eval(s: &mut String, depth: usize, cfg: &Expr) {
             }
         }
         Expr::Not(Not(expr)) => {
-            let pred = &expr.as_var().unwrap().0;
-            let val = pred.value.as_ref().unwrap();
-            write!(s, "{} != {:?}", pred.key, val).unwrap();
+            if let Expr::Var(Var(pred)) = &**expr {
+                if let Some(val) = &pred.value {
+                    write!(s, "{} != {:?}", pred.key, val).unwrap();
+                    return;
+                }
+            }
+            write!(s, "!(").unwrap();
+            cfg_eval(s, 0, expr);
+            write!(s, ")").unwrap();
         }
-        Expr::Var(Var(pred)) => {
-            let val = pred.value.as_ref().unwrap();
-            write!(s, "{} == {:?}", pred.key, val).unwrap();
-        }
+        Expr::Var(Var(pred)) => match &pred.value {
+            Some(val) => write!(s, "{} == {:?}", pred.key, val).unwrap(),
+            // A bare flag such as `unix`; cargo exposes it as `CARGO_CFG_<KEY>`.
+            None => {
+                let var = format!("CARGO_CFG_{}", pred.key.as_str().to_uppercase());
+                write!(s, "std::env::var({var:?}).is_ok()").unwrap();
+            }
+        },
         Expr::Const(_) => unimplemented!(),
     }
 }
@@ -77,6 +87,19 @@ fn forward_item_cfg(item_list: &[CfgItem], name: &str) {
     let item = find(item_list, name);
     let key = format!("has_{name}");
     set_cfg_if(&key, &item.cfg);
+}
+
+/// Forwards whether the `name` re-export exists.
+///
+/// The bindings alias `{name}64` to `{name}` where the 64-bit variant exists,
+/// and fall back to `libc::{name}` otherwise, so either variant makes the
+/// exported name callable.
+fn forward_alias_item_cfg(item_list: &[CfgItem], name: &str) {
+    let name64 = format!("{name}64");
+    let cfg64 = find(item_list, &name64).cfg.clone();
+    let cfg = find(item_list, name).cfg.clone();
+    let key = format!("has_{name}");
+    set_cfg_if(&key, &simplified_expr(any((cfg64, cfg))));
 }
 
 pub fn codegen(item_list: &[CfgItem]) {
@@ -106,6 +129,8 @@ pub fn codegen(item_list: &[CfgItem]) {
     }
 
     forward_item_cfg(item_list, "prlimit64");
+    forward_alias_item_cfg(item_list, "getrlimit");
+    forward_alias_item_cfg(item_list, "setrlimit");
 
     {
         let cfg = simplified_expr(all(find_many_cfg(
