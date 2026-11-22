@@ -6,6 +6,8 @@ pub fn codegen(item_list: &[CfgItem]) {
     g([
         "#![allow(clippy::cast_possible_truncation)]",
         "#![allow(clippy::unnecessary_cast)]",
+        // Not every target uses every generated re-export.
+        "#![allow(unused_imports)]",
         "",
     ]);
 
