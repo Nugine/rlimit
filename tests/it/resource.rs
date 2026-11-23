@@ -11,7 +11,7 @@ fn declared_resources() -> BTreeSet<&'static str> {
         .lines()
         .filter_map(|line| {
             let rest = line.trim().strip_prefix("pub const ")?;
-            Some(rest.split(':').next()?)
+            rest.split(':').next()
         })
         .collect()
 }
