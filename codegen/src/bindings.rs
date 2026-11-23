@@ -23,6 +23,12 @@ fn codegen_64(item_list: &[CfgItem]) {
         let item = item_list.iter().find(|item| item.name == name).unwrap();
         let cfg = item.cfg.clone();
 
+        // Only `setrlimit` and `prlimit` name the `rlimit` type, so
+        // exporting it where neither exists would be an unused import.
+        let is_type = name == "rlimit";
+        if is_type {
+            g!("#[cfg(any(rlimit__has_setrlimit, rlimit__has_prlimit64))]");
+        }
         g!("#[cfg({cfg64})]");
         g!("pub use libc::{name64} as {name};");
         g!();
@@ -31,6 +37,9 @@ fn codegen_64(item_list: &[CfgItem]) {
         if otherwise.is_const_false() {
             assert_eq!(name, "prlimit");
         } else {
+            if is_type {
+                g!("#[cfg(any(rlimit__has_setrlimit, rlimit__has_prlimit64))]");
+            }
             g!("#[cfg({otherwise})]");
             g!("pub use libc::{name};");
             g!();

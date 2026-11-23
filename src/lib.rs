@@ -133,6 +133,8 @@ mod tests {
     fn build_cfg() {
         if cfg!(target_os = "linux") || cfg!(target_os = "android") {
             assert!(cfg!(rlimit__has_prlimit64));
+            assert!(cfg!(rlimit__has_setrlimit));
+            assert!(cfg!(rlimit__has_getrlimit));
             assert!(cfg!(not(rlimit__get_kern_max_files_per_proc)));
         }
 

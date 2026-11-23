@@ -1,7 +1,9 @@
 use crate::bindings as C;
 use crate::resource::Resource;
 
-use std::{io, mem};
+use std::io;
+#[cfg(any(rlimit__has_prlimit64, rlimit__has_getrlimit))]
+use std::mem;
 
 /// A value indicating no limit.
 ///
@@ -23,6 +25,7 @@ fn check_supported(resource: Resource) -> io::Result<()> {
 /// \[Linux\] See <https://man7.org/linux/man-pages/man2/setrlimit.2.html>
 #[allow(clippy::unnecessary_min_or_max)]
 #[inline]
+#[cfg(rlimit__has_setrlimit)]
 pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     check_supported(resource)?;
     // SAFETY: Values are clamped to INFINITY, which is the maximum value representable
@@ -42,11 +45,26 @@ pub fn setrlimit(resource: Resource, soft: u64, hard: u64) -> io::Result<()> {
     }
 }
 
+/// Set resource limits.
+///
+/// This platform does not provide the `setrlimit` function.
+/// # Errors
+/// Returns `io::ErrorKind::Unsupported` when the resource exists on this
+/// platform; a resource that does not exist is rejected with the usual
+/// "unsupported resource" error, like the regular implementations.
+#[inline]
+#[cfg(not(rlimit__has_setrlimit))]
+pub fn setrlimit(resource: Resource, _soft: u64, _hard: u64) -> io::Result<()> {
+    check_supported(resource)?;
+    Err(io::Error::from(io::ErrorKind::Unsupported))
+}
+
 /// Get resource limits.
 /// # Errors
 /// \[Linux\] See <https://man7.org/linux/man-pages/man2/getrlimit.2.html>
 #[allow(clippy::unnecessary_min_or_max)]
 #[inline]
+#[cfg(rlimit__has_getrlimit)]
 pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     check_supported(resource)?;
     let mut rlim = unsafe { mem::zeroed() };
@@ -64,6 +82,20 @@ pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
     } else {
         Err(io::Error::last_os_error())
     }
+}
+
+/// Get resource limits.
+///
+/// This platform does not provide the `getrlimit` function.
+/// # Errors
+/// Returns `io::ErrorKind::Unsupported` when the resource exists on this
+/// platform; a resource that does not exist is rejected with the usual
+/// "unsupported resource" error, like the regular implementations.
+#[inline]
+#[cfg(not(rlimit__has_getrlimit))]
+pub fn getrlimit(resource: Resource) -> io::Result<(u64, u64)> {
+    check_supported(resource)?;
+    Err(io::Error::from(io::ErrorKind::Unsupported))
 }
 
 /// The type of a process ID

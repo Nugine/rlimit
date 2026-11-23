@@ -37,7 +37,8 @@ fn get_kern_max_files_per_proc() -> io::Result<u64> {
 /// `lim` is the expected limit which can be up to [`u64::MAX`].
 ///
 /// This function does nothing and returns `Ok(lim)`
-/// if `RLIMIT_NOFILE` does not exist on current platform.
+/// if `RLIMIT_NOFILE` or the `[sg]etrlimit` functions do not exist
+/// on current platform.
 ///
 /// # Errors
 /// Returns an error if any syscall failed.
@@ -50,7 +51,12 @@ pub fn increase_nofile_limit(lim: u64) -> io::Result<u64> {
             return Ok(lim);
         }
 
-        let (soft, hard) = Resource::NOFILE.get()?;
+        let (soft, hard) = match Resource::NOFILE.get() {
+            Ok(limits) => limits,
+            // The platform has `RLIMIT_NOFILE` but no `getrlimit`/`setrlimit`.
+            Err(err) if err.kind() == io::ErrorKind::Unsupported => return Ok(lim),
+            Err(err) => return Err(err),
+        };
 
         if soft >= hard {
             return Ok(hard);

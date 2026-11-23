@@ -1,6 +1,7 @@
 #![allow(clippy::cast_possible_truncation)]
 #![allow(clippy::unnecessary_cast)]
 
+#[cfg(any(rlimit__has_setrlimit, rlimit__has_prlimit64))]
 #[cfg(any(
     target_os = "fuchsia",
     all(
@@ -28,6 +29,7 @@
 ))]
 pub use libc::rlimit64 as rlimit;
 
+#[cfg(any(rlimit__has_setrlimit, rlimit__has_prlimit64))]
 #[cfg(all(
     any(
         target_os = "vxworks",
