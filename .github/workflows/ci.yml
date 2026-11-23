@@ -186,6 +186,22 @@ jobs:
       - run: |
           cargo test --all-features
 
+  # Fuchsia is tier 2 without host tools: rustup provides the standard library,
+  # so the targets can be checked on the host. Linking or running binaries
+  # would need the Fuchsia SDK sysroot, so this job only checks the build.
+  fuchsia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-fuchsia,aarch64-unknown-fuchsia
+          components: clippy
+      - name: check
+        run: |
+          cargo clippy --all-features --all-targets --target x86_64-unknown-fuchsia -- -D warnings
+          cargo clippy --all-features --all-targets --target aarch64-unknown-fuchsia -- -D warnings
+
   diff-codegen:
     runs-on: ubuntu-latest
     steps:
