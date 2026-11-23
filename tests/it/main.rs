@@ -5,6 +5,9 @@ use self::utils::*;
 mod linux;
 
 #[cfg(unix)]
+mod resource;
+
+#[cfg(unix)]
 mod unix;
 
 #[cfg(windows)]

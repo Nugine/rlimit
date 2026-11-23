@@ -54,7 +54,7 @@ jobs:
           # - aarch64-apple-darwin                  # (build error)
           # - aarch64-apple-ios                     # (build error)
           # - aarch64-apple-ios-sim                 # (build error)
-          # - aarch64-fuchsia                       # (fuchsia does not have [sg]etrlimit)
+          # - aarch64-unknown-fuchsia               # (build-only; covered by the fuchsia job)
           - aarch64-linux-android
           # - aarch64-pc-windows-msvc               # (missing docker image)
           - aarch64-unknown-linux-gnu
@@ -124,7 +124,7 @@ jobs:
           # - x86_64-apple-darwin                   # (build error)
           # - x86_64-apple-ios                      # (build error)
           # - x86_64-fortanix-unknown-sgx           # (tester error)
-          # - x86_64-fuchsia                        # (fuchsia does not have [sg]etrlimit)
+          # - x86_64-unknown-fuchsia                # (build-only; covered by the fuchsia job)
           - x86_64-linux-android
           # - x86_64-pc-solaris                     # (missing docker image)
           # - x86_64-pc-windows-gnu                 # (other)
@@ -201,6 +201,17 @@ jobs:
         run: |
           cargo clippy --all-features --all-targets --target x86_64-unknown-fuchsia -- -D warnings
           cargo clippy --all-features --all-targets --target aarch64-unknown-fuchsia -- -D warnings
+
+  semver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-semver-checks
+      - name: check semver against the latest published release
+        run: cargo semver-checks check-release -p rlimit
 
   diff-codegen:
     runs-on: ubuntu-latest
