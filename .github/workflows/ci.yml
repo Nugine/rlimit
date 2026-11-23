@@ -206,14 +206,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-semver-checks
-      - name: check semver against the latest release
-        run: cargo semver-checks check-release --baseline-rev v0.12.0 -p rlimit
+      - name: check semver against the latest published release
+        run: cargo semver-checks check-release -p rlimit
 
   diff-codegen:
     runs-on: ubuntu-latest
