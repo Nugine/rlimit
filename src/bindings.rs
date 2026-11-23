@@ -3,7 +3,6 @@
 
 #[cfg(any(rlimit__has_setrlimit, rlimit__has_prlimit64))]
 #[cfg(any(
-    target_os = "fuchsia",
     all(
         any(
             target_os = "aix",
@@ -35,11 +34,15 @@ pub use libc::rlimit64 as rlimit;
         target_os = "vxworks",
         all(
             unix,
-            not(any(target_os = "qurt", target_os = "solid_asp3", target_os = "switch"))
+            not(any(
+                target_os = "fuchsia",
+                target_os = "qurt",
+                target_os = "solid_asp3",
+                target_os = "switch"
+            ))
         )
     ),
     not(any(
-        target_os = "fuchsia",
         all(
             any(
                 target_os = "aix",
@@ -224,7 +227,6 @@ pub use libc::setrlimit;
 pub use libc::prlimit64 as prlimit;
 
 #[cfg(any(
-    target_os = "fuchsia",
     all(
         target_arch = "powerpc64",
         target_os = "aix",
@@ -309,7 +311,6 @@ pub use libc::prlimit64 as prlimit;
 pub const RLIM_INFINITY: u64 = libc::RLIM_INFINITY as u64;
 
 #[cfg(not(any(
-    target_os = "fuchsia",
     all(
         target_arch = "powerpc64",
         target_os = "aix",
@@ -2704,7 +2705,6 @@ pub const RLIMIT_RTPRIO: u8 = libc::RLIMIT_RTPRIO as u8;
 pub const RLIMIT_RTPRIO: u8 = u8::MAX;
 
 #[cfg(any(
-    target_os = "fuchsia",
     all(target_os = "l4re", not(target_env = "newlib")),
     all(
         target_os = "linux",
@@ -2773,7 +2773,6 @@ pub const RLIMIT_RTPRIO: u8 = u8::MAX;
 pub const RLIMIT_RTTIME: u8 = libc::RLIMIT_RTTIME as u8;
 
 #[cfg(not(any(
-    target_os = "fuchsia",
     all(target_os = "l4re", not(target_env = "newlib")),
     all(
         target_os = "linux",
@@ -4412,7 +4411,6 @@ mod tests {
         assert!((0..128).contains(&libc::RLIMIT_RTPRIO));
 
         #[cfg(any(
-            target_os = "fuchsia",
             all(target_os = "l4re", not(target_env = "newlib")),
             all(
                 target_os = "linux",
