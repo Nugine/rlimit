@@ -6,7 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/Nugine/rlimit/compare/v0.12.0...HEAD
+
+## [0.12.0] - 2026-11-23
+
+[0.12.0]: https://github.com/Nugine/rlimit/compare/v0.11.0...v0.12.0
+
++ [PR #100](https://github.com/Nugine/rlimit/pull/100): Gate `[sg]etrlimit` on availability, so targets whose libc lacks them (e.g. Fuchsia) compile and return `io::ErrorKind::Unsupported`.
++ [PR #101](https://github.com/Nugine/rlimit/pull/101): Build-check Fuchsia targets in CI and upgrade the codegen to libc-cfg 0.4.0.
++ [PR #102](https://github.com/Nugine/rlimit/pull/102): Publish releases through crates.io Trusted Publishing.
++ Remove the `once_cell` dev-dependency.
++ Update libc bindings (libc 0.2.191).
++ Bump dependencies and GitHub Actions.
 
 ## [0.11.0] - 2026-02-02
 
